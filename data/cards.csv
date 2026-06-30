@@ -1,0 +1,16 @@
+sectionId,order,kicker,title,body,mediaType,mediaSrc,posterSrc,mediaAlt,mediaRecommendedSize
+game_loop,1,01,設備を置く,水耕ポッドやボックスを区画に配置します。,,,,,
+game_loop,2,02,種を植える,種を購入し、植えましょう。植えた植物は自動で育っていきます。,,,,,
+game_loop,3,03,収穫し、売る,植物が成長しきると、収穫ができます。収穫したものを闇市場に売り、お金を稼ぎましょう。,,,,,
+game_loop,4,04,設備を拡張する,稼いだお金を元手に、新たな種・設備の購入・サポートロボットの性能強化・追加拠点の購入などを行って、あなただけの違法水耕栽培農場を築きましょう。,,,,,
+expansion_base,1,START,下層貧民区のセーフルーム,最初の小さな栽培区画。,image,../assets/bases/safe-room.png,,下層貧民区のセーフルーム,1200x900以上 / 4:3推奨
+expansion_base,2,EXPAND,排水室,湿った地下設備を転用した拠点。,image,../assets/bases/drainage-room.png,,排水室,1200x900以上 / 4:3推奨
+expansion_base,3,HIDDEN,廃駅区画,広いが扱いにくい隠し区画。,image,../assets/bases/abandoned-station.png,,廃駅区画,1200x900以上 / 4:3推奨
+expansion_robot,1,AUTOMATION,サポートロボット,収穫、掃除、植え付け、種の購入などを支援する自律機。,image,../official/media/プレイ画面（自動化拠点）.jpg,,サポートロボット,1200x1200以上 / 透過PNG推奨
+network,1,LOWER,下層市場,巨大企業に管理された人々。合成食や栄養ペーストばかりの食生活に苦しんでいる。,image,../assets/characters/market-lower.png,,下層市場のカイ,1000x1000以上 / 正方形推奨
+network,2,MEDICAL,医療区画,治療やケア用の植物を高値で買い取る。,image,../assets/characters/market-medical.png,,医療区画のドクター・イオ,1000x1000以上 / 正方形推奨
+network,3,UPPER,上層市場,希少性や見た目の美しい植物を求めている。,image,../assets/characters/market-upper.png,,上層富裕市場のセラ・ヴェイル,1000x1000以上 / 正方形推奨
+network,4,REBEL,反政府組織,？？？,image,../assets/characters/market-rebel.png,,反政府組織の連絡員,1000x1000以上 / 正方形推奨
+screen,1,FACILITY,栽培区画,設備を配置し、植物を育てるメイン画面。,image,../assets/help/gameplay-farm.png,,栽培区画画面,1600x1000以上 / 横長推奨
+screen,2,MARKET,闇市場,需要を読み、作物を売る画面。,image,../assets/help/gameplay-market.png,,闇市場画面,1600x1000以上 / 横長推奨
+screen,3,PROCUREMENT,調達端末,種や設備を購入する画面。,image,../assets/help/gameplay-shop.png,,調達端末画面,1600x1000以上 / 横長推奨
