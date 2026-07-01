@@ -521,6 +521,25 @@ figcaption {
   width: 100%;
 }
 
+.expansion-layout.has-side-media {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+.expansion-layout.has-side-media .expansion-copy {
+  justify-self: center;
+  width: min(820px, 100%);
+  min-height: 0;
+}
+
+.expansion-layout.has-side-media .feature-main-media {
+  width: 100%;
+}
+
+.expansion-layout.has-side-media .feature-main-media video {
+  aspect-ratio: 16 / 7;
+}
+
 .copy-stack {
   display: grid;
   gap: 14px;
