@@ -164,6 +164,13 @@ img { max-width: 100%; display: block; }
   width: min(1120px, 100%);
   margin: 0 auto;
 }
+.loop-media {
+  margin-bottom: 28px;
+}
+
+.loop-media video {
+  aspect-ratio: 16 / 9;
+}
 .loop-list {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -358,20 +365,40 @@ figcaption {
   flex-wrap: wrap;
 }
 
-.footer-links a {
+.floating-x-link {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  z-index: 24;
   display: inline-grid;
   place-items: center;
-  min-width: 34px;
-  height: 28px;
-  padding: 0 10px;
+  min-width: 72px;
+  height: 42px;
+  padding: 0 22px;
   border: 1px solid var(--line);
+  background: rgba(2, 18, 13, .92);
   color: var(--green);
   font-weight: 900;
+  letter-spacing: .14em;
+  text-decoration: none;
+  box-shadow: 0 0 24px rgba(105, 255, 183, .24), inset 0 0 14px rgba(105, 255, 183, .08);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 22px) scale(.96);
+  transition: opacity .22s ease, transform .22s ease, background .18s ease, color .18s ease;
 }
 
-.footer-links a:hover {
+.floating-x-link.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0) scale(1);
+}
+
+.floating-x-link:hover,
+.floating-x-link:focus-visible {
   color: #02120d;
   background: var(--green);
+  outline: none;
 }
 
 .site-footer {
@@ -403,6 +430,7 @@ figcaption {
     font-size: 12px;
   }
   .site-footer { flex-direction: column; }
+  .floating-x-link { bottom: 14px; height: 38px; min-width: 64px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -531,6 +559,29 @@ figcaption {
   max-height: 360px;
   object-fit: contain;
   filter: drop-shadow(0 18px 32px rgba(0,0,0,.55));
+}
+
+.feature-main-media video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  background: #020a07;
+}
+
+.feature-main-media:has(video) {
+  display: block;
+  min-height: 0;
+  background: #020a07;
+  overflow: hidden;
+}
+
+.screen-video-band .screen-only-media {
+  margin-top: 0;
+}
+
+.screen-video-band .screen-only-media video {
+  aspect-ratio: 16 / 9;
 }
 
 .base-cards article {

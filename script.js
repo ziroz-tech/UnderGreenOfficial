@@ -88,7 +88,7 @@ function mediaMarkup(entry, className = "") {
   const recommended = entry.mediaRecommendedSize ? ` data-recommended-size="${escapeHtml(entry.mediaRecommendedSize)}"` : "";
   if (type === "video") {
     const poster = entry.posterSrc ? ` poster="${escapeHtml(entry.posterSrc)}"` : "";
-    return `<figure class="${className || "wide-media video-frame"}"${recommended}><video controls muted playsinline${poster}><source src="${escapeHtml(src)}" type="video/mp4"></video></figure>`;
+    return `<figure class="${className || "wide-media video-frame"}"${recommended}><video muted loop playsinline preload="metadata" data-autoplay-video${poster}><source src="${escapeHtml(src)}" type="video/mp4"></video></figure>`;
   }
   return `<figure class="${className || "media-frame"}"${recommended}><img src="${escapeHtml(src)}" alt="${alt}"></figure>`;
 }
@@ -100,7 +100,7 @@ function heroMedia(section) {
     const poster = section.posterSrc ? ` poster="${escapeHtml(section.posterSrc)}"` : "";
     return `<video class="hero-bg" autoplay muted loop playsinline${poster}><source src="${escapeHtml(src)}" type="video/mp4"></video>`;
   }
-  return `<img class="hero-bg" src="${escapeHtml(src || "../assets/help/gameplay-farm.png")}" alt="${escapeHtml(section.mediaAlt || section.title)}">`;
+  return `<img class="hero-bg" src="${escapeHtml(src || "media/プレイ画面（栽培初期）.jpg")}" alt="${escapeHtml(section.mediaAlt || section.title)}">`;
 }
 
 function headingMarkup(section) {
@@ -138,9 +138,11 @@ function renderConcept(section) {
 }
 
 function renderLoop(section, cards) {
+  const sectionMedia = mediaMarkup(section, "wide-media video-frame loop-media");
   return `<section id="${escapeHtml(section.id)}" class="band play-band" data-guide="${escapeHtml(section.guide || section.id)}">
     ${headingMarkup(section)}
     <div class="section-copy">${paragraphMarkup(section.body)}</div>
+    ${sectionMedia}
     <div class="loop-list" aria-label="ゲームの基本サイクル">
       ${cards.map((card) => `<article><span>${escapeHtml(card.kicker)}</span><h3>${escapeHtml(card.title)}</h3><p>${escapeHtml(card.body)}</p></article>`).join("")}
     </div>
@@ -149,10 +151,10 @@ function renderLoop(section, cards) {
 
 function renderFeature(section, cards) {
   const sectionMedia = mediaMarkup(section, "feature-main-media");
-  const cardMarkup = cards.length ? `<div class="base-cards">${cards.map((card) => {
+  const cardMarkup = sectionMedia || (cards.length ? `<div class="base-cards">${cards.map((card) => {
     const cardMedia = mediaMarkup(card, "card-media");
     return `<article class="${cardMedia ? "" : "text-card"}">${cardMedia}<span>${escapeHtml(card.kicker)}</span><strong>${escapeHtml(card.title)}</strong><p>${escapeHtml(card.body)}</p></article>`;
-  }).join("")}</div>` : sectionMedia;
+  }).join("")}</div>` : "");
   const layoutClass = sectionMedia ? "has-side-media" : cards.length ? "cards-only" : "text-only";
   return `<section id="${escapeHtml(section.id)}" class="band expansion-band" data-guide="${escapeHtml(section.guide || section.id)}">
     ${headingMarkup(section)}
@@ -174,19 +176,28 @@ function renderMarkets(section, cards) {
 }
 
 function renderScreen(section, cards) {
-  return `<section id="${escapeHtml(section.id)}" class="band screens-band" data-guide="${escapeHtml(section.guide || section.id)}">
-    ${headingMarkup(section)}
-    <div class="screen-intro">
-      <div class="section-copy">${paragraphMarkup(section.body)}</div>
-      ${mediaMarkup(section, "wide-media video-frame")}
-    </div>
-    <div class="screens-grid">
+  const copy = paragraphMarkup(section.body);
+  const cardGrid = cards.length ? `<div class="screens-grid">
       ${cards.map((card) => {
         const recommended = card.mediaRecommendedSize ? ` data-recommended-size="${escapeHtml(card.mediaRecommendedSize)}"` : "";
         if (!hasMedia(card)) return `<article class="screen-text-card"${recommended}><span>${escapeHtml(card.kicker)}</span><strong>${escapeHtml(card.title)}</strong><p>${escapeHtml(card.body)}</p></article>`;
         return `<figure${recommended}><img src="${escapeHtml(card.mediaSrc)}" alt="${escapeHtml(card.mediaAlt || card.title)}"><figcaption>${escapeHtml(card.title)}</figcaption></figure>`;
       }).join("")}
+    </div>` : "";
+  return `<section id="${escapeHtml(section.id)}" class="band screens-band" data-guide="${escapeHtml(section.guide || section.id)}">
+    ${headingMarkup(section)}
+    <div class="screen-intro ${copy ? "" : "video-only"}">
+      ${copy ? `<div class="section-copy">${copy}</div>` : ""}
+      ${mediaMarkup(section, "wide-media video-frame")}
     </div>
+    ${cardGrid}
+  </section>`;
+}
+
+function renderScreenVideo(section) {
+  return `<section id="${escapeHtml(section.id)}" class="band screens-band screen-video-band" data-guide="${escapeHtml(section.guide || section.id)}">
+    ${headingMarkup(section)}
+    ${mediaMarkup(section, "wide-media video-frame screen-only-media")}
   </section>`;
 }
 
@@ -196,6 +207,7 @@ function renderSection(section, cards) {
   if (section.layout === "loop") return renderLoop(section, scopedCards);
   if (section.layout === "feature") return renderFeature(section, scopedCards);
   if (section.layout === "markets") return renderMarkets(section, scopedCards);
+  if (section.layout === "screen_video") return renderScreenVideo(section);
   if (section.layout === "screen") return renderScreen(section, scopedCards);
   return renderConcept(section);
 }
@@ -254,6 +266,52 @@ function setupRobotGuide(sections) {
   detectSection();
 }
 
+function setupFloatingXLink(link) {
+  if (!link) return;
+  const revealOffset = 140;
+
+  function update() {
+    const scroller = document.scrollingElement || document.documentElement;
+    const remaining = scroller.scrollHeight - (window.scrollY + window.innerHeight);
+    const isVisible = remaining <= revealOffset;
+    link.classList.toggle("is-visible", isVisible);
+    link.tabIndex = isVisible ? 0 : -1;
+  }
+
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+  update();
+}
+
+function setupAutoplayVideos() {
+  const videos = [...document.querySelectorAll("video[data-autoplay-video]")];
+  if (!videos.length) return;
+
+  videos.forEach((video) => {
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+  });
+
+  if (!("IntersectionObserver" in window)) {
+    videos.forEach((video) => video.play().catch(() => {}));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const video = entry.target;
+      if (entry.isIntersecting) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  }, { threshold: 0.35 });
+
+  videos.forEach((video) => observer.observe(video));
+}
+
 async function bootOfficialPage() {
   const [siteRows, sectionRows, cardRows] = await Promise.all([
     loadCsv(DATA_PATHS.site),
@@ -274,6 +332,7 @@ async function bootOfficialPage() {
   const footerX = document.getElementById("footer-x");
   footerX.textContent = site.xLabel || "X";
   footerX.href = site.xUrl || "https://x.com/";
+  footerX.setAttribute("aria-label", `${site.xLabel || "X"}へのリンク`);
 
   document.getElementById("site-nav").innerHTML = sections
     .filter((section) => section.navLabel)
@@ -282,6 +341,8 @@ async function bootOfficialPage() {
 
   document.getElementById("page-root").innerHTML = sections.map((section) => renderSection(section, cards)).join("");
   document.getElementById("page-loading")?.remove();
+  setupFloatingXLink(footerX);
+  setupAutoplayVideos();
   setupRobotGuide(sections);
   const scrollToHashTarget = () => {
     const hashId = decodeURIComponent((location.hash || "").replace(/^#/, ""));
