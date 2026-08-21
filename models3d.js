@@ -335,6 +335,12 @@ export function buildAreaLightModel({ extentX, extentZ }) {
   prism.userData.ignoreInteraction = true;
   prism.raycast = () => {};
   group.add(prism);
+  group.userData.growLight = {
+    lampMaterial: lamp,
+    volumeMaterial: prism.material,
+    baseLampColor: lamp.color.clone(),
+    basePeakOpacity: prism.material.uniforms.peakOpacity.value
+  };
   return finishPlaceholder(group, "light");
 }
 

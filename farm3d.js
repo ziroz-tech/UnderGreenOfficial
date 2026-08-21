@@ -1,5 +1,5 @@
 import * as THREE from "./three.module.min.js";
-import { buildChargeDockModel, buildRobotModel, buildCleaningBrushModel, buildCleaningBucketModel, buildPlantSprayerModel, buildMaintenanceWrenchModel, buildMarketCourierScooterModel, MODEL_BUILDERS } from "./models3d.js?v=20260821streetlight7";
+import { buildChargeDockModel, buildRobotModel, buildCleaningBrushModel, buildCleaningBucketModel, buildPlantSprayerModel, buildMaintenanceWrenchModel, buildMarketCourierScooterModel, MODEL_BUILDERS } from "./models3d.js?v=20260821fluorescent1";
 
 const FLOOR_HEIGHT = 0.18;
 const BASE_GAP = 3.4;
@@ -2465,6 +2465,19 @@ function buildEquipment(base, item, baseGroup) {
     model.position.y = 0.03;
     group.add(model);
     registerVisualInteraction(model, interaction);
+    if (item.type === "light" && model.userData.growLight) {
+      animatedObjects.push({
+        type: "grow-light",
+        object: model,
+        itemId: item.id,
+        ...model.userData.growLight,
+        randomState: Math.floor(Math.random() * 0xffffffff) >>> 0,
+        nextFlickerAt: null,
+        flickerStartedAt: null,
+        flickerMode: "single",
+        currentLevel: 1
+      });
+    }
     if (item.type === "support_robot") {
       const dock = buildChargeDockModel({ extentX: baseHeight, extentZ: baseWidth });
       dock.position.y = 0.018;
@@ -4616,6 +4629,45 @@ function updateSpriteSizing() {
     sizing.applied = true;
   });
 }
+function growLightRandom(entry) {
+  entry.randomState = (Math.imul(entry.randomState, 1664525) + 1013904223) >>> 0;
+  return entry.randomState / 0x100000000;
+}
+function scheduleGrowLightFlicker(entry, elapsed, initial = false) {
+  const delay = initial
+    ? 1.2 + growLightRandom(entry) * 2.8
+    : 2.8 + growLightRandom(entry) * 6.5;
+  entry.nextFlickerAt = elapsed + delay;
+  entry.flickerStartedAt = null;
+}
+function updateGrowLightFlicker(entry, elapsed) {
+  if (entry.nextFlickerAt === null) scheduleGrowLightFlicker(entry, elapsed, true);
+  if (entry.flickerStartedAt === null && elapsed >= entry.nextFlickerAt) {
+    entry.flickerStartedAt = elapsed;
+    entry.flickerMode = growLightRandom(entry) < 0.58 ? "double" : "single";
+  }
+
+  let level = 1;
+  if (entry.flickerStartedAt !== null) {
+    const age = elapsed - entry.flickerStartedAt;
+    if (entry.flickerMode === "double") {
+      if (age < 0.036) level = 0.14;
+      else if (age < 0.072) level = 0.84;
+      else if (age < 0.112) level = 0.05;
+      else if (age < 0.154) level = 0.58;
+      else if (age < 0.205) level = 1;
+      else scheduleGrowLightFlicker(entry, elapsed);
+    } else if (age < 0.048) level = 0.18;
+    else if (age < 0.086) level = 0.68;
+    else if (age < 0.13) level = 1;
+    else scheduleGrowLightFlicker(entry, elapsed);
+  }
+
+  entry.currentLevel = level;
+  const visibleLevel = 0.07 + level * 0.93;
+  entry.lampMaterial.color.copy(entry.baseLampColor).multiplyScalar(visibleLevel);
+  entry.volumeMaterial.uniforms.peakOpacity.value = entry.basePeakOpacity * visibleLevel;
+}
 function updateAnimations(elapsed) {
   updateUndergroundCityBackdrop(elapsed);
   let activeGrowthPulses = 0;
@@ -4623,6 +4675,8 @@ function updateAnimations(elapsed) {
     const wave = elapsed + entry.phase;
     if (entry.type === "robot") {
       updateRobotAnimation(entry, elapsed);
+    } else if (entry.type === "grow-light") {
+      updateGrowLightFlicker(entry, elapsed);
     } else if (entry.type === "marker") {
       entry.object.position.y = entry.baseY + Math.sin(wave * 2.8) * 0.08;
       entry.object.position.x = entry.baseX + (Math.sin(wave * 19) > 0.94 ? Math.sin(wave * 83) * 0.018 : 0);
@@ -4854,6 +4908,7 @@ function animate(now) {
   canvas.dataset.farm3dYaw = cameraState.yaw.toFixed(6);
   canvas.dataset.farm3dPitch = cameraState.pitch.toFixed(6);
   canvas.dataset.farm3dRobotMotions = animatedObjects.filter((entry) => entry.type === "robot").map((entry) => entry.itemId + ":" + (entry.visualState?.motion || "idle")).join(",");
+  canvas.dataset.farm3dGrowLightLevels = animatedObjects.filter((entry) => entry.type === "grow-light").map((entry) => entry.currentLevel.toFixed(2)).join(",");
   canvas.dataset.farm3dReadyPlants = String(animatedObjects.filter((entry) => entry.type === "ready-beacon").length);
   canvas.dataset.farm3dGrowingPlants = String(animatedObjects.filter((entry) => entry.type === "plant" && entry.growing).length);
   canvas.dataset.farm3dResourceReady = String(animatedObjects.filter((entry) => entry.type === "resource-ready").length);
@@ -5708,6 +5763,12 @@ function initScene() {
       freeRotation: navigationMode === "orbit",
       readyPlants: animatedObjects.filter((entry) => entry.type === "ready-beacon").length,
       plantEffects: transientEffects.filter((entry) => entry.type === "growth-lift").length,
+      growLights: animatedObjects.filter((entry) => entry.type === "grow-light").map((entry) => ({
+        itemId: entry.itemId,
+        level: entry.currentLevel,
+        flickering: entry.flickerStartedAt !== null,
+        nextFlickerIn: entry.nextFlickerAt === null ? null : Math.max(0, entry.nextFlickerAt - performance.now() / 1000)
+      })),
       accessPoints: animatedObjects.filter((entry) => entry.type === "market-access").map((entry) => {
         const rect = canvas.getBoundingClientRect();
         const point = entry.scooter.getWorldPosition(new THREE.Vector3());

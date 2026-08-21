@@ -86,6 +86,8 @@ const OFFICIAL_DEMO_MODE = (() => {
   }
 })();
 if (OFFICIAL_DEMO_MODE) document.body.classList.add("official-demo-mode");
+const AUDIO_DATA_PATH = OFFICIAL_DEMO_MODE ? "official_audio.csv" : "audio.csv";
+const AMBIENT_DATA_PATH = OFFICIAL_DEMO_MODE ? "official_ambient_layers.csv" : "ambient_layers.csv";
 const IS_VISUAL_EFFECT_QA = (() => {
   try {
     const params = new URLSearchParams(window.location.search);
@@ -862,8 +864,8 @@ const REQUIRED_GAME_DATA_PATHS = [
   "property_comments.csv",
   "events.csv",
   "quiet_news.csv",
-  "audio.csv",
-  "ambient_layers.csv",
+  AUDIO_DATA_PATH,
+  AMBIENT_DATA_PATH,
   "radio_programs.csv",
   "info_books.csv",
   "info_entries.csv",
@@ -883,6 +885,8 @@ const OFFICIAL_DEMO_DATA_PATHS = [
   "grow_unit_slots.csv",
   "grow_units.csv",
   "floor_devices.csv",
+  AUDIO_DATA_PATH,
+  AMBIENT_DATA_PATH,
 ];
 const csvTextCache = new Map();
 const CHARACTER_ASSET_CACHE_KEY = Date.now().toString(36);
@@ -1156,6 +1160,19 @@ async function loadOfficialDemoData() {
       placementLayer: String(row.placementLayer || "floor").trim().toLowerCase(),
       surfaceType: String(row.surfaceType || "").trim().toLowerCase(),
       surfaceSlots: Math.max(0, Math.floor(toNumber(row.surfaceSlots, 0)))
+    }));
+  });
+  await loadRequiredCsv(AUDIO_DATA_PATH, (rows) => {
+    SOUND_FILES = rowsToObject(rows, (row) => row.file);
+    SOUND_VOLUMES = rowsToObject(rows, (row) => toNumber(row.volume, 0.28));
+  });
+  await loadRequiredCsv(AMBIENT_DATA_PATH, (rows) => {
+    AMBIENT_LAYERS = rowsToObject(rows, (row) => ({
+      label: row.label,
+      file: row.file,
+      volume: toNumber(row.volume, 0.15),
+      condition: row.condition || "always",
+      description: row.description
     }));
   });
 }
@@ -1610,11 +1627,11 @@ async function loadExternalData() {
   await loadRequiredCsv("quiet_news.csv", (rows) => {
     QUIET_NEWS = rows.map((row) => row.text).filter(Boolean);
   });
-  await loadRequiredCsv("audio.csv", (rows) => {
+  await loadRequiredCsv(AUDIO_DATA_PATH, (rows) => {
     SOUND_FILES = rowsToObject(rows, (row) => row.file);
     SOUND_VOLUMES = rowsToObject(rows, (row) => toNumber(row.volume, 0.28));
   });
-  await loadRequiredCsv("ambient_layers.csv", (rows) => {
+  await loadRequiredCsv(AMBIENT_DATA_PATH, (rows) => {
     AMBIENT_LAYERS = rowsToObject(rows, (row) => ({
       label: row.label,
       file: row.file,
@@ -8545,6 +8562,8 @@ function setStatus(message, options = {}) {
 
 const soundPool = {};
 const loopAudioPool = {};
+let officialDemoAudioEnabled = false;
+const officialDemoSoundHistory = [];
 let radioTitleTimer = 0;
 let radioTitleHideTimer = 0;
 let lastRadioTitle = { programId: "", shownAt: 0 };
@@ -8747,6 +8766,7 @@ function cacheBustedAudioSource(source) {
 }
 
 function playSound(name, volume = null) {
+  if (OFFICIAL_DEMO_MODE && !officialDemoAudioEnabled) return false;
   const source = SOUND_FILES[name];
   if (!source) return false;
   const finalVolume = Math.max(0, Math.min(1, (volume ?? SOUND_VOLUMES[name] ?? 0.28) * masterVolume()));
@@ -8757,6 +8777,10 @@ function playSound(name, volume = null) {
   audio.volume = finalVolume;
   audio.currentTime = 0;
   audio.play().catch(() => {});
+  if (OFFICIAL_DEMO_MODE) {
+    officialDemoSoundHistory.push({ name, volume: Number(finalVolume.toFixed(3)), at: Date.now() });
+    if (officialDemoSoundHistory.length > 12) officialDemoSoundHistory.splice(0, officialDemoSoundHistory.length - 12);
+  }
   return true;
 }
 
@@ -8832,6 +8856,7 @@ function ambientLayerActive(layer) {
 }
 
 function activeAmbientLayers() {
+  if (OFFICIAL_DEMO_MODE && !officialDemoAudioEnabled) return [];
   if (state.audio?.noiseCanceling) return [];
   return Object.entries(AMBIENT_LAYERS).filter(([, layer]) => ambientLayerActive(layer));
 }
@@ -8860,6 +8885,54 @@ function syncLoopAudio() {
     if (activeIds.has(id)) return;
     audio.pause();
     audio.volume = 0;
+  });
+}
+
+function officialDemoAudioSnapshot() {
+  const activeLoops = Object.entries(loopAudioPool)
+    .filter(([, audio]) => !audio.paused && audio.volume > 0)
+    .map(([id, audio]) => ({ id, volume: Number(audio.volume.toFixed(3)) }));
+  return {
+    ready: Boolean(state?.audio),
+    enabled: Boolean(officialDemoAudioEnabled),
+    effects: Object.keys(SOUND_FILES).length,
+    ambient: Object.keys(AMBIENT_LAYERS).length,
+    activeLoops,
+    recentEffects: officialDemoSoundHistory.map((entry) => ({ ...entry }))
+  };
+}
+
+function setOfficialDemoAudioEnabled(enabled) {
+  if (!OFFICIAL_DEMO_MODE || !state?.audio) return officialDemoAudioSnapshot();
+  officialDemoAudioEnabled = Boolean(enabled);
+  document.documentElement.dataset.officialAudio = officialDemoAudioEnabled ? "on" : "off";
+  if (officialDemoAudioEnabled) {
+    state.audio.noiseCanceling = false;
+    syncLoopAudio();
+  } else {
+    Object.values(loopAudioPool).forEach((audio) => {
+      audio.pause();
+      audio.volume = 0;
+    });
+  }
+  return officialDemoAudioSnapshot();
+}
+
+if (OFFICIAL_DEMO_MODE) {
+  const unlockOfficialDemoAudio = () => {
+    if (!state?.audio) return;
+    setOfficialDemoAudioEnabled(true);
+    document.removeEventListener("pointerdown", unlockOfficialDemoAudio, true);
+    document.removeEventListener("keydown", unlockOfficialDemoAudio, true);
+  };
+  document.addEventListener("pointerdown", unlockOfficialDemoAudio, true);
+  document.addEventListener("keydown", unlockOfficialDemoAudio, true);
+  window.OfficialDemoAudio = Object.freeze({
+    start: () => setOfficialDemoAudioEnabled(true),
+    stop: () => setOfficialDemoAudioEnabled(false),
+    toggle: () => setOfficialDemoAudioEnabled(!officialDemoAudioEnabled),
+    snapshot: officialDemoAudioSnapshot,
+    play: (name, volume = null) => playSound(name, volume)
   });
 }
 

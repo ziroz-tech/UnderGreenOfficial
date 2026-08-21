@@ -1,0 +1,5 @@
+id,label,file,volume,condition,description
+base_hum,地下設備の基礎ノイズ,base-hum.wav,0.20,always,常に薄く流れる低い機械音。
+pump_active,循環ポンプ,pump-loop.wav,0.14,time_running,ゲーム内時間が進行している時に重なるポンプ循環音。
+dirty_filter,汚染警告ノイズ,silent-carrier.wav,0.10,cleaning_needed,清掃が必要な設備がある時に重なる埋もれた警告ノイズ。
+base_safe_room,セーフルームの密閉振動,base-safe-room.wav,0.10,base_tier:safe_room,初期区画を表示している時に重なる狭い密閉空間の振動音。

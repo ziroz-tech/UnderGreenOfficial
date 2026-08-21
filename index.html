@@ -7,7 +7,7 @@
   <title>UNDER GREEN | Who Owns the Seed?</title>
   <meta name="description" content="ゲーム本編と同じ3D栽培区画を操作できる、UNDER GREEN公式サイト。">
   <link rel="icon" href="seed.webp">
-  <link rel="stylesheet" href="portal.css?v=20260821cultivationdemo1">
+  <link rel="stylesheet" href="portal.css?v=20260821audiocharacters3">
 </head>
 <body class="is-intro">
   <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="プロローグ">
@@ -38,13 +38,16 @@
     <nav class="portal-nav" aria-label="サイト案内">
       <button type="button" data-panel="system"><small>01 / システム</small><strong>GAME</strong></button>
       <button type="button" data-panel="world"><small>02 / 物語</small><strong>STORY</strong></button>
-      <button type="button" data-panel="credits"><small>03 / 制作</small><strong>CREDITS</strong></button>
-      <button type="button" data-panel="play"><small>04 / 開発情報</small><strong>PLAY</strong></button>
-      <button type="button" data-panel="contact"><small>05 / 通信</small><strong>CONTACT</strong></button>
+      <button type="button" data-panel="characters"><small>03 / 人物</small><strong>CHARACTERS</strong></button>
+      <button type="button" data-panel="credits"><small>04 / 制作</small><strong>CREDITS</strong></button>
+      <button type="button" data-panel="play"><small>05 / 開発情報</small><strong>PLAY</strong></button>
+      <button type="button" data-panel="contact"><small>06 / 通信</small><strong>CONTACT</strong></button>
     </nav>
     <div class="portal-status" aria-live="polite">
-      <i aria-hidden="true"></i>
-      <span><small>LIVE CULTIVATION</small><strong id="portal-game-day">DAY 01 · CONNECTING</strong></span>
+      <div class="portal-live"><i aria-hidden="true"></i><span><small>LIVE CULTIVATION</small><strong id="portal-game-day">DAY 01 · CONNECTING</strong></span></div>
+      <button class="portal-audio-toggle" id="portal-audio-toggle" type="button" aria-pressed="false" aria-label="ゲーム音を再生">
+        <span aria-hidden="true">♪</span><small>SOUND</small><strong id="portal-audio-state">START</strong>
+      </button>
     </div>
   </header>
 
@@ -54,9 +57,9 @@
     <iframe
       id="game-frame"
       class="game-frame"
-      src="official-demo.html?officialdemo=1&amp;build=20260821officialminimal3"
+      src="official-demo.html?officialdemo=1&amp;build=20260821audiocharacters3"
       title="UNDER GREEN ゲーム体験版"
-      allow="fullscreen"
+      allow="autoplay; fullscreen"
     ></iframe>
     <aside class="cultivation-guide" aria-label="栽培区画の操作方法">
       <strong>HOW TO CULTIVATE</strong>
@@ -90,9 +93,20 @@
       <p class="panel-lead">中央の体験区画には、開発中のゲーム本体と同じHTML・CSS・Three.js・操作ロジックを読み込んでいます。</p>
     </article>
 
+    <article class="info-panel character-panel" data-info="characters" role="dialog" aria-modal="true" aria-labelledby="characters-title">
+      <button class="panel-close" type="button" aria-label="閉じる">×</button>
+      <p class="panel-kicker">CHARACTERS // PERSONNEL FILE 03</p>
+      <h2 id="characters-title">地下通信網の<em>人物記録。</em></h2>
+      <p class="panel-lead">ゲーム内の人物アイコンと記録をもとにしたキャラクター紹介です。物語の進行に合わせて内容を更新します。</p>
+      <div class="character-grid" id="character-list" data-character-source="characters.csv">
+        <p class="character-loading">LOADING PERSONNEL FILES...</p>
+      </div>
+      <p class="character-draft-note">DRAFT PROFILE // 紹介文は開発中の設定をもとにした下書きです。</p>
+    </article>
+
     <article class="info-panel compact" data-info="credits" role="dialog" aria-modal="true" aria-labelledby="credits-title">
       <button class="panel-close" type="button" aria-label="閉じる">×</button>
-      <p class="panel-kicker">CREDITS // 03</p>
+      <p class="panel-kicker">CREDITS // 04</p>
       <h2 id="credits-title">UNDER GREEN</h2>
       <p class="panel-lead">Who Owns the Seed?</p>
       <dl class="credit-list" id="credit-list" data-credit-source="credits.csv"><div><dt>LOADING</dt><dd>ゲーム内クレジットを読み込んでいます...</dd></div></dl>
@@ -101,7 +115,7 @@
 
     <article class="info-panel" data-info="play" role="dialog" aria-modal="true" aria-label="PLAY">
       <button class="panel-close" type="button" aria-label="閉じる">×</button>
-      <p class="panel-kicker">PLAY // DEVELOPMENT 04</p>
+      <p class="panel-kicker">PLAY // DEVELOPMENT 05</p>
       <p class="play-statement">steamでの発売を目指して開発を進めながら全国のインディーゲームイベントに出展しています。</p>
       <section class="event-history" aria-labelledby="event-history-title">
         <h3 id="event-history-title">イベント出展履歴</h3>
@@ -114,12 +128,12 @@
 
     <article class="info-panel compact" data-info="contact" role="dialog" aria-modal="true" aria-label="CONTACT">
       <button class="panel-close" type="button" aria-label="閉じる">×</button>
-      <p class="panel-kicker">CONTACT // 05</p>
+      <p class="panel-kicker">CONTACT // 06</p>
       <p class="panel-lead">作品へのご感想、取材、制作に関するお問い合わせは、公式Xからお送りください。</p>
       <a class="contact-link" href="https://x.com/" target="_blank" rel="noopener noreferrer"><span>X</span><strong>OFFICIAL CHANNEL</strong><i>↗</i></a>
     </article>
   </div>
 
-  <script src="portal.js?v=20260821officialintro2"></script>
+  <script src="portal.js?v=20260821audiocharacters3"></script>
 </body>
 </html>

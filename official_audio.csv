@@ -1,0 +1,15 @@
+id,file,volume
+click,ui-click.ogg,0.12
+ui_click,ui-click.ogg,0.12
+tab_switch,ui-click.ogg,0.18
+seed_select,ui-click.ogg,0.16
+equipment_menu_open,drop-place.ogg,0.18
+clean_tool_grab,drop-place.ogg,0.18
+equipment_place,drop-place.ogg,0.28
+plant_seed,plant-soil.wav,0.22
+water_splash,plant-soil.wav,0.20
+harvest_single,harvest-scissors.wav,0.26
+crop_ready,mature-alert.wav,0.24
+clean_bucket,plant-soil.wav,0.20
+feedback_reject,alert.ogg,0.18
+alert,alert.ogg,0.18

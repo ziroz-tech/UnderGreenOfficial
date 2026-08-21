@@ -21,12 +21,16 @@ const portalGameDay = document.getElementById("portal-game-day");
 const infoLayer = document.getElementById("info-layer");
 const localLaunchNote = document.getElementById("local-launch-note");
 const creditList = document.getElementById("credit-list");
+const characterList = document.getElementById("character-list");
+const portalAudioToggle = document.getElementById("portal-audio-toggle");
+const portalAudioState = document.getElementById("portal-audio-state");
 let introFinished = false;
 let introTimer = 0;
 let introLoadingFrame = 0;
 let introFinalLoadingStarted = false;
 let lastPanelTrigger = null;
 let gameStatusTimer = 0;
+let portalAudioManuallyMuted = false;
 
 function parseCsv(text) {
   const rows = [];
@@ -122,6 +126,101 @@ async function loadCredits() {
   }
 }
 
+function renderCharacters(rows) {
+  if (!characterList) return;
+  const profiles = rows.filter((profile) => profile.id && profile.name && profile.icon);
+  const assetPrefix = characterList.dataset.characterAssetPrefix || "";
+  characterList.replaceChildren();
+  profiles.forEach((profile, index) => {
+    const card = document.createElement("article");
+    card.className = `character-card character-${profile.id}`;
+
+    const portrait = document.createElement("figure");
+    portrait.className = "character-portrait";
+    const image = document.createElement("img");
+    image.src = `${assetPrefix}${profile.icon}`;
+    image.alt = `${profile.name}のゲーム内人物アイコン`;
+    image.loading = "eager";
+    image.decoding = "sync";
+    portrait.appendChild(image);
+
+    const copy = document.createElement("div");
+    copy.className = "character-copy";
+    const metadata = document.createElement("p");
+    metadata.className = "character-signal";
+    metadata.textContent = `${String(index + 1).padStart(2, "0")} // ${profile.signal || "PERSONNEL FILE"}`;
+    const heading = document.createElement("h3");
+    heading.textContent = profile.name;
+    const role = document.createElement("p");
+    role.className = "character-role";
+    role.textContent = profile.role;
+    const summary = document.createElement("p");
+    summary.className = "character-summary";
+    summary.textContent = profile.summary;
+    const note = document.createElement("p");
+    note.className = "character-note";
+    note.textContent = profile.note;
+    copy.append(metadata, heading, role, summary, note);
+    card.append(portrait, copy);
+    characterList.appendChild(card);
+  });
+  characterList.dataset.loadedCount = String(profiles.length);
+}
+
+async function loadCharacters() {
+  if (!characterList?.dataset.characterSource) return;
+  try {
+    const response = await fetch(characterList.dataset.characterSource, { cache: "no-store" });
+    if (!response.ok) throw new Error(`characters: ${response.status}`);
+    renderCharacters(parseCsv(await response.text()));
+  } catch (error) {
+    characterList.replaceChildren();
+    const message = document.createElement("p");
+    message.className = "character-loading is-error";
+    message.textContent = "人物記録を読み込めませんでした。";
+    characterList.appendChild(message);
+    characterList.dataset.loadedCount = "0";
+  }
+}
+
+function embeddedAudioApi() {
+  try {
+    return gameFrame.contentWindow?.OfficialDemoAudio || null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function updatePortalAudioStatus(snapshot = null) {
+  if (!portalAudioToggle || !portalAudioState) return;
+  let current = snapshot;
+  try {
+    current ||= embeddedAudioApi()?.snapshot?.() || null;
+  } catch (error) {}
+  const ready = Boolean(current?.ready);
+  const enabled = Boolean(current?.enabled);
+  portalAudioToggle.disabled = !ready;
+  portalAudioToggle.classList.toggle("is-on", enabled);
+  portalAudioToggle.setAttribute("aria-pressed", String(enabled));
+  portalAudioToggle.setAttribute("aria-label", enabled ? "ゲーム音を停止" : "ゲーム音を再生");
+  portalAudioState.textContent = ready ? (enabled ? "ON" : "OFF") : "WAIT";
+}
+
+function setPortalAudioEnabled(enabled, { manual = false } = {}) {
+  const api = embeddedAudioApi();
+  if (!api) return null;
+  let snapshot = null;
+  try {
+    snapshot = enabled ? api.start?.() : api.stop?.();
+    if (enabled) api.play?.("ui_click", 0.1);
+  } catch (error) {
+    return null;
+  }
+  if (manual) portalAudioManuallyMuted = !enabled;
+  updatePortalAudioStatus(snapshot);
+  return snapshot;
+}
+
 function updateGameStatus() {
   if (!portalGameDay) return;
   try {
@@ -130,6 +229,7 @@ function updateGameStatus() {
     const day = String(Math.max(1, Number(snapshot.day) || 1)).padStart(2, "0");
     const progress = Math.round(Math.max(0, Math.min(1, Number(snapshot.dayProgress) || 0)) * 100);
     portalGameDay.textContent = `DAY ${day} · ${String(progress).padStart(2, "0")}% · ${snapshot.timeRunning ? "GROWING" : "PAUSED"}`;
+    updatePortalAudioStatus();
   } catch (error) {}
 }
 
@@ -252,6 +352,16 @@ introSkip.addEventListener("click", () => {
   setIntroProgress(100, "MANUAL ACCESS");
   finishIntro();
 });
+portalAudioToggle?.addEventListener("click", (event) => {
+  event.stopPropagation();
+  const enabled = portalAudioToggle.getAttribute("aria-pressed") === "true";
+  setPortalAudioEnabled(!enabled, { manual: true });
+});
+document.addEventListener("pointerdown", (event) => {
+  if (portalAudioManuallyMuted || event.target.closest("#portal-audio-toggle")) return;
+  const snapshot = embeddedAudioApi()?.snapshot?.();
+  if (snapshot?.ready && !snapshot.enabled) setPortalAudioEnabled(true);
+}, true);
 document.querySelectorAll(".portal-nav [data-panel]").forEach((button) => button.addEventListener("click", () => openPanel(button.dataset.panel, button)));
 document.querySelectorAll(".panel-close, .info-backdrop").forEach((button) => button.addEventListener("click", closePanel));
 document.addEventListener("keydown", (event) => {
@@ -267,6 +377,7 @@ gameFrame.addEventListener("load", () => {
   gameLoading.classList.add("is-hidden");
   window.clearInterval(gameStatusTimer);
   updateGameStatus();
+  updatePortalAudioStatus();
   gameStatusTimer = window.setInterval(updateGameStatus, 500);
 });
 
@@ -276,3 +387,4 @@ if (window.location.protocol === "file:") {
 
 typeIntro();
 loadCredits();
+loadCharacters();
