@@ -1,0 +1,2 @@
+id,name,days,seedPrice,packSize,basePrice,water,nutrient,icon,color,note,unlock,category,careStages
+lettuce,レタス,1.5,60,6,60,1,1,lettuce.webp,#72ffb8,早い・安い・安定,lower,food,0.50

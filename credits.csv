@@ -1,0 +1,12 @@
+section,sectionLabel,name,role,note,url,order
+production,企画・制作・シナリオ・３Dモデリング,違法レタス栽培促進委員会,,（ZZgames）,,10
+character_illustration,キャラクター（人間）イラスト,まるこ,,,,20
+music,楽曲,主題歌「Signal Green」,,作詞:ZZGames|作曲:？？,,30
+music,楽曲,ED曲「サポートロボットの歌」,,作詞:ZZgames|作曲:サポートロボットたち,,40
+materials,楽曲,劇中歌「サミダレギター」,,楽曲提供：ピピアンサロニ,https://youtube.com/@pipisanaloni65?si=_7GC2Nj_i0VjrqZM,41
+materials,素材利用,効果音ラボ,,,https://soundeffect-lab.info/,42
+special_thanks,Special thanks,さくらい,,,,50
+special_thanks,Special thanks,（株）DynoGames,,,,51
+special_thanks,Special thanks,ゆうみ,,,,60
+program,プログラム/画像素材作成,Codex,,,,70
+program,プログラム/画像素材作成,Claude,,,,71

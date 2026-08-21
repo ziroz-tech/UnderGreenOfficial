@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#020907">
+  <title>UNDER GREEN | Who Owns the Seed?</title>
+  <meta name="description" content="ゲーム本編と同じ3D栽培区画を操作できる、UNDER GREEN公式サイト。">
+  <link rel="icon" href="seed.webp">
+  <link rel="stylesheet" href="portal.css?v=20260821cultivationdemo1">
+</head>
+<body class="is-intro">
+  <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="プロローグ">
+    <div class="intro-noise" aria-hidden="true"></div>
+    <div class="intro-terminal">
+      <p class="intro-code">ARCHIVE 08-14 // RESTORED TEXT</p>
+      <div class="intro-copy" id="intro-copy"></div>
+      <span class="intro-cursor" aria-hidden="true"></span>
+      <div class="intro-loading" aria-live="polite">
+        <div class="intro-loading-meta">
+          <span id="intro-loading-status">RESTORING ARCHIVE...</span>
+          <strong id="intro-loading-progress">000%</strong>
+        </div>
+        <div class="intro-loading-track" aria-hidden="true"><i id="intro-loading-bar"></i></div>
+      </div>
+    </div>
+    <button class="intro-skip" id="intro-skip" type="button">SKIP <span aria-hidden="true">↗</span></button>
+    <p class="intro-status">UNLICENSED SIGNAL / CH. 004</p>
+  </div>
+
+  <header class="portal-header">
+    <a class="portal-brand" href="#game" aria-label="ゲーム体験へ戻る">
+      <span class="portal-site-label">OFFICIAL WEBSITE</span>
+      <span class="portal-logo-frame" aria-hidden="true">
+        <img class="portal-logo" src="title_logo.webp" alt="">
+      </span>
+    </a>
+    <nav class="portal-nav" aria-label="サイト案内">
+      <button type="button" data-panel="system"><small>01 / システム</small><strong>GAME</strong></button>
+      <button type="button" data-panel="world"><small>02 / 物語</small><strong>STORY</strong></button>
+      <button type="button" data-panel="credits"><small>03 / 制作</small><strong>CREDITS</strong></button>
+      <button type="button" data-panel="play"><small>04 / 開発情報</small><strong>PLAY</strong></button>
+      <button type="button" data-panel="contact"><small>05 / 通信</small><strong>CONTACT</strong></button>
+    </nav>
+    <div class="portal-status" aria-live="polite">
+      <i aria-hidden="true"></i>
+      <span><small>LIVE CULTIVATION</small><strong id="portal-game-day">DAY 01 · CONNECTING</strong></span>
+    </div>
+  </header>
+
+  <main class="game-host" id="game">
+    <div class="game-loading" id="game-loading"><i></i><span>LOADING CURRENT GAME BUILD...</span></div>
+    <div class="cultivation-demo-label" aria-label="栽培デモ">栽培デモ</div>
+    <iframe
+      id="game-frame"
+      class="game-frame"
+      src="official-demo.html?officialdemo=1&amp;build=20260821officialminimal3"
+      title="UNDER GREEN ゲーム体験版"
+      allow="fullscreen"
+    ></iframe>
+    <aside class="cultivation-guide" aria-label="栽培区画の操作方法">
+      <strong>HOW TO CULTIVATE</strong>
+      <p><span>植える</span> 右下「植える」のレタスを空PODへドラッグ　／　<span>育てる</span> 霧吹きをレタスへドラッグ（何度でも成長促進）　／　<span>掃除</span> バケツを汚れたPODへドラッグ</p>
+    </aside>
+    <aside class="local-launch-note" id="local-launch-note" hidden>
+      <strong>LOCAL SERVER REQUIRED</strong>
+      <p>ゲーム本体のCSVと3Dモジュールを読み込むため、<code>play-local.bat</code>を起動して <code>http://127.0.0.1:8766/official/</code> を開いてください。</p>
+    </aside>
+  </main>
+
+  <div class="info-layer" id="info-layer" aria-hidden="true">
+    <button class="info-backdrop" type="button" aria-label="案内を閉じる"></button>
+
+    <article class="info-panel" data-info="world" role="dialog" aria-modal="true" aria-labelledby="world-title">
+      <button class="panel-close" type="button" aria-label="閉じる">×</button>
+      <p class="panel-kicker">WORLD // ARCHIVE 01</p>
+      <h2 id="world-title">緑を育てることが、<em>罪になった世界。</em></h2>
+      <div class="panel-columns story-copy">
+        <div>
+          <p>核戦争で地表が汚染され、人々は食料生産企業が管理する地下シェルターへ逃げ延びた。土も種も知識も、企業の所有物だ。</p>
+          <p>失われた栽培知識を手にしたあなたは、ホコリと鉄サビにまみれた一室で、禁じられた水耕栽培を始める。</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="info-panel" data-info="system" role="dialog" aria-modal="true" aria-labelledby="system-title">
+      <button class="panel-close" type="button" aria-label="閉じる">×</button>
+      <p class="panel-kicker">GAME SYSTEM // LIVE BUILD</p>
+      <h2 id="system-title">ディストピア違法農場経営<em>シュミレーション</em></h2>
+      <p class="panel-lead">中央の体験区画には、開発中のゲーム本体と同じHTML・CSS・Three.js・操作ロジックを読み込んでいます。</p>
+    </article>
+
+    <article class="info-panel compact" data-info="credits" role="dialog" aria-modal="true" aria-labelledby="credits-title">
+      <button class="panel-close" type="button" aria-label="閉じる">×</button>
+      <p class="panel-kicker">CREDITS // 03</p>
+      <h2 id="credits-title">UNDER GREEN</h2>
+      <p class="panel-lead">Who Owns the Seed?</p>
+      <dl class="credit-list" id="credit-list" data-credit-source="credits.csv"><div><dt>LOADING</dt><dd>ゲーム内クレジットを読み込んでいます...</dd></div></dl>
+      <p class="copyright">© 2026 UNDER GREEN PROJECT</p>
+    </article>
+
+    <article class="info-panel" data-info="play" role="dialog" aria-modal="true" aria-label="PLAY">
+      <button class="panel-close" type="button" aria-label="閉じる">×</button>
+      <p class="panel-kicker">PLAY // DEVELOPMENT 04</p>
+      <p class="play-statement">steamでの発売を目指して開発を進めながら全国のインディーゲームイベントに出展しています。</p>
+      <section class="event-history" aria-labelledby="event-history-title">
+        <h3 id="event-history-title">イベント出展履歴</h3>
+        <ul>
+          <li><span>2026</span><strong>ゲームパビリオンjp2026</strong></li>
+          <li><span>2026</span><strong>九州学生ゲーム大祭2026</strong></li>
+        </ul>
+      </section>
+    </article>
+
+    <article class="info-panel compact" data-info="contact" role="dialog" aria-modal="true" aria-label="CONTACT">
+      <button class="panel-close" type="button" aria-label="閉じる">×</button>
+      <p class="panel-kicker">CONTACT // 05</p>
+      <p class="panel-lead">作品へのご感想、取材、制作に関するお問い合わせは、公式Xからお送りください。</p>
+      <a class="contact-link" href="https://x.com/" target="_blank" rel="noopener noreferrer"><span>X</span><strong>OFFICIAL CHANNEL</strong><i>↗</i></a>
+    </article>
+  </div>
+
+  <script src="portal.js?v=20260821officialintro2"></script>
+</body>
+</html>

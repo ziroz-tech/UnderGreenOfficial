@@ -1,0 +1,2 @@
+"id","name","code","slots","price","upkeep","width","height","continuous","icon","sprite","emptySprite","description","dirtMod"
+"pod","栽培ポッド","GROW POD","1","120","1","1","1","false","","","","1苗用の小型密閉設備。植え付け時に水・養液を一括投入し、収穫まで追加消費なし。","2.2"

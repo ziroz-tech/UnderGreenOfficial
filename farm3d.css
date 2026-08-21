@@ -1,0 +1,1494 @@
+/* UNDERGREEN // THREE.JS FARM SURFACE
+   The legacy 2D farm DOM is intentionally disabled. All farm rendering,
+   hit testing, camera movement and equipment interaction live on the canvas. */
+
+.farm3d-active #facility-world,
+.farm3d-active .facility-camera-transition,
+.farm3d-active .facility-base-transition,
+.farm3d-active .selected-unit-panel {
+  display: none !important;
+}
+
+.farm3d-active .facility-grid-shell {
+  position: relative;
+  isolation: isolate;
+  min-height: 620px;
+  padding: 0 !important;
+  overflow: hidden;
+  border-color: rgba(72, 219, 234, .36);
+  background: #030907;
+  box-shadow:
+    inset 0 0 70px rgba(13, 54, 39, .18),
+    0 18px 50px rgba(0, 0, 0, .34);
+  cursor: default;
+}
+
+.farm3d-active .facility-grid-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(3, 15, 11, .05), transparent 15%, transparent 82%, rgba(3, 15, 11, .18));
+  opacity: .72;
+}
+
+body:has(#farm-screen.active) > .scanlines {
+  display: none;
+}
+
+.farm3d-active .facility-grid-shell::after {
+  display: none !important;
+}
+
+.farm3d-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline: 0;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.farm3d-canvas:focus-visible {
+  box-shadow: inset 0 0 0 2px rgba(114, 255, 184, .74);
+}
+
+.farm3d-active .facility-grid-toolbar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 22;
+  max-width: calc(100% - 190px);
+  margin: 0;
+  padding: 7px 10px;
+  border: 1px solid rgba(114, 255, 184, .26);
+  background: rgba(2, 14, 10, .84);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .28);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.farm3d-active .facility-grid-toolbar:empty {
+  display: none;
+}
+
+.farm3d-active .facility-grid-toolbar > * {
+  pointer-events: auto;
+}
+
+.farm3d-active .facility-clean-tools {
+  position: absolute;
+  z-index: 25;
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: auto;
+  display: block;
+  width: 360px;
+  height: 360px;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  isolation: isolate;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  pointer-events: none;
+  transform: none;
+}
+
+.farm3d-active .tool-wheel-hit-strip {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: transparent;
+  clip-path: polygon(
+    35% 100%, 37% 82%, 44% 66%, 55% 55%, 69% 45%, 84% 38%, 100% 35%,
+    100% 100%
+  );
+  pointer-events: auto;
+  cursor: ns-resize;
+}
+
+.farm3d-active .tool-wheel-guide {
+  position: absolute;
+  z-index: 7;
+  right: 8px;
+  bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 38px;
+  height: 68px;
+  color: rgba(181, 255, 219, .9);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 5px);
+  transition: opacity .18s ease, transform .22s ease, visibility 0s linear .22s;
+  pointer-events: none;
+}
+
+.farm3d-active .facility-clean-tools:has(.tool-wheel-hit-strip:hover, > .clean-tool-button:hover) .tool-wheel-guide {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, 0);
+  transition-delay: 0s;
+}
+
+
+
+.farm3d-active .tool-wheel-arrow {
+  width: 9px;
+  height: 9px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  opacity: .92;
+}
+
+.farm3d-active .tool-wheel-arrow.is-left {
+  transform: rotate(-45deg);
+}
+
+.farm3d-active .tool-wheel-arrow.is-right {
+  transform: rotate(135deg);
+}
+
+.farm3d-active .tool-wheel-mouse {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 27px;
+  border: 2px solid rgba(181, 255, 219, .88);
+  border-radius: 10px;
+  background: rgba(3, 18, 13, .72);
+  box-shadow: 0 0 10px rgba(72, 219, 234, .18);
+}
+
+.farm3d-active .tool-wheel-mouse > span {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  width: 2px;
+  height: 6px;
+  border-radius: 2px;
+  background: #72ffb8;
+  box-shadow: 0 0 7px rgba(114, 255, 184, .7);
+  transform: translateX(-50%);
+  animation: farm3d-wheel-hint 1.65s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.farm3d-active .facility-clean-tools:has(.tool-wheel-hit-strip:hover, > .clean-tool-button:hover) .tool-wheel-mouse > span {
+  animation-play-state: running;
+}
+.farm3d-active .facility-clean-tools::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: 0;
+  width: 224px;
+  height: 224px;
+  border-top: 1px solid rgba(114, 255, 184, .22);
+  border-left: 1px solid rgba(114, 255, 184, .22);
+  border-top-left-radius: 100%;
+  background:
+    radial-gradient(circle at 100% 100%, rgba(79, 255, 180, .12) 0 28%, rgba(23, 79, 56, .07) 48%, transparent 73%);
+  box-shadow: inset 15px 15px 30px rgba(72, 219, 234, .025);
+  pointer-events: none;
+}
+
+.farm3d-active .facility-clean-tools::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+  width: 132px;
+  height: 132px;
+  border-top: 1px solid rgba(72, 219, 234, .13);
+  border-left: 1px solid rgba(72, 219, 234, .13);
+  border-top-left-radius: 100%;
+  background: radial-gradient(circle at 100% 100%, rgba(3, 9, 7, .9) 0 42%, rgba(3, 9, 7, .32) 68%, transparent 72%);
+  pointer-events: none;
+}
+
+.farm3d-active .facility-clean-tools .tool-palette-label {
+  display: none;
+}
+
+.farm3d-active .clean-tool-button {
+  --tool-wheel-x: 0px;
+  --tool-wheel-y: -8px;
+  --tool-wheel-scale: 1.24;
+  --tool-wheel-opacity: 1;
+  position: absolute;
+  z-index: 3;
+  top: 100%;
+  left: 100%;
+  width: 62px;
+  height: 62px;
+  min-width: 62px;
+  min-height: 62px;
+  padding: 2px;
+  overflow: visible;
+  border: 1px solid rgba(114, 255, 184, .34);
+  border-radius: 50%;
+  color: #dffff0;
+  background:
+    radial-gradient(circle at 42% 35%, rgba(41, 88, 68, .88), rgba(3, 18, 13, .96) 69%);
+  box-shadow:
+    inset 0 0 16px rgba(114, 255, 184, .07),
+    0 8px 18px rgba(0, 0, 0, .4);
+  opacity: var(--tool-wheel-opacity);
+  cursor: pointer;
+  pointer-events: auto;
+  transform:
+    translate(-50%, -50%)
+    translate(var(--tool-wheel-x), var(--tool-wheel-y))
+    scale(var(--tool-wheel-scale));
+  transform-origin: center;
+  transition:
+    transform .3s cubic-bezier(.18, .78, .2, 1),
+    opacity .22s ease,
+    border-color .16s ease,
+    background .16s ease,
+    box-shadow .16s ease,
+    filter .16s ease;
+}
+
+.farm3d-active .facility-clean-tools .clean-tool-button::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  display: block !important;
+  border: 2px solid transparent;
+  border-top-color: #72ffb8;
+  border-right-color: rgba(114, 255, 184, .34);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.farm3d-active .facility-clean-tools .clean-tool-button::after {
+  display: none !important;
+}
+
+.farm3d-active .facility-clean-tools .clean-tool-name {
+  position: absolute;
+  z-index: 8;
+  top: calc(100% + 8px);
+  left: 50%;
+  display: block;
+  min-width: 112px;
+  color: rgba(210, 239, 224, .78);
+  font: 800 10px/1.2 Consolas, "Yu Gothic UI", sans-serif;
+  letter-spacing: 0;
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, 3px);
+  transition: opacity .16s ease, transform .22s ease;
+  pointer-events: none;
+}
+
+.farm3d-active .clean-tool-button.wheel-current {
+  z-index: 6;
+  border-color: #72ffb8;
+  background:
+    radial-gradient(circle at 42% 35%, rgba(65, 139, 101, .98), rgba(4, 31, 22, .98) 72%);
+  box-shadow:
+    inset 0 0 20px rgba(114, 255, 184, .16),
+    0 0 0 3px rgba(114, 255, 184, .1),
+    0 0 24px rgba(72, 219, 234, .32),
+    0 11px 24px rgba(0, 0, 0, .46);
+}
+
+.farm3d-active .clean-tool-button.wheel-current::before {
+  opacity: 1;
+  animation: farm3d-tool-orbit 3.4s linear infinite;
+}
+
+.farm3d-active .clean-tool-button.wheel-current .clean-tool-name {
+  color: #effff6;
+  font-size: 14px;
+  font-weight: 900;
+  text-shadow: 0 0 8px rgba(114, 255, 184, .52);
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.farm3d-active .clean-tool-button.wheel-hidden {
+  visibility: hidden;
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.farm3d-active .facility-clean-tools .clean-tool-button:hover,
+.farm3d-active .facility-clean-tools .clean-tool-button:focus-visible {
+  border-color: #effff8;
+  filter: brightness(1.16);
+  outline: 0;
+}
+
+.clean-tool-model {
+  display: block;
+  width: 50px;
+  height: 50px;
+  pointer-events: none;
+  filter: drop-shadow(0 5px 6px rgba(0, 0, 0, .42));
+}
+
+.farm3d-active .clean-tool-button.dragging {
+  opacity: .42 !important;
+}
+.farm3d-active .facility-clean-tools .clean-tool-icon {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(72, 219, 234, .34));
+  pointer-events: none;
+}
+
+.farm3d-active .facility-clean-tools .clean-tool-icon[hidden] {
+  display: none !important;
+}
+
+.farm3d-active .facility-clean-tools .clean-tool-fallback-letter {
+  display: grid;
+  place-items: center;
+  color: #dffff0;
+  font: 800 18px/1 var(--mono);
+  border: 1px solid rgba(72, 219, 234, .45);
+  border-radius: 50%;
+  background: rgba(5, 20, 17, .78);
+}
+
+
+@keyframes farm3d-wheel-hint {
+  0%, 100% { opacity: .35; transform: translate(-50%, 0); }
+  45% { opacity: 1; transform: translate(-50%, 6px); }
+  70% { opacity: .65; transform: translate(-50%, 2px); }
+}
+
+@keyframes farm3d-tool-orbit {
+  to { transform: rotate(360deg); }
+}
+
+/* Override the desktop compact-layout rules from styles.css. */
+#farm-screen .facility-grid-shell.farm3d-active > .facility-clean-tools {
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: auto;
+  gap: 0;
+  padding: 0;
+}
+
+#farm-screen .facility-grid-shell.farm3d-active > .facility-clean-tools .clean-tool-button {
+  width: 62px;
+  height: 62px;
+}
+
+#farm-screen .facility-grid-shell.farm3d-active > .facility-clean-tools .clean-tool-icon {
+  width: 38px;
+  height: 38px;
+}
+
+#farm-screen .facility-grid-shell.farm3d-active > .facility-clean-tools .tool-palette-label {
+  display: none;
+}
+.farm3d-hud {
+  position: absolute;
+  z-index: 26;
+  top: 12px;
+  right: 12px;
+  bottom: auto;
+  left: auto;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px;
+  border: 1px solid rgba(72, 219, 234, .34);
+  background: rgba(2, 14, 10, .9);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .34);
+  backdrop-filter: blur(8px);
+}
+
+.farm3d-hud button {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid rgba(114, 255, 184, .28);
+  border-radius: 2px;
+  color: #b8f7d5;
+  background: rgba(10, 34, 25, .72);
+  font: 700 19px/1 monospace;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.farm3d-hud button:hover,
+.farm3d-hud button:focus-visible {
+  border-color: rgba(114, 255, 184, .76);
+  color: #f0fff8;
+  background: rgba(24, 79, 55, .72);
+  outline: 0;
+}
+
+.farm3d-hud button.active {
+  border-color: #f5d65b;
+  color: #f5d65b;
+  background: rgba(72, 60, 10, .46);
+  box-shadow: inset 0 0 13px rgba(245, 214, 91, .14);
+}
+
+.farm3d-hud button.farm3d-rotation-toggle {
+  width: 48px;
+  grid-template-rows: 22px 10px;
+  align-content: center;
+  gap: 1px;
+}
+
+.farm3d-hud button.farm3d-rotation-toggle > span {
+  font-size: 19px;
+  line-height: 1;
+}
+
+.farm3d-hud button.farm3d-rotation-toggle > small {
+  font: 700 7px/1 monospace;
+  letter-spacing: 0;
+  opacity: .72;
+}
+
+.farm3d-hud button.farm3d-rotation-toggle.active > small {
+  opacity: 1;
+}
+
+
+
+.farm3d-hud-divider {
+  width: 1px;
+  height: 28px;
+  margin: 0 2px;
+  background: rgba(114, 255, 184, .18);
+}
+
+.farm3d-hover-label {
+  position: absolute;
+  z-index: 26;
+  max-width: min(260px, calc(100% - 24px));
+  padding: 6px 9px;
+  border: 1px solid rgba(245, 214, 91, .58);
+  color: #f9edaa;
+  background: rgba(5, 17, 12, .94);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .38);
+  font: 700 11px/1.45 var(--font-mono, monospace);
+  letter-spacing: 0;
+  white-space: normal;
+  opacity: 0;
+  transform: translate(10px, 10px);
+  pointer-events: none;
+  transition: opacity .1s ease;
+}
+
+.farm3d-hover-label.visible {
+  opacity: 1;
+}
+
+.farm3d-hover-label[data-hover-type="slot"] {
+  border-color: rgba(114, 255, 184, .52);
+  color: #dffff0;
+  box-shadow: 0 0 16px rgba(114, 255, 184, .12), 0 6px 20px rgba(0, 0, 0, .38);
+}
+
+.farm3d-hover-label[data-hover-type="expansion"] {
+  border-color: rgba(72, 219, 234, .5);
+  color: #dffbff;
+  box-shadow: 0 0 16px rgba(72, 219, 234, .12), 0 6px 20px rgba(0, 0, 0, .38);
+}
+
+.farm3d-hover-label[data-hover-type="storage"] {
+  border-color: rgba(72, 219, 234, .72);
+  color: #dffbff;
+  box-shadow: 0 0 18px rgba(72, 219, 234, .22), 0 6px 20px rgba(0, 0, 0, .42);
+}
+
+.farm3d-canvas[data-farm3d-store-drop="ready"] {
+  cursor: alias !important;
+}
+
+.farm3d-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 28;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 13px;
+  color: #72ffb8;
+  background: #030907;
+  font: 700 11px/1 var(--font-mono, monospace);
+  letter-spacing: .18em;
+  transition: opacity .25s ease, visibility .25s ease;
+  pointer-events: none;
+}
+
+.farm3d-loading span {
+  width: 44px;
+  height: 44px;
+  border: 2px solid rgba(114, 255, 184, .18);
+  border-top-color: #72ffb8;
+  border-radius: 50%;
+  animation: farm3d-loading-spin .9s linear infinite;
+}
+
+.farm3d-loading.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.farm3d-fatal {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  color: #ff998d;
+  background: #050907;
+  font: 700 13px/1.6 var(--font-mono, monospace);
+  text-align: center;
+}
+
+.farm3d-seed-drag-ghost {
+  position: fixed;
+  z-index: 12000;
+  width: 164px;
+  min-height: 54px;
+  margin: 0;
+  pointer-events: none;
+  opacity: 0.94;
+  transform: translate(-50%, -50%) scale(0.94);
+  transform-origin: center;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.48);
+  transition: border-color 90ms ease, box-shadow 90ms ease, filter 90ms ease;
+}
+
+.farm3d-seed-drag-ghost.drop-valid {
+  border-color: #72ffb8;
+  filter: brightness(1.16);
+  box-shadow: 0 0 0 2px rgba(114, 255, 184, 0.3), 0 12px 32px rgba(25, 218, 149, 0.32);
+}
+
+.farm3d-seed-drag-ghost.drop-invalid {
+  border-color: #ff5b6e;
+  filter: saturate(0.7) brightness(0.82);
+  box-shadow: 0 0 0 2px rgba(255, 91, 110, 0.22), 0 10px 28px rgba(0, 0, 0, 0.48);
+}
+
+html.farm3d-seed-drag-active .farm3d-canvas,
+html.farm3d-equipment-drag-active .farm3d-canvas,
+html.farm3d-clean-drag-active .farm3d-canvas {
+  cursor: copy !important;
+}
+
+.farm3d-clean-drag-ghost {
+  z-index: 12000;
+  width: 104px;
+  height: 104px;
+  margin: -52px 0 0 -52px;
+  overflow: visible;
+  border: 1px solid rgba(114, 255, 184, .34);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(26, 80, 57, .25), rgba(3, 12, 9, .08) 62%, transparent 72%);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .36), 0 0 22px rgba(72, 219, 234, .12);
+  opacity: 1;
+  transform: none;
+  transition: border-color 90ms ease, box-shadow 90ms ease, filter 90ms ease;
+}
+
+.farm3d-clean-drag-ghost .clean-tool-model {
+  width: 96px;
+  height: 96px;
+  filter: drop-shadow(0 10px 9px rgba(0, 0, 0, .5));
+}
+
+.farm3d-clean-drag-ghost.drop-valid {
+  border-color: #72ffb8;
+  filter: brightness(1.16);
+  box-shadow: 0 0 0 2px rgba(114, 255, 184, .3), 0 0 24px rgba(72, 219, 234, .42);
+}
+
+.farm3d-clean-drag-ghost.drop-invalid {
+  border-color: #ff5b6e;
+  filter: grayscale(.42) brightness(.72);
+  box-shadow: 0 0 0 2px rgba(255, 91, 110, .22), 0 10px 24px rgba(0, 0, 0, .48);
+}
+
+.farm3d-active .placement-stock {
+  cursor: grab;
+}
+
+.farm3d-active .placement-stock:active,
+.farm3d-active .placement-stock.dragging {
+  cursor: grabbing;
+}
+
+.farm3d-equipment-drag-ghost {
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .58));
+}
+
+.farm3d-equipment-drag-ghost.drop-valid {
+  filter: brightness(1.12) drop-shadow(0 0 16px rgba(114, 255, 184, .5));
+}
+
+.farm3d-equipment-drag-ghost.drop-invalid {
+  filter: grayscale(.45) brightness(.72) drop-shadow(0 8px 12px rgba(0, 0, 0, .56));
+}
+@keyframes farm3d-loading-spin {
+  to { transform: rotate(360deg); }
+}
+
+html.low-spec-mode .farm3d-active .facility-grid-shell::before {
+  display: none;
+}
+
+html.low-spec-mode .farm3d-hud,
+html.low-spec-mode .farm3d-active .facility-clean-tools,
+html.low-spec-mode .farm3d-active .facility-grid-toolbar {
+  backdrop-filter: none;
+}
+
+@media (max-width: 760px) {
+  .farm3d-active .facility-grid-shell,
+  #farm-screen .farm3d-active.facility-grid-shell {
+    min-height: 500px;
+    max-height: none;
+  }
+
+  .farm3d-active .facility-grid-toolbar {
+    top: 8px;
+    left: 8px;
+    max-width: calc(100% - 128px);
+    padding: 6px 8px;
+  }
+
+  #farm-screen .facility-grid-shell.farm3d-active > .facility-clean-tools {
+    bottom: 0;
+    width: min(340px, calc(100% - 8px));
+    height: min(340px, calc(100% - 8px));
+  }
+
+  #farm-screen .facility-grid-shell.farm3d-active > .facility-clean-tools .clean-tool-button {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    min-height: 52px;
+    padding: 2px;
+  }
+
+  #farm-screen .facility-grid-shell.farm3d-active > .facility-clean-tools .clean-tool-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .farm3d-hud {
+    top: 8px;
+    right: 8px;
+    padding: 5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .farm3d-loading span,
+  .farm3d-active .clean-tool-button.wheel-current::before,
+  .farm3d-active .tool-wheel-mouse > span,
+  .farm3d-loading,
+  .farm3d-hover-label,
+  .farm3d-active .clean-tool-button {
+    transition: none;
+  }
+}
+
+/* Toolbox storage trial // remove .toolbox-storage-trial to restore the side vault. */
+#farm-screen.toolbox-storage-trial .side-panel {
+  display: none !important;
+}
+
+@media (min-width: 980px) and (min-height: 650px) {
+  #farm-screen.toolbox-storage-trial .farm-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  #farm-screen.toolbox-storage-trial .facility-workspace {
+    position: relative;
+    display: block;
+    min-width: 0;
+    height: 100%;
+  }
+
+  #farm-screen.toolbox-storage-trial .facility-grid-shell {
+    grid-column: 1;
+    width: 100%;
+    height: 100%;
+  }
+
+  #farm-screen.toolbox-storage-trial .base-banner {
+    position: absolute;
+    z-index: 18;
+    top: 12px;
+    left: 12px;
+    display: block;
+    width: 196px;
+    height: auto;
+    min-height: 0;
+    max-height: calc(100% - 24px);
+    margin: 0;
+    padding: 0 4px 0 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border: 0;
+    background: none !important;
+    box-shadow: none;
+    scrollbar-color: rgba(114, 255, 184, .34) transparent;
+    scrollbar-width: thin;
+  }
+
+  #farm-screen.toolbox-storage-trial .base-banner > div:not(.base-switcher),
+  #farm-screen.toolbox-storage-trial .base-banner > strong {
+    display: none;
+  }
+
+  #farm-screen.toolbox-storage-trial .base-switcher {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    width: 100%;
+  }
+
+  #farm-screen.toolbox-storage-trial .base-switch {
+    position: relative;
+    min-height: 46px;
+    padding: 7px 9px 7px 12px;
+    overflow: hidden;
+    border-color: rgba(114, 255, 184, .24);
+    background: rgba(2, 12, 9, .78);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .24);
+    backdrop-filter: blur(5px);
+    transition: border-color .16s ease, background .16s ease, transform .16s ease;
+  }
+
+  #farm-screen.toolbox-storage-trial .base-switch::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 0;
+    width: 2px;
+    background: rgba(114, 255, 184, .26);
+    box-shadow: 0 0 8px rgba(114, 255, 184, .16);
+  }
+
+  #farm-screen.toolbox-storage-trial .base-switch:hover {
+    border-color: rgba(114, 255, 184, .64);
+    background: rgba(5, 27, 19, .92);
+    transform: translateX(3px);
+  }
+
+  #farm-screen.toolbox-storage-trial .base-switch.active {
+    border-color: rgba(114, 255, 184, .78);
+    background: rgba(7, 38, 27, .94);
+    box-shadow: 0 0 18px rgba(114, 255, 184, .13), 0 8px 20px rgba(0, 0, 0, .28);
+  }
+
+  #farm-screen.toolbox-storage-trial .base-switch.active::before {
+    width: 3px;
+    background: var(--green);
+    box-shadow: 0 0 12px rgba(114, 255, 184, .52);
+  }
+
+  #farm-screen.toolbox-storage-trial .base-switch span,
+  #farm-screen.toolbox-storage-trial .base-switch small {
+    font-size: 7px;
+  }
+
+  #farm-screen.toolbox-storage-trial .base-switch strong {
+    margin: 2px 0;
+    font-size: 10px;
+    line-height: 1.2;
+    white-space: normal;
+    text-overflow: clip;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+}
+
+#farm-screen.toolbox-storage-trial .facility-grid-shell.farm3d-active > .facility-clean-tools {
+  right: 0;
+  left: auto;
+  width: 360px;
+  height: 360px;
+  overflow: visible;
+}
+
+.farm3d-active .tool-storage-trigger {
+  border-color: rgba(72, 219, 234, .58);
+  background:
+    radial-gradient(circle at 42% 35%, rgba(34, 93, 94, .96), rgba(3, 19, 18, .98) 70%);
+  cursor: pointer;
+}
+
+.farm3d-active .tool-storage-trigger .clean-tool-icon {
+  filter: drop-shadow(0 0 9px rgba(72, 219, 234, .52));
+}
+
+.farm3d-active .tool-storage-trigger.wheel-current,
+.farm3d-active .tool-storage-trigger.storage-active {
+  border-color: #8cecff;
+  background:
+    radial-gradient(circle at 42% 35%, rgba(49, 126, 129, .98), rgba(3, 28, 27, .98) 72%);
+  box-shadow:
+    inset 0 0 20px rgba(72, 219, 234, .18),
+    0 0 0 3px rgba(72, 219, 234, .11),
+    0 0 27px rgba(72, 219, 234, .38),
+    0 11px 24px rgba(0, 0, 0, .46);
+}
+
+.farm3d-active .tool-storage-access-mark {
+  position: absolute;
+  z-index: 9;
+  top: -17px;
+  right: 50%;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 18px;
+  border: 1px solid rgba(140, 236, 255, .62);
+  border-bottom: 0;
+  border-radius: 13px 13px 0 0;
+  color: #8cecff;
+  background: rgba(3, 20, 18, .94);
+  box-shadow: 0 -5px 13px rgba(72, 219, 234, .18);
+  font: 900 14px/1 Consolas, monospace;
+  transform: translateX(50%);
+  transition: transform .18s ease, color .18s ease;
+  pointer-events: none;
+}
+
+.farm3d-active .tool-storage-trigger:hover .tool-storage-access-mark,
+.farm3d-active .tool-storage-trigger.storage-active .tool-storage-access-mark {
+  color: #efffff;
+  transform: translate(50%, -4px);
+}
+
+.farm3d-active .tool-storage-count {
+  position: absolute;
+  z-index: 10;
+  top: -7px;
+  right: -7px;
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 4px;
+  border: 1px solid rgba(140, 236, 255, .72);
+  border-radius: 10px;
+  color: #dfffff;
+  background: #062b2a;
+  box-shadow: 0 0 13px rgba(72, 219, 234, .34);
+  font: 900 9px/1 Consolas, monospace;
+  pointer-events: none;
+}
+
+.farm3d-active .tool-storage-ring {
+  position: absolute;
+  z-index: 11;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(8px, 8px) scale(.97);
+  transform-origin: 100% 100%;
+  transition: opacity .16s ease, transform .22s cubic-bezier(.18, .78, .2, 1), visibility 0s linear .22s;
+  pointer-events: none;
+}
+
+.farm3d-active .tool-storage-ring.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, 0) scale(1);
+  transition-delay: 0s;
+  pointer-events: none;
+}
+
+.farm3d-active .tool-storage-ring::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border: 0;
+  border-radius: 0;
+  background:
+    radial-gradient(circle at 100% 100%, transparent 0 56%, rgba(6, 27, 23, .66) 57% 79%, transparent 80%);
+  clip-path: polygon(
+    19% 89%, 26% 65%, 42% 42%, 65% 26%, 89% 19%,
+    99% 19%, 92% 42%, 75% 47%, 59% 59%, 47% 75%, 42% 92%, 19% 99%
+  );
+  box-shadow: inset 0 0 32px rgba(72, 219, 234, .04);
+  opacity: .9;
+  pointer-events: auto;
+}
+
+.farm3d-active .tool-storage-ring::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  right: 0;
+  bottom: 0;
+  width: 292px;
+  height: 292px;
+  border-top: 1px solid rgba(72, 219, 234, .3);
+  border-left: 1px solid rgba(72, 219, 234, .3);
+  border-top-left-radius: 100%;
+  box-shadow: inset 16px 16px 38px rgba(72, 219, 234, .025);
+  pointer-events: none;
+}
+
+.farm3d-active .tool-storage-ring-title {
+  position: absolute;
+  z-index: 2;
+  top: 36px;
+  right: 114px;
+  left: auto;
+  min-width: 168px;
+  padding: 5px 12px;
+  border: 1px solid rgba(72, 219, 234, .38);
+  color: #bffaff;
+  background: rgba(3, 18, 16, .92);
+  box-shadow: 0 0 17px rgba(72, 219, 234, .14);
+  font: 900 9px/1 Consolas, monospace;
+  letter-spacing: .1em;
+  text-align: center;
+  transform: none;
+  pointer-events: none;
+}
+
+.farm3d-active .tool-storage-ring.open.storage-ring-pageable .tool-storage-ring-title {
+  cursor: ns-resize;
+}
+
+.farm3d-active .tool-storage-ring.open.storage-ring-pageable {
+  cursor: ns-resize;
+}
+
+.farm3d-active .tool-storage-ring.open.storage-ring-pageable .tool-storage-ring-title::after {
+  content: "  ↕";
+  color: #f5d65b;
+  text-shadow: 0 0 8px rgba(245, 214, 91, .48);
+}
+
+.farm3d-active .tool-storage-ring-items {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+}
+
+.farm3d-active .tool-storage-ring-entry,
+.farm3d-active .tool-storage-ring-items > .seed-option {
+  position: absolute;
+  z-index: calc(4 + var(--tool-ring-order));
+  top: 100%;
+  left: 100%;
+  width: 58px;
+  height: 58px;
+  margin: 0;
+  opacity: 0;
+  transform:
+    translate(-50%, -50%)
+    translate(var(--tool-ring-x), var(--tool-ring-y))
+    scale(.74);
+  transition: opacity .14s ease, transform .2s cubic-bezier(.22, .72, .24, 1);
+  pointer-events: none;
+}
+
+.farm3d-active .tool-storage-ring.open .tool-storage-ring-entry,
+.farm3d-active .tool-storage-ring.open .tool-storage-ring-items > .seed-option {
+  opacity: 1;
+  transform:
+    translate(-50%, -50%)
+    translate(var(--tool-ring-x), var(--tool-ring-y))
+    scale(1);
+  pointer-events: auto;
+}
+
+.farm3d-active .tool-storage-ring.open .tool-storage-ring-entry.tool-ring-hidden,
+.farm3d-active .tool-storage-ring.open .tool-storage-ring-items > .seed-option.tool-ring-hidden {
+  visibility: hidden;
+  opacity: 0;
+  transform:
+    translate(-50%, -50%)
+    translate(var(--tool-ring-x), var(--tool-ring-y))
+    scale(.62);
+  pointer-events: none !important;
+}
+
+.farm3d-active .tool-storage-ring-entry > .placement-stock,
+.farm3d-active .tool-storage-ring-items > .seed-option {
+  display: grid;
+  grid-template-columns: 1fr;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  min-width: 58px;
+  min-height: 58px;
+  padding: 5px;
+  overflow: visible;
+  border: 1px solid rgba(140, 236, 255, .46);
+  border-radius: 50%;
+  color: #eafff5;
+  background:
+    radial-gradient(circle at 42% 35%, rgba(31, 83, 69, .96), rgba(3, 17, 13, .98) 72%);
+  box-shadow: inset 0 0 15px rgba(114, 255, 184, .08), 0 8px 18px rgba(0, 0, 0, .48);
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.farm3d-active .tool-storage-ring-entry > .placement-stock {
+  transform: scale(1);
+  transform-origin: center;
+  transition:
+    transform .26s cubic-bezier(.16, 1.42, .3, 1),
+    border-color .16s ease,
+    background .16s ease,
+    box-shadow .2s ease;
+  will-change: transform;
+}
+
+/* Keep compact-layout rules from turning circular storage entries back into rows. */
+#farm-screen .facility-grid-shell.farm3d-active .tool-storage-ring-entry > .placement-stock,
+#farm-screen .facility-grid-shell.farm3d-active .tool-storage-ring-items > .seed-option {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  place-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.farm3d-active .tool-storage-ring.open .tool-storage-ring-entry:not(.tool-ring-hidden) > .tool-storage-item::before,
+.farm3d-active .tool-storage-ring.open .tool-storage-ring-items > .seed-option.tool-storage-item:not(.tool-ring-hidden)::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: transparent;
+  pointer-events: auto;
+}
+
+.farm3d-active .tool-storage-ring-entry > .placement-stock {
+  position: relative;
+}
+
+.farm3d-active .tool-storage-ring-items > .seed-option {
+  position: absolute;
+}
+
+.farm3d-active .tool-storage-ring-entry > .placement-stock:hover,
+.farm3d-active .tool-storage-ring-items > .seed-option:hover,
+.farm3d-active .tool-storage-ring-items > .seed-option.active {
+  border-color: #f5d65b;
+  background: radial-gradient(circle at 42% 35%, rgba(83, 89, 45, .98), rgba(25, 25, 8, .98) 74%);
+  box-shadow: 0 0 0 3px rgba(245, 214, 91, .1), 0 0 23px rgba(245, 214, 91, .3), 0 9px 20px rgba(0, 0, 0, .48);
+}
+
+.farm3d-active .tool-storage-ring.open .tool-storage-ring-entry:not(.tool-ring-hidden):hover,
+.farm3d-active .tool-storage-ring.open .tool-storage-ring-items > .seed-option:not(.tool-ring-hidden):hover {
+  z-index: 40;
+}
+
+.farm3d-active .tool-storage-ring-entry:not(.tool-ring-hidden) > .placement-stock:hover {
+  transform: scale(1.18);
+}
+
+.farm3d-active .tool-storage-ring.open .tool-storage-ring-items > .seed-option:not(.tool-ring-hidden):hover {
+  transform:
+    translate(-50%, -50%)
+    translate(var(--tool-ring-x), var(--tool-ring-y))
+    scale(1.18);
+}
+
+.farm3d-active .tool-storage-ring-entry > .placement-stock img,
+.farm3d-active .tool-storage-ring-items > .seed-option .seed-glyph img {
+  width: 42px;
+  height: 42px;
+  border: 0;
+  background: transparent;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(72, 219, 234, .34));
+  pointer-events: none;
+}
+
+#farm-screen .facility-grid-shell.farm3d-active .tool-storage-ring-entry > .placement-stock img,
+#farm-screen .facility-grid-shell.farm3d-active .tool-storage-ring-items > .seed-option .seed-glyph img {
+  display: block;
+  margin: 0;
+  background: transparent;
+  object-position: center;
+}
+
+#farm-screen .facility-grid-shell.farm3d-active .tool-storage-ring-items > .seed-option .seed-glyph {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin: 0;
+  justify-self: center;
+}
+
+/* Icon artwork is supplied on black plates; screen blending lets the wheel show through. */
+#farm-screen .facility-grid-shell.farm3d-active .facility-clean-tools .clean-tool-icon,
+#farm-screen .facility-grid-shell.farm3d-active .tool-storage-ring .seed-glyph img {
+  background: transparent !important;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+}
+
+.farm3d-active .tool-storage-item-copy {
+  position: absolute;
+  z-index: 12;
+  top: calc(100% + 7px);
+  bottom: auto;
+  left: 50%;
+  display: block;
+  min-width: max-content;
+  max-width: 150px;
+  padding: 5px 7px;
+  border: 1px solid rgba(72, 219, 234, .36);
+  color: #e8fff3;
+  background: rgba(3, 14, 11, .96);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .46);
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition: opacity .12s ease, transform .12s ease;
+  pointer-events: none;
+}
+
+.farm3d-active .tool-storage-item:hover .tool-storage-item-copy,
+.farm3d-active .tool-storage-item:focus-visible .tool-storage-item-copy {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.farm3d-active .tool-storage-item-copy strong,
+.farm3d-active .tool-storage-item-copy small {
+  display: block;
+  font: 800 9px/1.3 Consolas, "Yu Gothic UI", sans-serif;
+  white-space: nowrap;
+}
+
+.farm3d-active .tool-storage-item-copy small {
+  color: rgba(191, 250, 255, .7);
+  font-size: 8px;
+}
+
+.farm3d-active .tool-storage-ring-items > .seed-option > b {
+  position: absolute;
+  top: -3px;
+  right: -2px;
+  display: grid;
+  place-items: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 4px;
+  border: 1px solid rgba(114, 255, 184, .68);
+  border-radius: 10px;
+  color: #dffff0;
+  background: #08241a;
+  font: 900 9px/1 Consolas, monospace;
+}
+
+.farm3d-active .tool-storage-ring-items > .seed-option:disabled {
+  opacity: .3 !important;
+  filter: grayscale(.7);
+  cursor: not-allowed;
+  pointer-events: auto !important;
+}
+
+.farm3d-active .tool-storage-ring-entry > .stock-sell-button {
+  position: absolute;
+  z-index: 14;
+  top: -8px;
+  left: -8px;
+  width: 21px;
+  height: 21px;
+  min-width: 21px;
+  padding: 0;
+  border-radius: 50%;
+  opacity: 0;
+  font-size: 8px;
+  pointer-events: auto;
+  transition: opacity .12s ease;
+}
+
+.farm3d-active .tool-storage-ring-entry:hover > .stock-sell-button,
+.farm3d-active .tool-storage-ring-entry:focus-within > .stock-sell-button {
+  opacity: 1;
+}
+
+.farm3d-active .tool-storage-empty {
+  position: absolute;
+  top: 68px;
+  right: 110px;
+  bottom: auto;
+  left: auto;
+  min-width: 140px;
+  margin: 0;
+  padding: 8px 11px;
+  border: 1px solid rgba(72, 219, 234, .28);
+  color: rgba(191, 250, 255, .64);
+  background: rgba(3, 14, 11, .92);
+  font: 800 9px/1 Consolas, monospace;
+  text-align: center;
+  transform: none;
+  pointer-events: none;
+}
+
+@media (max-width: 760px) {
+  #farm-screen.toolbox-storage-trial .facility-grid-shell.farm3d-active > .facility-clean-tools {
+    width: min(340px, calc(100% - 8px));
+    height: min(340px, calc(100% - 8px));
+  }
+
+  .farm3d-active .tool-storage-ring {
+    inset: 0;
+  }
+
+  .farm3d-active .tool-storage-ring::before {
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .farm3d-active .tool-storage-ring,
+  .farm3d-active .tool-storage-ring-entry,
+  .farm3d-active .tool-storage-ring-entry > .placement-stock,
+  .farm3d-active .tool-storage-ring-items > .seed-option,
+  .farm3d-active .tool-storage-access-mark {
+    transition: none;
+  }
+}
+
+/* Official site hands-on demo: keep the live farm surface and core care tools only. */
+body.official-demo-mode .app-command-deck,
+body.official-demo-mode .active-task-dock,
+body.official-demo-mode #task-ready-notice,
+body.official-demo-mode #tasks-screen,
+body.official-demo-mode #comms-banner,
+body.official-demo-mode #story-comms-overlay,
+body.official-demo-mode #timed-mode-countdown,
+body.official-demo-mode #market-ending-overlay,
+body.official-demo-mode #news-history-panel,
+body.official-demo-mode #toast-container,
+body.official-demo-mode [data-clean-tool="brush"],
+body.official-demo-mode [data-clean-tool="wrench"],
+body.official-demo-mode [data-tool-storage="equipment"],
+body.official-demo-mode [data-tool-storage-ring="equipment"],
+body.official-demo-mode #base-banner {
+  display: none !important;
+}
+
+body.official-demo-mode #app {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+body.official-demo-mode #farm-screen {
+  padding-top: 0;
+}
+
+body.official-demo-mode #farm-screen .facility-grid-shell.farm3d-active [data-toolbox-seed-list] .seed-option[data-drag-crop="lettuce"] .seed-glyph,
+body.official-demo-mode #farm-screen .facility-grid-shell.farm3d-active [data-toolbox-seed-list] .seed-option[data-drag-crop="lettuce"] .seed-glyph img {
+  width: 54px;
+  height: 54px;
+}
+
+body.official-demo-mode #farm-screen .facility-grid-shell.farm3d-active [data-toolbox-seed-list] .seed-option[data-drag-crop="lettuce"] {
+  width: 70px;
+  height: 70px;
+  min-width: 70px;
+  min-height: 70px;
+}
+
+body.official-demo-mode.official-plant-tutorial-waiting [data-toolbox-seed-list] .seed-option[data-drag-crop="lettuce"] {
+  animation: official-seed-tutorial-aura 1.15s ease-in-out infinite;
+}
+
+body.official-demo-mode.official-plant-tutorial-waiting [data-toolbox-seed-list] .seed-option[data-drag-crop="lettuce"] .seed-glyph {
+  animation: official-seed-tutorial-scale 1.15s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.official-plant-tutorial-layer {
+  position: fixed;
+  z-index: 11980;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.official-plant-tutorial-drag {
+  position: fixed;
+  z-index: 2;
+  width: 96px;
+  height: 78px;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 14px rgba(114, 255, 184, .5));
+}
+
+.official-plant-tutorial-mouse {
+  position: absolute;
+  top: 0;
+  left: 5px;
+  width: 35px;
+  height: 53px;
+  border: 2px solid rgba(224, 255, 244, .58);
+  border-radius: 19px;
+  background: rgba(4, 23, 17, .28);
+  box-shadow: inset 0 0 14px rgba(114, 255, 184, .12), 0 0 12px rgba(114, 255, 184, .18);
+  animation: official-tutorial-mouse-action 2.7s ease-in-out infinite;
+}
+
+.official-plant-tutorial-mouse::after {
+  content: "";
+  position: absolute;
+  top: 21px;
+  right: 0;
+  left: 0;
+  border-top: 1px solid rgba(224, 255, 244, .38);
+}
+
+.official-plant-tutorial-mouse i {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 3px;
+  height: 9px;
+  border-radius: 3px;
+  background: rgba(114, 255, 184, .72);
+  transform: translateX(-50%);
+}
+
+.official-plant-tutorial-seed {
+  position: absolute;
+  top: 22px;
+  left: 39px;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  opacity: .82;
+  filter: drop-shadow(0 0 10px rgba(245, 214, 91, .8));
+  animation: official-tutorial-seed-release 2.7s ease-in-out infinite;
+}
+
+.official-plant-tutorial-target {
+  position: fixed;
+  width: 132px;
+  height: 98px;
+  border: 2px solid rgba(114, 255, 184, .72);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(114, 255, 184, .16), rgba(114, 255, 184, 0) 68%);
+  box-shadow: 0 0 18px rgba(114, 255, 184, .38), inset 0 0 22px rgba(114, 255, 184, .17);
+  transform: translate(-50%, -50%);
+  animation: official-pod-tutorial-blink .52s ease-in-out infinite alternate;
+}
+
+.official-plant-tutorial-target i {
+  position: absolute;
+  inset: 11px;
+  border: 1px dashed rgba(245, 214, 91, .68);
+  border-radius: 50%;
+}
+
+.official-plant-tutorial-target span {
+  position: absolute;
+  bottom: -21px;
+  left: 50%;
+  color: #baffdf;
+  font: 800 8px/1 Consolas, monospace;
+  letter-spacing: .16em;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.official-seed-hover-hint {
+  position: fixed;
+  z-index: 12020;
+  padding: 6px 9px 5px;
+  border: 1px solid rgba(245, 214, 91, .78);
+  color: #fff4ac;
+  background: rgba(18, 17, 4, .94);
+  box-shadow: 0 0 16px rgba(245, 214, 91, .28);
+  font: 900 10px/1 Consolas, "Yu Gothic UI", sans-serif;
+  letter-spacing: .12em;
+  white-space: nowrap;
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+.official-seed-hover-hint::before {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 8px;
+  width: 8px;
+  height: 8px;
+  border-right: 1px solid rgba(245, 214, 91, .78);
+  border-bottom: 1px solid rgba(245, 214, 91, .78);
+  background: rgba(18, 17, 4, .94);
+  transform: rotate(45deg);
+}
+
+@keyframes official-seed-tutorial-scale {
+  0%, 100% { transform: scale(.94); filter: brightness(.9); }
+  50% { transform: scale(1.07); filter: brightness(1.28); }
+}
+
+@keyframes official-seed-tutorial-aura {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(245, 214, 91, .06), 0 0 12px rgba(245, 214, 91, .18);
+    transform: translate(-50%, -50%) translate(var(--tool-ring-x), var(--tool-ring-y)) translateY(2px) scale(.96);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(245, 214, 91, .14), 0 0 30px rgba(245, 214, 91, .62);
+    transform: translate(-50%, -50%) translate(var(--tool-ring-x), var(--tool-ring-y)) translateY(-7px) scale(1.1);
+  }
+}
+
+@keyframes official-pod-tutorial-blink {
+  from { opacity: .3; filter: brightness(.82); transform: translate(-50%, -50%) scale(.92); }
+  to { opacity: 1; filter: brightness(1.35); transform: translate(-50%, -50%) scale(1.08); }
+}
+
+@keyframes official-tutorial-mouse-action {
+  0%, 76%, 100% { border-top-color: rgba(224, 255, 244, .58); background: rgba(4, 23, 17, .28); }
+  82%, 92% { border-top-color: #f5d65b; background: rgba(245, 214, 91, .16); }
+}
+
+@keyframes official-tutorial-seed-release {
+  0%, 76% { opacity: .82; transform: translateY(0) scale(1); }
+  88% { opacity: .42; transform: translateY(9px) scale(.82); }
+  100% { opacity: 0; transform: translateY(14px) scale(.62); }
+}
