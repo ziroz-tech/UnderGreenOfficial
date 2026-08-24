@@ -1,0 +1,93 @@
+section,key,type,order,text,subtext,body,note,src,alt,href,mediaType,meta
+site,pageTitle,text,10,UNDER GREEN | Who Owns the Seed?,,,,,,,,
+site,description,text,20,ディストピア違法農場経営シュミレーション「UNDER GREEN」公式サイト,,,,,,,,
+site,favicon,image,30,,,,,asset:icons/seed.webp,,,,
+intro,code,text,10,ARCHIVE 08-14 // RESTORED TEXT,,,,,,,,
+intro,line,paragraph,20,人類はいま、核戦争によって壊滅した地球において、緩やかな滅亡へと向かっている。,,,,,,,,
+intro,line,paragraph,30,土も空気も汚染され、地下シェルターへと逃げ延びた人々は、食料生産企業によって厳しく統制されている。,,,,,,,,
+intro,line,paragraph,40,人類史をとおして長らく続いた武器による支配は、食料生産独占による支配に置き換わった。,,,,,,,,
+intro,line,paragraph,50,ホコリと鉄サビにまみれたシェルター。,,,,,,,,
+intro,line,paragraph,60,失われた知識を手に、禁じられた食糧生産を始めた主人公。,,,,,,,,
+intro,line,paragraph,70,その行為は人類の未来になにをもたらすのだろうか？,,,,,,,,
+intro,loadingRestore,text,80,RESTORING ARCHIVE...,,,,,,,,
+intro,loadingVerify,text,90,VERIFYING RESTORED DATA...,,,,,,,,
+intro,loadingGranted,text,100,ACCESS GRANTED,,,,,,,,
+intro,loadingManual,text,110,MANUAL ACCESS,,,,,,,,
+intro,skipInitial,text,120,SKIP,,,,,,,,
+intro,skipReady,text,130,ENTER NOW,,,,,,,,
+intro,status,text,140,UNLICENSED SIGNAL / CH. 004,,,,,,,,
+header,siteLabel,text,10,OFFICIAL WEBSITE,,,,,,,,
+header,logo,image,20,,,,,asset:Logo/title_logo.webp,UNDER GREEN,,,
+header,nav,nav,30,GAME,システム,,,,,,,system
+header,nav,nav,40,STORY,物語,,,,,,,world
+header,nav,nav,50,CHARACTERS,人物,,,,,,,characters
+header,nav,nav,60,CREDITS,制作,,,,,,,credits
+header,nav,nav,70,PLAY,開発情報,,,,,,,play
+header,nav,nav,80,CONTACT,通信,,,,,,,contact
+header,liveLabel,text,90,LIVE CULTIVATION,,,,,,,,
+header,audioLabel,text,100,SOUND,,,,,,,,
+header,audioStart,text,110,START,,,,,,,,
+header,audioWait,text,120,WAIT,,,,,,,,
+header,audioOn,text,130,ON,,,,,,,,
+header,audioOff,text,140,OFF,,,,,,,,
+header,audioPlayAria,text,150,ゲーム音を再生,,,,,,,,
+header,audioStopAria,text,160,ゲーム音を停止,,,,,,,,
+header,statusConnecting,text,165,DAY 01 · CONNECTING,,,,,,,,
+header,statusGrowing,text,170,GROWING,,,,,,,,
+header,statusPaused,text,180,PAUSED,,,,,,,,
+game,loading,text,10,LOADING CURRENT GAME BUILD...,,,,,,,,
+game,demoTitle,text,20,レタスを育てて収穫しよう！,,,,,,,,
+game,frame,embed,30,UNDER GREEN ゲーム体験版,,,,page:official-demo.html?officialdemo=1&build=20260822toolboxlock2,,,,
+game,guideTitle,text,40,HOW TO CULTIVATE,,,,,,,,
+game,guideStep,guide,50,切り替え,,右下ツールボックス上でホイール,,,,,,
+game,guideStep,guide,60,植える,,「植える」→種保管庫のレタスを空PODへドラッグ,,,,,,
+game,guideStep,guide,70,育てる,,霧吹きをレタスへドラッグ（何度でも成長促進）,,,,,,
+game,guideStep,guide,80,掃除,,バケツを汚れたPODへドラッグ,,,,,,
+game,localTitle,text,90,LOCAL SERVER REQUIRED,,,,,,,,
+game,localBody,text,100,ゲーム本体のCSVと3Dモジュールを読み込むため、play-local.batを起動して http://127.0.0.1:8766/official/ を開いてください。,,,,,,,,
+world,kicker,text,10,WORLD // ARCHIVE 01,,,,,,,,
+world,title,rich,20,星は死に,緑は消えた,,,,,,,
+world,paragraph,paragraph,30,"人類はいま、核戦争によって壊滅した地球において、緩やかな滅亡へと向かっている。
+土も空気も汚染され、地下シェルターへと逃げ延びた人々は、食料生産企業によって厳しく統制されている。
+人類史をとおして長らく続いた武器による支配は、食料生産を独占するカロリー企業による支配に置き換わった。
+人口の８割は環境の悪い下層に押し込められ、合成ペーストや栄養食しか配給されない。
+空腹は満たせるが、味覚障害や栄養不足は拡大している。そのため、下層の人々は闇市場でたびたび食料を購入する。
+管理局の目を盗んで食糧を生産をし、闇市場に流す行為は非常にリスクが高い危険な行為だが、同時に大きな成功の芽を秘めている。
+非合法に汚染された大地から持ち帰られた種子が闇市場に流れ、それを元に違法農場をつくり、一攫千金の夢に身を亡ぼすものが後を絶たない。
+本作の主人公も、そんな大勢の「違法栽培者」の一人である。",,,,,,,,
+system,kicker,text,10,GAME SYSTEM // LIVE BUILD,,,,,,,,
+system,title,rich,20,ディストピア違法農場経営,シュミレーション,,,,,,,
+system,lead,text,30,"『UNDERGREEN』は、核汚染によって崩壊した地上から逃れた人々が過ごす巨大企業に管理された地下都市で、禁じられた食糧生産＝水耕栽培を営む、SF農業経営シミュレーションです。
+プレイヤーは、栽培設備を配置して作物を育て、出荷することで資金を稼ぎ、設備や拠点を拡張していきます。
+相棒となるサポートロボットの業務をプログラムして、独自の作業フローを構築することもできます。
+また、サポートロボットたちの労働環境を整えてあげることも重要な要素です。
+日々のニュースや人々の噂で市場が動き、計画を立てて生産することでより大きな利益を得ることができます。
+また、地下世界には複数の勢力があり、食糧を供給することで主人公との友好度や勢力間の関係が変化し、それがこの地下世界の行く末を左右します。
+ なにを作り誰に売るかはあなた次第。
+ あなただけの地下農場を作り上げてください。",,,,,,,,
+system,feature01,feature,40,違法な地下農場で植物栽培,FEATURE 01,種を買い、栽培ポッドを設置して栽培します。植えた植物は時間とともに成長し、やがて収穫できます。,IMAGE PLACEHOLDER // CULTIVATION,data\assets\video\栽培.mp4,栽培システム画像,,video,cultivation
+system,feature02,feature,50,闇市場で売りさばく,FEATURE 02,地下都市には様々な階層・勢力がひしめいています。あなたが生産した食料は、彼らの糧となり、あなたとの関係、あるいは勢力間の関係を変化させます。,IMAGE PLACEHOLDER // EXPANSION,data\assets\video\調達.png|data\assets\video\売買１.png|data\assets\video\売買２.png,拠点拡張画像,,album,expansion
+system,feature03,feature,60,拠点を拡張し、労働環境を整備する,FEATURE 03,貯めたお金で新たな拠点を買い、地下世界に巨大な違法農場ネットワークを構築していきます。サポートロボットたちの要望に応えて快適な労働環境を提供すれば、あなたの農場はさらなる飛躍を遂げるでしょう。,IMAGE PLACEHOLDER // MARKET,data\assets\video\拠点拡張0.png|data\assets\video\拠点拡張1.png|data\assets\video\拠点拡張２.png,市場取引画像,,album,market
+system,feature04,feature,70,管理局の摘発をやり過ごす,FEATURE 04,管理局の偵察ドローンが拠点に接近した時は、拠点の電源をシャットダウンして回避しないといけません。監視カメラで常に気を配り、警戒を怠らないようにしましょう。,IMAGE PLACEHOLDER // BLACKOUT,data\assets\video\監視カメラ.png,摘発回避画像,,image,blackout
+system,feature05,feature,80,サポートロボットの労働をプログラムする,FEATURE 05,植え付け・収穫・清掃・物流をノードで接続し、業務フローを設計できます。適度に休憩をはさませるもよし、限界まで働かせるもよし。サポートロボットたちの適性を生かすも殺すも、すべてはあなたの采配次第です。,IMAGE PLACEHOLDER // LABOR,data\assets\video\プログラム１.png|data\assets\video\プログラム２.png,ロボット労務画像,,album,labor
+system,feature06,feature,90,その種は誰のもの？,FEATURE 06,管理局の食糧制限によって支配された世界において、あなたの農場は重要な影響力を発揮します。誰のために農場を動かすのか、何を作り誰に売るのかで、地下世界の様相は大きく変化していきます。,IMAGE PLACEHOLDER // STORY,data\assets\video\勢力.png,物語分岐画像,,image,story
+characters,kicker,text,10,CHARACTERS // PERSONNEL FILE 03,,,,,,,,
+characters,title,rich,20,地下通信網の,人物記録。,,,,,,,
+characters,lead,text,30,ゲーム内の人物アイコンと記録をもとにしたキャラクター紹介です。物語の進行に合わせて内容を更新します。,,,,,,,,
+characters,operator,profile,40,オペレーター,未登録栽培者,違法農場経営に手を出す本作の主人公。レタスのイヤリングを片耳にしている。友人から譲り受けたという旧世界の園芸本を大事に持っている。,「秩序と変化。私の心を癒すのはそのふたつだ。レタスはどちらも私にもたらしてくれる」,asset:characters/protagonist.webp,オペレーターのゲーム内人物アイコン,,image,PLAYER / ILLEGAL GROWER
+characters,mara,profile,50,マーラ,種ブローカー,高齢の闇ブローカー。違法水耕栽培種子と設備を闇で流す。旧世界では過激な環境活動家であった過去を持つ。希少な種子を保存するボトルを常に首から下げている。,「あたしらはこの鉄くずと血とホコリにまみれた死にゆく世界で、きわめて歪な方法で自然と触れ合うしかないのさ」,asset:characters/seed-broker.webp,マーラのゲーム内人物アイコン,,image,ENCRYPTED SEED ROUTE
+characters,support_robot,profile,60,サポートロボット,サポートロボット,農場作業を支える小型支援機。OSや設備を増やすことで、植え付け・収穫・清掃など担当できる仕事が広がる。,見ているだけの機械に見える日もある。だが、見ていてくれるだけで助かる日もある。,asset:characters/supportRobot-iso-leftdown.webp,サポートロボットのゲーム内人物アイコン,,image,SUPPORT UNIT
+characters,yun,profile,70,ユン,下層市場の仲買人,自らも日々の発電労役に苦しみつつ、下層住民に食用野菜を調達して流す仲買人。常に煤と機械油にまみれているが、彼の周りでは笑い声が絶えない,「俺らが買えるはずだったレタスがどこへ消えたのか、皆だいたい分かってるよ。」,asset:characters/market-lower.webp,ユンのゲーム内人物アイコン,,image,LOWER MARKET
+characters,io,profile,80,Dr.イオ,医療・実験区画の調達官,慢性的な物資不足により違法市場からの調達に手を出している。カモミールやローズマリーなどの医療系作物を高く買い付ける。,「この社会では闇に手を染めない人間はいません。まともであればあるほどに」,asset:characters/market-medical.webp,ドクター・イオのゲーム内人物アイコン,,image,MEDICAL CHANNEL
+characters,sera,profile,90,セラ・ヴェイル,上層市場の果実フィクサー,上層の食卓に希少な果実を届けるフィクサー。イチゴやメロンなど高級果実に高い価値をつける一方で、通常の食用野菜には関心を示さない。,「レタスで食卓は飾れない。箱を開けた瞬間、顧客が美しさに息を止めるようなものを持ってきて頂戴」,asset:characters/market-upper.webp,セラ・ヴェイルのゲーム内人物アイコン,,image,UPPER FIXER
+characters,nagi,profile,100,ナギ,レジスタンス,反体制組織の補給網に関わる人物。詳細は分かっていない。,「管理局が配給する食料は毒だ。人々を弱らせ、明日を見れなくする。」,asset:characters/market-rebel.webp,ナギのゲーム内人物アイコン,,image,REBEL SUPPLY
+characters,kido,profile,110,キド,闇不動産ブローカー,管理局の台帳に載らない物件を扱う闇ブローカー。礼儀正しいが底が見えない。常に一流のスーツに身を包み、汚れ１つついていない。,「闇の領域は光のあてかたによって揺らぐもの。それが分からないのなら、あなたにはまだ居場所があります」,asset:characters/property-broker-black.webp,キドのゲーム内人物アイコン,,image,OFF-LEDGER BROKER
+characters,note,text,120,DRAFT PROFILE // 紹介文は開発中の設定をもとにした下書きです。,,,,,,,,
+play,kicker,text,10,PLAY // DEVELOPMENT 05,,,,,,,,
+play,statement,text,20,steamでの発売を目指して開発を進めながら、インディーゲームイベントに出展しています。,,,,,,,,
+play,eventTitle,text,30,イベント出展履歴,,,,,,,,
+play,event,event,40,ゲームパビリオンjp2026,,,,,,,,2026
+play,event,event,50,九州学生ゲーム大祭2026,,,,,,,,2026
+contact,kicker,text,10,CONTACT // 06,,,,,,,,
+contact,lead,text,20,作品へのご感想、取材、制作に関するお問い合わせは、公式Xからお送りください。,,,,,,,,
+contact,channel,link,30,X,OFFICIAL CHANNEL,,,,,https://x.com/UnderGreenJP,,

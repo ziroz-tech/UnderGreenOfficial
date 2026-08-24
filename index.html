@@ -1,19 +1,21 @@
 <!doctype html>
-<html lang="ja">
+<html lang="ja" data-content-asset-prefix="../assets/" data-content-page-prefix="../">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#020907">
   <title>UNDER GREEN | Who Owns the Seed?</title>
-  <meta name="description" content="ゲーム本編と同じ3D栽培区画を操作できる、UNDER GREEN公式サイト。">
-  <link rel="icon" href="seed.webp">
-  <link rel="stylesheet" href="portal.css?v=20260821audiocharacters3">
+  <meta name="description" content="ディストピア違法農場経営シュミレーション「UNDER GREEN」公式サイト">
+  <meta property="og:description" content="ディストピア違法農場経営シュミレーション「UNDER GREEN」公式サイト">
+  <meta name="twitter:description" content="ディストピア違法農場経営シュミレーション「UNDER GREEN」公式サイト">
+  <link id="site-favicon" rel="icon" href="../assets/icons/seed.webp">
+  <link rel="stylesheet" href="portal.css?v=20260824responsive1">
 </head>
 <body class="is-intro">
   <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="プロローグ">
     <div class="intro-noise" aria-hidden="true"></div>
     <div class="intro-terminal">
-      <p class="intro-code">ARCHIVE 08-14 // RESTORED TEXT</p>
+      <p class="intro-code" data-content="intro.code">ARCHIVE 08-14 // RESTORED TEXT</p>
       <div class="intro-copy" id="intro-copy"></div>
       <span class="intro-cursor" aria-hidden="true"></span>
       <div class="intro-loading" aria-live="polite">
@@ -25,14 +27,14 @@
       </div>
     </div>
     <button class="intro-skip" id="intro-skip" type="button">SKIP <span aria-hidden="true">↗</span></button>
-    <p class="intro-status">UNLICENSED SIGNAL / CH. 004</p>
+    <p class="intro-status" data-content="intro.status">UNLICENSED SIGNAL / CH. 004</p>
   </div>
 
   <header class="portal-header">
     <a class="portal-brand" href="#game" aria-label="ゲーム体験へ戻る">
-      <span class="portal-site-label">OFFICIAL WEBSITE</span>
+      <span class="portal-site-label" data-content="header.siteLabel">OFFICIAL WEBSITE</span>
       <span class="portal-logo-frame" aria-hidden="true">
-        <img class="portal-logo" src="title_logo.webp" alt="">
+        <img class="portal-logo" id="portal-logo" src="../assets/Logo/title_logo.webp" alt="">
       </span>
     </a>
     <nav class="portal-nav" aria-label="サイト案内">
@@ -44,41 +46,39 @@
       <button type="button" data-panel="contact"><small>06 / 通信</small><strong>CONTACT</strong></button>
     </nav>
     <div class="portal-status" aria-live="polite">
-      <div class="portal-live"><i aria-hidden="true"></i><span><small>LIVE CULTIVATION</small><strong id="portal-game-day">DAY 01 · CONNECTING</strong></span></div>
       <button class="portal-audio-toggle" id="portal-audio-toggle" type="button" aria-pressed="false" aria-label="ゲーム音を再生">
-        <span aria-hidden="true">♪</span><small>SOUND</small><strong id="portal-audio-state">START</strong>
+        <span aria-hidden="true">♪</span><small data-content="header.audioLabel">SOUND</small><strong id="portal-audio-state">START</strong>
       </button>
     </div>
   </header>
 
   <main class="game-host" id="game">
-    <div class="game-loading" id="game-loading"><i></i><span>LOADING CURRENT GAME BUILD...</span></div>
-    <div class="cultivation-demo-label" aria-label="栽培デモ">栽培デモ</div>
+    <div class="game-loading" id="game-loading"><i></i><span data-content="game.loading">LOADING CURRENT GAME BUILD...</span></div>
+    <div class="cultivation-demo-label" id="cultivation-demo-label" aria-label="レタスを育てて収穫しよう！" data-content="game.demoTitle">レタスを育てて収穫しよう！</div>
     <iframe
       id="game-frame"
       class="game-frame"
-      src="official-demo.html?officialdemo=1&amp;build=20260821audiocharacters3"
+      src="../official-demo.html?officialdemo=1&amp;build=20260822toolboxlock2"
       title="UNDER GREEN ゲーム体験版"
       allow="autoplay; fullscreen"
     ></iframe>
     <aside class="cultivation-guide" aria-label="栽培区画の操作方法">
-      <strong>HOW TO CULTIVATE</strong>
-      <p><span>植える</span> 右下「植える」のレタスを空PODへドラッグ　／　<span>育てる</span> 霧吹きをレタスへドラッグ（何度でも成長促進）　／　<span>掃除</span> バケツを汚れたPODへドラッグ</p>
+      <strong data-content="game.guideTitle">HOW TO CULTIVATE</strong>
+      <p id="cultivation-guide-steps"><span>切り替え</span> 右下ツールボックス上でホイール　／　<span>植える</span> 「植える」→種保管庫のレタスを空PODへドラッグ　／　<span>育てる</span> 霧吹きをレタスへドラッグ（何度でも成長促進）　／　<span>掃除</span> バケツを汚れたPODへドラッグ</p>
     </aside>
     <aside class="local-launch-note" id="local-launch-note" hidden>
-      <strong>LOCAL SERVER REQUIRED</strong>
-      <p>ゲーム本体のCSVと3Dモジュールを読み込むため、<code>play-local.bat</code>を起動して <code>http://127.0.0.1:8766/official/</code> を開いてください。</p>
+      <strong data-content="game.localTitle">LOCAL SERVER REQUIRED</strong>
+      <p data-content="game.localBody">ゲーム本体のCSVと3Dモジュールを読み込むため、play-local.batを起動して http://127.0.0.1:8766/official/ を開いてください。</p>
     </aside>
   </main>
 
-  <div class="info-layer" id="info-layer" aria-hidden="true">
+  <div class="info-layer" id="info-layer" data-content-source="site-content.csv" aria-hidden="true">
     <button class="info-backdrop" type="button" aria-label="案内を閉じる"></button>
 
     <article class="info-panel" data-info="world" role="dialog" aria-modal="true" aria-labelledby="world-title">
-      <button class="panel-close" type="button" aria-label="閉じる">×</button>
-      <p class="panel-kicker">WORLD // ARCHIVE 01</p>
-      <h2 id="world-title">緑を育てることが、<em>罪になった世界。</em></h2>
-      <div class="panel-columns story-copy">
+      <p class="panel-kicker" data-content="world.kicker">WORLD // ARCHIVE 01</p>
+      <h2 id="world-title" data-content-rich="world.title">緑を育てることが、<em>罪になった世界。</em></h2>
+      <div class="panel-columns story-copy" id="world-paragraphs">
         <div>
           <p>核戦争で地表が汚染され、人々は食料生産企業が管理する地下シェルターへ逃げ延びた。土も種も知識も、企業の所有物だ。</p>
           <p>失われた栽培知識を手にしたあなたは、ホコリと鉄サビにまみれた一室で、禁じられた水耕栽培を始める。</p>
@@ -87,39 +87,43 @@
     </article>
 
     <article class="info-panel" data-info="system" role="dialog" aria-modal="true" aria-labelledby="system-title">
-      <button class="panel-close" type="button" aria-label="閉じる">×</button>
-      <p class="panel-kicker">GAME SYSTEM // LIVE BUILD</p>
-      <h2 id="system-title">ディストピア違法農場経営<em>シュミレーション</em></h2>
-      <p class="panel-lead">中央の体験区画には、開発中のゲーム本体と同じHTML・CSS・Three.js・操作ロジックを読み込んでいます。</p>
+      <p class="panel-kicker" data-content="system.kicker">GAME SYSTEM // LIVE BUILD</p>
+      <h2 id="system-title" data-content-rich="system.title">ディストピア違法農場経営<em>シュミレーション</em></h2>
+      <p class="panel-lead" data-content="system.lead">荒廃した地下世界で禁じられた植物を育て、設備・売り先・労働を選ぶ。小さなレタス1株から、地下社会へ影響を広げる違法農場経営が始まります。</p>
+      <ol class="system-steps" id="system-feature-list">
+        <li><span>FEATURE 01</span><strong>触って育てる立体農場</strong><figure class="system-feature-media" data-visual="cultivation" role="img" aria-label="栽培システム画像の仮置き"><figcaption>IMAGE PLACEHOLDER // CULTIVATION</figcaption></figure><p>種を運び、手入れし、成長を待って収穫する。作物ごとの環境条件と水・養液、設備の汚れまでが生産に影響します。</p></li>
+        <li><span>FEATURE 02</span><strong>地下空間を生産拠点へ</strong><figure class="system-feature-media" data-visual="expansion" role="img" aria-label="拠点拡張画像の仮置き"><figcaption>IMAGE PLACEHOLDER // EXPANSION</figcaption></figure><p>栽培PODや大型BOX、製水器、養液培養槽などを配置。区画を買い足し、自給できる農場へ拡張します。</p></li>
+        <li><span>FEATURE 03</span><strong>売り先が農場の意味を変える</strong><figure class="system-feature-media" data-visual="market" role="img" aria-label="市場取引画像の仮置き"><figcaption>IMAGE PLACEHOLDER // MARKET</figcaption></figure><p>下層市場、医療区画、上層市場、反体制派では求める作物も価格も異なります。需要と関係性を読み、誰へ食料を渡すか選びます。</p></li>
+        <li><span>FEATURE 04</span><strong>停電で摘発をやり過ごす</strong><figure class="system-feature-media" data-visual="blackout" role="img" aria-label="摘発回避画像の仮置き"><figcaption>IMAGE PLACEHOLDER // BLACKOUT</figcaption></figure><p>管理局の接近中は拠点の電源を落として農場を隠せます。しかし光も生産設備も止まるため、安全と稼働を天秤にかけます。</p></li>
+        <li><span>FEATURE 05</span><strong>労働を組みロボットへ渡す</strong><figure class="system-feature-media" data-visual="labor" role="img" aria-label="ロボット労務画像の仮置き"><figcaption>IMAGE PLACEHOLDER // LABOR</figcaption></figure><p>植え付け・収穫・清掃・物流をノードで接続し、業務フローを設計。技能と性格の異なるサポートロボットへ仕事を割り当てます。</p></li>
+        <li><span>FEATURE 06</span><strong>経営の結果が物語になる</strong><figure class="system-feature-media" data-visual="story" role="img" aria-label="物語分岐画像の仮置き"><figcaption>IMAGE PLACEHOLDER // STORY</figcaption></figure><p>どの市場を支え、何を育て、どこまで危険を冒すか。日々の経営判断が人物との関係と複数の結末へつながります。</p></li>
+      </ol>
     </article>
 
     <article class="info-panel character-panel" data-info="characters" role="dialog" aria-modal="true" aria-labelledby="characters-title">
-      <button class="panel-close" type="button" aria-label="閉じる">×</button>
-      <p class="panel-kicker">CHARACTERS // PERSONNEL FILE 03</p>
-      <h2 id="characters-title">地下通信網の<em>人物記録。</em></h2>
-      <p class="panel-lead">ゲーム内の人物アイコンと記録をもとにしたキャラクター紹介です。物語の進行に合わせて内容を更新します。</p>
-      <div class="character-grid" id="character-list" data-character-source="characters.csv">
+      <p class="panel-kicker" data-content="characters.kicker">CHARACTERS // PERSONNEL FILE 03</p>
+      <h2 id="characters-title" data-content-rich="characters.title">地下通信網の<em>人物記録。</em></h2>
+      <p class="panel-lead" data-content="characters.lead">ゲーム内の人物アイコンと記録をもとにしたキャラクター紹介です。物語の進行に合わせて内容を更新します。</p>
+      <div class="character-grid" id="character-list">
         <p class="character-loading">LOADING PERSONNEL FILES...</p>
       </div>
-      <p class="character-draft-note">DRAFT PROFILE // 紹介文は開発中の設定をもとにした下書きです。</p>
+      <p class="character-draft-note" data-content="characters.note">DRAFT PROFILE // 紹介文は開発中の設定をもとにした下書きです。</p>
     </article>
 
     <article class="info-panel compact" data-info="credits" role="dialog" aria-modal="true" aria-labelledby="credits-title">
-      <button class="panel-close" type="button" aria-label="閉じる">×</button>
       <p class="panel-kicker">CREDITS // 04</p>
       <h2 id="credits-title">UNDER GREEN</h2>
       <p class="panel-lead">Who Owns the Seed?</p>
-      <dl class="credit-list" id="credit-list" data-credit-source="credits.csv"><div><dt>LOADING</dt><dd>ゲーム内クレジットを読み込んでいます...</dd></div></dl>
+      <dl class="credit-list" id="credit-list" data-credit-source="../data/credits.csv"><div><dt>LOADING</dt><dd>ゲーム内クレジットを読み込んでいます...</dd></div></dl>
       <p class="copyright">© 2026 UNDER GREEN PROJECT</p>
     </article>
 
     <article class="info-panel" data-info="play" role="dialog" aria-modal="true" aria-label="PLAY">
-      <button class="panel-close" type="button" aria-label="閉じる">×</button>
-      <p class="panel-kicker">PLAY // DEVELOPMENT 05</p>
-      <p class="play-statement">steamでの発売を目指して開発を進めながら全国のインディーゲームイベントに出展しています。</p>
+      <p class="panel-kicker" data-content="play.kicker">PLAY // DEVELOPMENT 05</p>
+      <p class="play-statement" data-content="play.statement">steamでの発売を目指して開発を進めながら全国のインディーゲームイベントに出展しています。</p>
       <section class="event-history" aria-labelledby="event-history-title">
-        <h3 id="event-history-title">イベント出展履歴</h3>
-        <ul>
+        <h3 id="event-history-title" data-content="play.eventTitle">イベント出展履歴</h3>
+        <ul id="play-event-list">
           <li><span>2026</span><strong>ゲームパビリオンjp2026</strong></li>
           <li><span>2026</span><strong>九州学生ゲーム大祭2026</strong></li>
         </ul>
@@ -127,13 +131,13 @@
     </article>
 
     <article class="info-panel compact" data-info="contact" role="dialog" aria-modal="true" aria-label="CONTACT">
-      <button class="panel-close" type="button" aria-label="閉じる">×</button>
-      <p class="panel-kicker">CONTACT // 06</p>
-      <p class="panel-lead">作品へのご感想、取材、制作に関するお問い合わせは、公式Xからお送りください。</p>
-      <a class="contact-link" href="https://x.com/" target="_blank" rel="noopener noreferrer"><span>X</span><strong>OFFICIAL CHANNEL</strong><i>↗</i></a>
+      <p class="panel-kicker" data-content="contact.kicker">CONTACT // 06</p>
+      <p class="panel-lead" data-content="contact.lead">作品へのご感想、取材、制作に関するお問い合わせは、公式Xからお送りください。</p>
+      <a class="contact-link" id="contact-channel" href="https://x.com/UnderGreenJP" target="_blank" rel="noopener noreferrer"><span>X</span><strong>OFFICIAL CHANNEL</strong><i>↗</i></a>
     </article>
   </div>
+  <button class="panel-close panel-close-global" id="panel-close-global" type="button" aria-label="閉じる">×</button>
 
-  <script src="portal.js?v=20260821audiocharacters3"></script>
+  <script src="portal.js?v=20260824responsive1"></script>
 </body>
 </html>
