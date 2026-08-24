@@ -74,14 +74,14 @@ system,feature06,feature,90,その種は誰のもの？,FEATURE 06,管理局の�
 characters,kicker,text,10,CHARACTERS // PERSONNEL FILE 03,,,,,,,,
 characters,title,rich,20,地下通信網の,人物記録。,,,,,,,
 characters,lead,text,30,ゲーム内の人物アイコンと記録をもとにしたキャラクター紹介です。物語の進行に合わせて内容を更新します。,,,,,,,,
-characters,operator,profile,40,オペレーター,未登録栽培者,違法農場経営に手を出す本作の主人公。レタスのイヤリングを片耳にしている。友人から譲り受けたという旧世界の園芸本を大事に持っている。,「秩序と変化。私の心を癒すのはそのふたつだ。レタスはどちらも私にもたらしてくれる」,data\asset\characters\protagonist.webp,オペレーターのゲーム内人物アイコン,,image,PLAYER / ILLEGAL GROWER
-characters,mara,profile,50,マーラ,種ブローカー,高齢の闇ブローカー。違法水耕栽培種子と設備を闇で流す。旧世界では過激な環境活動家であった過去を持つ。希少な種子を保存するボトルを常に首から下げている。,「あたしらはこの鉄くずと血とホコリにまみれた死にゆく世界で、きわめて歪な方法で自然と触れ合うしかないのさ」,data\asset\characters\seed-broker.webp,マーラのゲーム内人物アイコン,,image,ENCRYPTED SEED ROUTE
-characters,support_robot,profile,60,サポートロボット,サポートロボット,農場作業を支える小型支援機。OSや設備を増やすことで、植え付け・収穫・清掃など担当できる仕事が広がる。,見ているだけの機械に見える日もある。だが、見ていてくれるだけで助かる日もある。,data\asset\characters\supportRobot-iso-leftdown.webp,サポートロボットのゲーム内人物アイコン,,image,SUPPORT UNIT
-characters,yun,profile,70,ユン,下層市場の仲買人,自らも日々の発電労役に苦しみつつ、下層住民に食用野菜を調達して流す仲買人。常に煤と機械油にまみれているが、彼の周りでは笑い声が絶えない,「俺らが買えるはずだったレタスがどこへ消えたのか、皆だいたい分かってるよ。」,data\asset\characters\market-lower.webp,ユンのゲーム内人物アイコン,,image,LOWER MARKET
-characters,io,profile,80,Dr.イオ,医療・実験区画の調達官,慢性的な物資不足により違法市場からの調達に手を出している。カモミールやローズマリーなどの医療系作物を高く買い付ける。,「この社会では闇に手を染めない人間はいません。まともであればあるほどに」,data\asset\characters\market-medical.webp,ドクター・イオのゲーム内人物アイコン,,image,MEDICAL CHANNEL
-characters,sera,profile,90,セラ・ヴェイル,上層市場の果実フィクサー,上層の食卓に希少な果実を届けるフィクサー。イチゴやメロンなど高級果実に高い価値をつける一方で、通常の食用野菜には関心を示さない。,「レタスで食卓は飾れない。箱を開けた瞬間、顧客が美しさに息を止めるようなものを持ってきて頂戴」,data\asset\characters\market-upper.webp,セラ・ヴェイルのゲーム内人物アイコン,,image,UPPER FIXER
-characters,nagi,profile,100,ナギ,レジスタンス,反体制組織の補給網に関わる人物。詳細は分かっていない。,「管理局が配給する食料は毒だ。人々を弱らせ、明日を見れなくする。」,data\asset\characters\market-rebel.webp,ナギのゲーム内人物アイコン,,image,REBEL SUPPLY
-characters,kido,profile,110,キド,闇不動産ブローカー,管理局の台帳に載らない物件を扱う闇ブローカー。礼儀正しいが底が見えない。常に一流のスーツに身を包み、汚れ１つついていない。,「闇の領域は光のあてかたによって揺らぐもの。それが分からないのなら、あなたにはまだ居場所があります」,data\asset\characters\property-broker-black.webp,キドのゲーム内人物アイコン,,image,OFF-LEDGER BROKER
+characters,operator,profile,40,オペレーター,未登録栽培者,違法農場経営に手を出す本作の主人公。レタスのイヤリングを片耳にしている。友人から譲り受けたという旧世界の園芸本を大事に持っている。,「秩序と変化。私の心を癒すのはそのふたつだ。レタスはどちらも私にもたらしてくれる」,protagonist.webp,オペレーターのゲーム内人物アイコン,,image,PLAYER / ILLEGAL GROWER
+characters,mara,profile,50,マーラ,種ブローカー,高齢の闇ブローカー。違法水耕栽培種子と設備を闇で流す。旧世界では過激な環境活動家であった過去を持つ。希少な種子を保存するボトルを常に首から下げている。,「あたしらはこの鉄くずと血とホコリにまみれた死にゆく世界で、きわめて歪な方法で自然と触れ合うしかないのさ」,seed-broker.webp,マーラのゲーム内人物アイコン,,image,ENCRYPTED SEED ROUTE
+characters,support_robot,profile,60,サポートロボット,サポートロボット,農場作業を支える小型支援機。OSや設備を増やすことで、植え付け・収穫・清掃など担当できる仕事が広がる。,見ているだけの機械に見える日もある。だが、見ていてくれるだけで助かる日もある。,supportRobot-iso-leftdown.webp,サポートロボットのゲーム内人物アイコン,,image,SUPPORT UNIT
+characters,yun,profile,70,ユン,下層市場の仲買人,自らも日々の発電労役に苦しみつつ、下層住民に食用野菜を調達して流す仲買人。常に煤と機械油にまみれているが、彼の周りでは笑い声が絶えない,「俺らが買えるはずだったレタスがどこへ消えたのか、皆だいたい分かってるよ。」,market-lower.webp,ユンのゲーム内人物アイコン,,image,LOWER MARKET
+characters,io,profile,80,Dr.イオ,医療・実験区画の調達官,慢性的な物資不足により違法市場からの調達に手を出している。カモミールやローズマリーなどの医療系作物を高く買い付ける。,「この社会では闇に手を染めない人間はいません。まともであればあるほどに」,market-medical.webp,ドクター・イオのゲーム内人物アイコン,,image,MEDICAL CHANNEL
+characters,sera,profile,90,セラ・ヴェイル,上層市場の果実フィクサー,上層の食卓に希少な果実を届けるフィクサー。イチゴやメロンなど高級果実に高い価値をつける一方で、通常の食用野菜には関心を示さない。,「レタスで食卓は飾れない。箱を開けた瞬間、顧客が美しさに息を止めるようなものを持ってきて頂戴」,market-upper.webp,セラ・ヴェイルのゲーム内人物アイコン,,image,UPPER FIXER
+characters,nagi,profile,100,ナギ,レジスタンス,反体制組織の補給網に関わる人物。詳細は分かっていない。,「管理局が配給する食料は毒だ。人々を弱らせ、明日を見れなくする。」,market-rebel.webp,ナギのゲーム内人物アイコン,,image,REBEL SUPPLY
+characters,kido,profile,110,キド,闇不動産ブローカー,管理局の台帳に載らない物件を扱う闇ブローカー。礼儀正しいが底が見えない。常に一流のスーツに身を包み、汚れ１つついていない。,「闇の領域は光のあてかたによって揺らぐもの。それが分からないのなら、あなたにはまだ居場所があります」,property-broker-black.webp,キドのゲーム内人物アイコン,,image,OFF-LEDGER BROKER
 characters,note,text,120,DRAFT PROFILE // 紹介文は開発中の設定をもとにした下書きです。,,,,,,,,
 play,kicker,text,10,PLAY // DEVELOPMENT 05,,,,,,,,
 play,statement,text,20,steamでの発売を目指して開発を進めながら、インディーゲームイベントに出展しています。,,,,,,,,
