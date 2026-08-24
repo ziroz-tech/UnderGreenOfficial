@@ -65,12 +65,12 @@ system,lead,text,30,"『UNDERGREEN』は、核汚染によって崩壊した地�
 また、地下世界には複数の勢力があり、食糧を供給することで主人公との友好度や勢力間の関係が変化し、それがこの地下世界の行く末を左右します。
  なにを作り誰に売るかはあなた次第。
  あなただけの地下農場を作り上げてください。",,,,,,,,
-system,feature01,feature,40,違法な地下農場で植物栽培,FEATURE 01,種を買い、栽培ポッドを設置して栽培します。植えた植物は時間とともに成長し、やがて収穫できます。,IMAGE PLACEHOLDER // CULTIVATION,data\assets\video\栽培.mp4,栽培システム画像,,video,cultivation
-system,feature02,feature,50,闇市場で売りさばく,FEATURE 02,地下都市には様々な階層・勢力がひしめいています。あなたが生産した食料は、彼らの糧となり、あなたとの関係、あるいは勢力間の関係を変化させます。,IMAGE PLACEHOLDER // EXPANSION,data\assets\video\調達.png|data\assets\video\売買１.png|data\assets\video\売買２.png,拠点拡張画像,,album,expansion
-system,feature03,feature,60,拠点を拡張し、労働環境を整備する,FEATURE 03,貯めたお金で新たな拠点を買い、地下世界に巨大な違法農場ネットワークを構築していきます。サポートロボットたちの要望に応えて快適な労働環境を提供すれば、あなたの農場はさらなる飛躍を遂げるでしょう。,IMAGE PLACEHOLDER // MARKET,data\assets\video\拠点拡張0.png|data\assets\video\拠点拡張1.png|data\assets\video\拠点拡張２.png,市場取引画像,,album,market
-system,feature04,feature,70,管理局の摘発をやり過ごす,FEATURE 04,管理局の偵察ドローンが拠点に接近した時は、拠点の電源をシャットダウンして回避しないといけません。監視カメラで常に気を配り、警戒を怠らないようにしましょう。,IMAGE PLACEHOLDER // BLACKOUT,data\assets\video\監視カメラ.png,摘発回避画像,,image,blackout
-system,feature05,feature,80,サポートロボットの労働をプログラムする,FEATURE 05,植え付け・収穫・清掃・物流をノードで接続し、業務フローを設計できます。適度に休憩をはさませるもよし、限界まで働かせるもよし。サポートロボットたちの適性を生かすも殺すも、すべてはあなたの采配次第です。,IMAGE PLACEHOLDER // LABOR,data\assets\video\プログラム１.png|data\assets\video\プログラム２.png,ロボット労務画像,,album,labor
-system,feature06,feature,90,その種は誰のもの？,FEATURE 06,管理局の食糧制限によって支配された世界において、あなたの農場は重要な影響力を発揮します。誰のために農場を動かすのか、何を作り誰に売るのかで、地下世界の様相は大きく変化していきます。,IMAGE PLACEHOLDER // STORY,data\assets\video\勢力.png,物語分岐画像,,image,story
+system,feature01,feature,40,違法な地下農場で植物栽培,FEATURE 01,種を買い、栽培ポッドを設置して栽培します。植えた植物は時間とともに成長し、やがて収穫できます。,IMAGE PLACEHOLDER // CULTIVATION,data\asset\video\栽培.mp4,栽培システム画像,,video,cultivation
+system,feature02,feature,50,闇市場で売りさばく,FEATURE 02,地下都市には様々な階層・勢力がひしめいています。あなたが生産した食料は、彼らの糧となり、あなたとの関係、あるいは勢力間の関係を変化させます。,IMAGE PLACEHOLDER // EXPANSION,data\asset\video\調達.png|data\asset\video\売買１.png|data\asset\video\売買２.png,拠点拡張画像,,album,expansion
+system,feature03,feature,60,拠点を拡張し、労働環境を整備する,FEATURE 03,貯めたお金で新たな拠点を買い、地下世界に巨大な違法農場ネットワークを構築していきます。サポートロボットたちの要望に応えて快適な労働環境を提供すれば、あなたの農場はさらなる飛躍を遂げるでしょう。,IMAGE PLACEHOLDER // MARKET,data\asset\video\拠点拡張0.png|data\asset\video\拠点拡張1.png|data\asset\video\拠点拡張２.png,市場取引画像,,album,market
+system,feature04,feature,70,管理局の摘発をやり過ごす,FEATURE 04,管理局の偵察ドローンが拠点に接近した時は、拠点の電源をシャットダウンして回避しないといけません。監視カメラで常に気を配り、警戒を怠らないようにしましょう。,IMAGE PLACEHOLDER // BLACKOUT,data\asset\video\監視カメラ.png,摘発回避画像,,image,blackout
+system,feature05,feature,80,サポートロボットの労働をプログラムする,FEATURE 05,植え付け・収穫・清掃・物流をノードで接続し、業務フローを設計できます。適度に休憩をはさませるもよし、限界まで働かせるもよし。サポートロボットたちの適性を生かすも殺すも、すべてはあなたの采配次第です。,IMAGE PLACEHOLDER // LABOR,data\asset\video\プログラム１.png|data\asset\video\プログラム２.png,ロボット労務画像,,album,labor
+system,feature06,feature,90,その種は誰のもの？,FEATURE 06,管理局の食糧制限によって支配された世界において、あなたの農場は重要な影響力を発揮します。誰のために農場を動かすのか、何を作り誰に売るのかで、地下世界の様相は大きく変化していきます。,IMAGE PLACEHOLDER // STORY,data\asset\video\勢力.png,物語分岐画像,,image,story
 characters,kicker,text,10,CHARACTERS // PERSONNEL FILE 03,,,,,,,,
 characters,title,rich,20,地下通信網の,人物記録。,,,,,,,
 characters,lead,text,30,ゲーム内の人物アイコンと記録をもとにしたキャラクター紹介です。物語の進行に合わせて内容を更新します。,,,,,,,,
