@@ -139,7 +139,7 @@ function updateOfficialSeedHoverHint(event) {
   if (!officialSeedHoverHint) {
     officialSeedHoverHint = document.createElement("div");
     officialSeedHoverHint.className = "official-seed-hover-hint";
-    officialSeedHoverHint.textContent = "ドラッグ";
+    officialSeedHoverHint.textContent = "ドラッグ！";
     officialSeedHoverHint.setAttribute("aria-hidden", "true");
     document.body.appendChild(officialSeedHoverHint);
   }
@@ -4332,7 +4332,7 @@ function beginPointerAction(event) {
   const pointerNavigationMode = freeLookEnabled && (event.button === 2 || pointerIsTouch) ? "orbit" : "pan";
   let mode = pointerNavigationMode;
   if (snapshot?.placement && event.button === 0) mode = "place";
-  else if (event.button === 0 && hit?.interaction?.type === "equipment") mode = "item-pending";
+  else if (event.button === 0 && hit?.interaction?.type === "equipment" && !document.body.classList.contains("official-demo-mode")) mode = "item-pending";
   else if (event.button === 0 && hit && hit.interaction.type !== "cell") mode = "action-pending";
   pointerAction = {
     pointerId: event.pointerId, button: event.button, mode, navigationMode: pointerNavigationMode,
@@ -4354,7 +4354,7 @@ function beginPointerAction(event) {
     pointerAction.dragHeight = snapshot.placement.height;
     refreshPlacePointer(pointerAction, event.clientX, event.clientY);
   }
-  if (mode !== "place" && hit?.interaction?.type === "equipment") {
+  if (mode === "item-pending" && hit?.interaction?.type === "equipment") {
     const item = hit.interaction.item;
     pointerAction.baseWidth = Math.max(1, Number(item.baseWidth) || Number(item.width) || 1);
     pointerAction.baseHeight = Math.max(1, Number(item.baseHeight) || Number(item.height) || 1);

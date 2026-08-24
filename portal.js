@@ -111,12 +111,14 @@ function contentText(id, fallback = "") {
 function resolveContentSource(source) {
   if (!source) return "";
   const normalizedSource = source.replace(/\\/g, "/");
+  const flattenAssets = document.documentElement.dataset.contentFlattenAssets === "true";
   if (normalizedSource.startsWith("asset:")) {
     let path = normalizedSource.slice(6);
-    if (document.documentElement.dataset.contentFlattenAssets === "true") path = path.split("/").pop();
+    if (flattenAssets) path = path.split("/").pop();
     return `${document.documentElement.dataset.contentAssetPrefix || ""}${path}`;
   }
   if (normalizedSource.startsWith("page:")) return `${document.documentElement.dataset.contentPagePrefix || ""}${normalizedSource.slice(5)}`;
+  if (flattenAssets && !/^(?:[a-z]+:|\/)/i.test(normalizedSource)) return normalizedSource.split("/").pop();
   return normalizedSource;
 }
 

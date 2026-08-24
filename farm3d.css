@@ -970,34 +970,31 @@ html.low-spec-mode .farm3d-active .facility-grid-toolbar {
 .farm3d-active .tool-storage-ring-title {
   position: absolute;
   z-index: 2;
-  top: 36px;
-  right: 114px;
-  left: auto;
-  min-width: 168px;
-  padding: 5px 12px;
-  border: 1px solid rgba(72, 219, 234, .38);
-  color: #bffaff;
-  background: rgba(3, 18, 16, .92);
-  box-shadow: 0 0 17px rgba(72, 219, 234, .14);
-  font: 900 9px/1 Consolas, monospace;
-  letter-spacing: .1em;
-  text-align: center;
-  transform: none;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
   pointer-events: none;
 }
 
-.farm3d-active .tool-storage-ring.open.storage-ring-pageable .tool-storage-ring-title {
-  cursor: ns-resize;
+.farm3d-active .tool-storage-ring-title-arc {
+  fill: none;
+  stroke: rgba(72, 219, 234, .34);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+  filter: drop-shadow(0 0 6px rgba(72, 219, 234, .28));
+}
+
+.farm3d-active .tool-storage-ring-title text {
+  fill: #cfffff;
+  font: 900 10px/1 Consolas, "Yu Gothic UI", sans-serif;
+  letter-spacing: .12em;
+  filter: drop-shadow(0 0 5px rgba(72, 219, 234, .55));
 }
 
 .farm3d-active .tool-storage-ring.open.storage-ring-pageable {
   cursor: ns-resize;
-}
-
-.farm3d-active .tool-storage-ring.open.storage-ring-pageable .tool-storage-ring-title::after {
-  content: "  ↕";
-  color: #f5d65b;
-  text-shadow: 0 0 8px rgba(245, 214, 91, .48);
 }
 
 .farm3d-active .tool-storage-ring-items {
@@ -1436,13 +1433,13 @@ body.official-demo-mode.official-plant-tutorial-waiting [data-toolbox-seed-list]
 .official-seed-hover-hint {
   position: fixed;
   z-index: 12020;
-  padding: 6px 9px 5px;
-  border: 1px solid rgba(245, 214, 91, .78);
+  padding: 10px 14px 9px;
+  border: 2px solid rgba(245, 214, 91, .9);
   color: #fff4ac;
   background: rgba(18, 17, 4, .94);
-  box-shadow: 0 0 16px rgba(245, 214, 91, .28);
-  font: 900 10px/1 Consolas, "Yu Gothic UI", sans-serif;
-  letter-spacing: .12em;
+  box-shadow: 0 0 0 3px rgba(245, 214, 91, .09), 0 0 26px rgba(245, 214, 91, .48);
+  font: 900 17px/1 Consolas, "Yu Gothic UI", sans-serif;
+  letter-spacing: .14em;
   white-space: nowrap;
   transform: translateY(-100%);
   pointer-events: none;
@@ -1451,12 +1448,12 @@ body.official-demo-mode.official-plant-tutorial-waiting [data-toolbox-seed-list]
 .official-seed-hover-hint::before {
   content: "";
   position: absolute;
-  bottom: -5px;
-  left: 8px;
-  width: 8px;
-  height: 8px;
-  border-right: 1px solid rgba(245, 214, 91, .78);
-  border-bottom: 1px solid rgba(245, 214, 91, .78);
+  bottom: -7px;
+  left: 13px;
+  width: 11px;
+  height: 11px;
+  border-right: 2px solid rgba(245, 214, 91, .9);
+  border-bottom: 2px solid rgba(245, 214, 91, .9);
   background: rgba(18, 17, 4, .94);
   transform: rotate(45deg);
 }

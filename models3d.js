@@ -14,7 +14,7 @@
      ワールド X = グリッド Y、ワールド Z = グリッド X という対応のため
    ● ロボットの正面は +Z
    ========================================================================= */
-import * as THREE from "./vendor/three.module.min.js";
+import * as THREE from "./three.module.min.js";
 
 /* 苗のビルボードは MeshBasicMaterial（ライティングを受けない＝常に最大輝度）なので、
    モデル側もそれと並んで見える明るさが要る。暗い床の上で沈まないように、
@@ -236,7 +236,7 @@ export function buildChargeDockModel({ extentX, extentZ }) {
 }
 
 
-/** Four-panel grow light on a reinforced central mast. */
+/** Forward-facing grow light shaped like an industrial street lamp. */
 export function buildAreaLightModel({ extentX, extentZ }) {
   const group = new THREE.Group();
   const dark = lambert(PALETTE.rubber);
@@ -249,31 +249,98 @@ export function buildAreaLightModel({ extentX, extentZ }) {
 
   addBox(group, dark, base, size * 0.16, base, 0, size * 0.08, 0);
   addBox(group, shell, base * 0.86, size * 0.16, base * 0.86, 0, size * 0.2, 0);
-  addCylinder(group, trim, size * 0.13, size * 0.16, size * 0.22, 0, size * 0.34, 0, 12);
-  addCylinder(group, shell, size * 0.085, size * 0.09, size * 1.38, 0, size * 1.0, 0, 12);
-  addCylinder(group, cyan, size * 0.105, size * 0.105, size * 0.06, 0, size * 1.72, 0, 12);
+  const poleZ = -size * 0.19;
+  addCylinder(group, trim, size * 0.14, size * 0.17, size * 0.24, 0, size * 0.36, poleZ, 12);
+  addCylinder(group, shell, size * 0.075, size * 0.095, size * 1.26, 0, size * 1.02, poleZ, 12);
+  addCylinder(group, trim, size * 0.095, size * 0.095, size * 0.08, 0, size * 1.48, poleZ, 12);
+  addBox(group, cyan, size * 0.12, size * 0.24, size * 0.025, 0, size * 0.94, poleZ + size * 0.082);
 
-  const hubY = size * 1.43;
-  addBox(group, trim, size * 0.24, size * 0.28, size * 0.22, 0, hubY, 0);
-  const panelConfigs = [
-    { x: -0.31, y: 1.69, rotation: 0.22 },
-    { x: 0.31, y: 1.69, rotation: -0.22 },
-    { x: -0.31, y: 1.17, rotation: -0.22 },
-    { x: 0.31, y: 1.17, rotation: 0.22 }
+  // A short diagonal neck keeps the street-light silhouette without an exaggerated elbow.
+  const armStart = new THREE.Vector3(0, size * 1.57, poleZ);
+  const armEnd = new THREE.Vector3(0, size * 1.43, size * 0.21);
+  addPipeBetween(group, shell, size * 0.065, armStart, armEnd, 10);
+  addPipeBetween(group, cyan, size * 0.018,
+    new THREE.Vector3(-size * 0.075, size * 1.53, -size * 0.12),
+    new THREE.Vector3(-size * 0.075, size * 1.4, size * 0.18), 7);
+
+  const head = new THREE.Group();
+  head.position.set(0, size * 1.52, size * 0.41);
+  // Tilt the luminous underside toward the default camera while still aiming down at the front tile.
+  head.rotation.x = -Math.PI * 0.12;
+  group.add(head);
+  addBox(head, dark, size * 0.68, size * 0.15, size * 0.42, 0, 0, 0);
+  addBox(head, shell, size * 0.6, size * 0.065, size * 0.36, 0, -size * 0.052, size * 0.01);
+  addBox(head, lamp, size * 0.54, size * 0.026, size * 0.32, 0, -size * 0.098, size * 0.025);
+  addBox(head, lamp, size * 0.56, size * 0.022, size * 0.035, 0, -size * 0.086, size * 0.19);
+  addBox(head, trim, size * 0.72, size * 0.05, size * 0.045, 0, size * 0.012, size * 0.205);
+  addBox(head, cyan, size * 0.3, size * 0.027, size * 0.025, 0, size * 0.095, -size * 0.1);
+
+  // Expand the light from the lamp face across the full 2 x 2 POD cultivation area.
+  const headTilt = new THREE.Euler(-Math.PI * 0.12, 0, 0);
+  const topCorners = [
+    new THREE.Vector3(-size * 0.27, -size * 0.112, -size * 0.145),
+    new THREE.Vector3(size * 0.27, -size * 0.112, -size * 0.145),
+    new THREE.Vector3(size * 0.27, -size * 0.112, size * 0.17),
+    new THREE.Vector3(-size * 0.27, -size * 0.112, size * 0.17)
+  ].map((point) => point.applyEuler(headTilt).add(head.position));
+  const bottomY = size * 0.86;
+  const bottomCorners = [
+    new THREE.Vector3(-size * 0.52, bottomY, size * 0.48),
+    new THREE.Vector3(size * 1.48, bottomY, size * 0.48),
+    new THREE.Vector3(size * 1.48, bottomY, size * 2.48),
+    new THREE.Vector3(-size * 0.52, bottomY, size * 2.48)
   ];
-  panelConfigs.forEach((config) => {
-    const panelX = size * config.x;
-    const panelY = size * config.y;
-    const arm = addBox(group, shell, size * 0.36, size * 0.075, size * 0.08,
-      panelX * 0.52, (hubY + panelY) * 0.5, -size * 0.01);
-    arm.rotation.z = Math.atan2(panelY - hubY, panelX) * 0.24;
-    const frame = addBox(group, dark, size * 0.48, size * 0.29, size * 0.1, panelX, panelY, size * 0.02);
-    frame.rotation.z = config.rotation;
-    const face = addBox(group, lamp, size * 0.39, size * 0.2, size * 0.018, panelX, panelY, size * 0.08);
-    face.rotation.z = config.rotation;
-    addBox(group, cyan, size * 0.16, size * 0.025, size * 0.02,
-      panelX, panelY + size * 0.115, size * 0.09).rotation.z = config.rotation;
-  });
+  const prismGeometry = new THREE.BufferGeometry();
+  prismGeometry.setAttribute("position", new THREE.Float32BufferAttribute(
+    [...topCorners, ...bottomCorners].flatMap((point) => [point.x, point.y, point.z]), 3
+  ));
+  prismGeometry.setIndex([
+    0, 1, 2, 0, 2, 3,
+    4, 6, 5, 4, 7, 6,
+    0, 4, 5, 0, 5, 1,
+    1, 5, 6, 1, 6, 2,
+    2, 6, 7, 2, 7, 3,
+    3, 7, 4, 3, 4, 0
+  ]);
+  prismGeometry.setAttribute("lightFade", new THREE.Float32BufferAttribute([1, 1, 1, 1, 0, 0, 0, 0], 1));
+  const prism = new THREE.Mesh(prismGeometry, new THREE.ShaderMaterial({
+    uniforms: {
+      lightColor: { value: new THREE.Color(0xc8ff58) },
+      peakOpacity: { value: 0.052 }
+    },
+    vertexShader: `
+      attribute float lightFade;
+      varying float vLightFade;
+      void main() {
+        vLightFade = lightFade;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform vec3 lightColor;
+      uniform float peakOpacity;
+      varying float vLightFade;
+      void main() {
+        float fade = pow(smoothstep(0.0, 1.0, vLightFade), 1.2);
+        float alpha = mix(0.0015, peakOpacity, fade);
+        gl_FragColor = vec4(lightColor, alpha);
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending
+  }));
+  prism.name = "grow-light-volume";
+  prism.userData.ignoreInteraction = true;
+  prism.raycast = () => {};
+  group.add(prism);
+  group.userData.growLight = {
+    lampMaterial: lamp,
+    volumeMaterial: prism.material,
+    baseLampColor: lamp.color.clone(),
+    basePeakOpacity: prism.material.uniforms.peakOpacity.value
+  };
   return finishPlaceholder(group, "light");
 }
 
