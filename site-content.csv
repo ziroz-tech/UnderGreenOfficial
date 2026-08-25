@@ -36,7 +36,7 @@ header,statusConnecting,text,165,DAY 01 · CONNECTING,,,,,,,,
 header,statusGrowing,text,170,GROWING,,,,,,,,
 header,statusPaused,text,180,PAUSED,,,,,,,,
 game,loading,text,10,LOADING CURRENT GAME BUILD...,,,,,,,,
-game,demoTitle,text,20,レタスを育てて収穫しよう！,,,,,,,,
+game,demoTitle,text,20,レタスを育てて収穫♪,,,,,,,,
 game,frame,embed,30,UNDER GREEN ゲーム体験版,,,,page:official-demo.html?officialdemo=1&build=20260822toolboxlock2,,,,
 game,guideTitle,text,40,HOW TO CULTIVATE,,,,,,,,
 game,guideStep,guide,50,切り替え,,右下ツールボックス上でホイール,,,,,,
@@ -72,8 +72,8 @@ system,feature04,feature,70,管理局の摘発をやり過ごす,FEATURE 04,管�
 system,feature05,feature,80,サポートロボットの労働をプログラムする,FEATURE 05,植え付け・収穫・清掃・物流をノードで接続し、業務フローを設計できます。適度に休憩をはさませるもよし、限界まで働かせるもよし。サポートロボットたちの適性を生かすも殺すも、すべてはあなたの采配次第です。,IMAGE PLACEHOLDER // LABOR,data\asset\video\プログラム１.png|data\asset\video\プログラム２.png,ロボット労務画像,,album,labor
 system,feature06,feature,90,その種は誰のもの？,FEATURE 06,管理局の食糧制限によって支配された世界において、あなたの農場は重要な影響力を発揮します。誰のために農場を動かすのか、何を作り誰に売るのかで、地下世界の様相は大きく変化していきます。,IMAGE PLACEHOLDER // STORY,data\asset\video\勢力.png,物語分岐画像,,image,story
 characters,kicker,text,10,CHARACTERS // PERSONNEL FILE 03,,,,,,,,
-characters,title,rich,20,地下通信網の,人物記録。,,,,,,,
-characters,lead,text,30,ゲーム内の人物アイコンと記録をもとにしたキャラクター紹介です。物語の進行に合わせて内容を更新します。,,,,,,,,
+characters,title,rich,20,地下通信網の,人物レコード,,,,,,,
+characters,lead,text,30,様々な利害関係が渦巻く地下世界は、曲者ぞろい,,,,,,,,
 characters,operator,profile,40,オペレーター,未登録栽培者,違法農場経営に手を出す本作の主人公。レタスのイヤリングを片耳にしている。友人から譲り受けたという旧世界の園芸本を大事に持っている。,「秩序と変化。私の心を癒すのはそのふたつだ。レタスはどちらも私にもたらしてくれる」,protagonist.webp,オペレーターのゲーム内人物アイコン,,image,PLAYER / ILLEGAL GROWER
 characters,mara,profile,50,マーラ,種ブローカー,高齢の闇ブローカー。違法水耕栽培種子と設備を闇で流す。旧世界では過激な環境活動家であった過去を持つ。希少な種子を保存するボトルを常に首から下げている。,「あたしらはこの鉄くずと血とホコリにまみれた死にゆく世界で、きわめて歪な方法で自然と触れ合うしかないのさ」,seed-broker.webp,マーラのゲーム内人物アイコン,,image,ENCRYPTED SEED ROUTE
 characters,support_robot,profile,60,サポートロボット,サポートロボット,農場作業を支える小型支援機。OSや設備を増やすことで、植え付け・収穫・清掃など担当できる仕事が広がる。,見ているだけの機械に見える日もある。だが、見ていてくれるだけで助かる日もある。,supportRobot-iso-leftdown.webp,サポートロボットのゲーム内人物アイコン,,image,SUPPORT UNIT
@@ -82,12 +82,12 @@ characters,io,profile,80,Dr.イオ,医療・実験区画の調達官,慢性的�
 characters,sera,profile,90,セラ・ヴェイル,上層市場の果実フィクサー,上層の食卓に希少な果実を届けるフィクサー。イチゴやメロンなど高級果実に高い価値をつける一方で、通常の食用野菜には関心を示さない。,「レタスで食卓は飾れない。箱を開けた瞬間、顧客が美しさに息を止めるようなものを持ってきて頂戴」,market-upper.webp,セラ・ヴェイルのゲーム内人物アイコン,,image,UPPER FIXER
 characters,nagi,profile,100,ナギ,レジスタンス,反体制組織の補給網に関わる人物。詳細は分かっていない。,「管理局が配給する食料は毒だ。人々を弱らせ、明日を見れなくする。」,market-rebel.webp,ナギのゲーム内人物アイコン,,image,REBEL SUPPLY
 characters,kido,profile,110,キド,闇不動産ブローカー,管理局の台帳に載らない物件を扱う闇ブローカー。礼儀正しいが底が見えない。常に一流のスーツに身を包み、汚れ１つついていない。,「闇の領域は光のあてかたによって揺らぐもの。それが分からないのなら、あなたにはまだ居場所があります」,property-broker-black.webp,キドのゲーム内人物アイコン,,image,OFF-LEDGER BROKER
-characters,note,text,120,DRAFT PROFILE // 紹介文は開発中の設定をもとにした下書きです。,,,,,,,,
+characters,note,text,120,DRAFT PROFILE // ,,,,,,,,
 play,kicker,text,10,PLAY // DEVELOPMENT 05,,,,,,,,
 play,statement,text,20,steamでの発売を目指して開発を進めながら、インディーゲームイベントに出展しています。,,,,,,,,
 play,eventTitle,text,30,イベント出展履歴,,,,,,,,
 play,event,event,40,ゲームパビリオンjp2026,,,,,,,,2026
-play,event,event,50,九州学生ゲーム大祭2026,,,,,,,,2026
+play,event,event,50,九州学生ゲーム大祭2026,,,,,,,,
 contact,kicker,text,10,CONTACT // 06,,,,,,,,
-contact,lead,text,20,作品へのご感想、取材、制作に関するお問い合わせは、公式Xからお送りください。,,,,,,,,
+contact,lead,text,20,作品へのご感想、取材、制作に関するお問い合わせは、公式Xからお送りください。開発の励みになります。,,,,,,,,
 contact,channel,link,30,X,OFFICIAL CHANNEL,,,,,https://x.com/UnderGreenJP,,
