@@ -118,7 +118,7 @@ function resolveContentSource(source) {
     return `${document.documentElement.dataset.contentAssetPrefix || ""}${path}`;
   }
   if (normalizedSource.startsWith("page:")) return `${document.documentElement.dataset.contentPagePrefix || ""}${normalizedSource.slice(5)}`;
-  if (flattenAssets && !/^(?:[a-z]+:|\/)/i.test(normalizedSource)) return normalizedSource.split("/").pop();
+  // Only asset: references use the flat export; explicit paths keep their folders.
   return normalizedSource;
 }
 
