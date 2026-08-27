@@ -79,6 +79,7 @@ button { color: inherit; }
   box-shadow: inset 0 1px 0 rgba(181, 255, 224, .08);
   transition: color .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
 }
+.portal-nav button[data-panel="characters"] { flex: 1.6; }
 .portal-nav button small { color: #568475; font: 9px Consolas, "Yu Gothic UI", sans-serif; letter-spacing: .12em; transition: color .18s ease; white-space: nowrap; }
 .portal-nav button strong { font: 800 15px/1 "Yu Gothic UI", sans-serif; letter-spacing: .07em; white-space: nowrap; }
 .portal-nav button:last-child { border-right: 1px solid rgba(113, 255, 193, .3); }
@@ -242,6 +243,12 @@ button { color: inherit; }
 .event-history li { display: grid; grid-template-columns: 90px 1fr; align-items: center; gap: 24px; min-height: 68px; padding: 14px 18px; border-bottom: 1px solid var(--line); background: rgba(50, 174, 130, .035); }
 .event-history li span { color: var(--green); font: 12px Consolas, monospace; letter-spacing: .14em; }
 .event-history li strong { color: #e4fff4; font-size: 17px; }
+.media-coverage-list { margin: 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
+.media-coverage-list > li { padding: clamp(20px, 3vw, 30px) 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.media-publication { margin: 0 0 14px; color: var(--green); font-size: clamp(14px, 1.8vw, 18px); font-weight: 700; line-height: 1.7; }
+.media-coverage-list h3 { margin: 0; color: #eafff6; font-size: clamp(19px, 2.5vw, 26px); line-height: 1.6; }
+.media-author { margin: 12px 0 0; color: #8ab2a4; font-size: 14px; line-height: 1.8; }
+.media-coverage-list .panel-lead { margin: 20px 0 0; }
 .contact-link { display: grid; grid-template-columns: 44px 1fr 30px; align-items: center; margin-top: 25px; border: 1px solid rgba(103, 255, 195, .62); color: #67ffc3; background: rgba(103, 255, 195, .025); text-decoration: none; transition: color .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease; }
 .contact-link span { display: grid; place-items: center; height: 58px; border-right: 1px solid var(--line); color: var(--green); font-size: 17px; }
 .contact-link strong { padding-left: 20px; font: 12px Consolas, monospace; letter-spacing: .14em; }
@@ -300,8 +307,9 @@ body.is-intro .game-host { filter: blur(10px); transform: scale(1.012); }
   .portal-logo-frame { width: 250px; height: 66px; }
   .portal-logo { width: 260px; }
   .portal-status { grid-column: 2; grid-row: 1; display: flex; padding: 0 7px 0 3px; }
-  .portal-nav { grid-column: 1 / 3; grid-row: 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(2, 53px); }
-  .portal-nav button { padding: 0 4px; justify-items: center; text-align: center; }
+  .portal-nav { grid-column: 1 / 3; grid-row: 2; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: repeat(2, 53px); }
+  .portal-nav button { grid-column: span 3; padding: 0 4px; justify-items: center; text-align: center; }
+  .portal-nav button:nth-child(n + 5) { grid-column: span 4; }
   .portal-nav button small { display: none; }
   .portal-nav button strong { max-width: 100%; font-size: 10px; letter-spacing: 0; }
   .info-layer { padding: 10px; }

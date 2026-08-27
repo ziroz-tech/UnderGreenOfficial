@@ -23,6 +23,7 @@ header,nav,nav,40,STORY,物語,,,,,,,world
 header,nav,nav,50,CHARACTERS,人物,,,,,,,characters
 header,nav,nav,60,CREDITS,制作,,,,,,,credits
 header,nav,nav,70,PLAY,開発情報,,,,,,,play
+header,nav,nav,75,MEDIA,掲載情報,,,,,,,media
 header,nav,nav,80,CONTACT,通信,,,,,,,contact
 header,liveLabel,text,90,LIVE CULTIVATION,,,,,,,,
 header,audioLabel,text,100,SOUND,,,,,,,,
@@ -88,6 +89,12 @@ play,statement,text,20,steamでの発売を目指して開発を進めながら�
 play,eventTitle,text,30,イベント出展履歴,,,,,,,,
 play,event,event,40,ゲームパビリオンjp2026,,,,,,,,2026
 play,event,event,50,九州学生ゲーム大祭2026,,,,,,,,
-contact,kicker,text,10,CONTACT // 06,,,,,,,,
+media,kicker,text,10,MEDIA // PRESS 06,,,,,,,,
+media,title,text,20,メディア掲載,,,,,,,,
+media,sf202610Issue,text,30,SFマガジン 2026年10月号,,,,,,,,
+media,sf202610Title,text,40,「未来のゲームについてお話しします」,,,,,,,,
+media,sf202610Author,text,50,著者：赤野工作氏,,,,,,,,
+media,sf202610Body,text,60,『UNDER GREEN』が掲載されました。,,,,,,,,
+contact,kicker,text,10,CONTACT // 07,,,,,,,,
 contact,lead,text,20,作品へのご感想、取材、制作に関するお問い合わせは、公式Xからお送りください。開発の励みになります。,,,,,,,,
 contact,channel,link,30,X,OFFICIAL CHANNEL,,,,,https://x.com/UnderGreenJP,,
