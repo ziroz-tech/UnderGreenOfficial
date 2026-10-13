@@ -37,7 +37,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=JetBrains+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;700&family=Zen+Old+Mincho:wght@600;900&display=swap">
   <link rel="preload" as="image" href="site/img/logo.webp">
-  <link rel="stylesheet" href="site/site.css?v=20261013c">
+  <link rel="stylesheet" href="site/site.css?v=20261014a">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -79,6 +79,7 @@
 
   <div class="grain" aria-hidden="true"></div>
   <div class="boot-sweep" id="boot-sweep" aria-hidden="true"></div>
+  <div class="theater-backdrop" id="theater-backdrop" aria-hidden="true"></div>
   <div class="cursor" aria-hidden="true"><i class="cursor__dot"></i><i class="cursor__ring"><b class="cursor__label"></b></i></div>
 
   <!-- ===== Header ===== -->
@@ -311,19 +312,22 @@
         <p class="eyebrow mono" data-scramble><span data-content="trailer.kicker">TRAILER // 求人案内動画編</span></p>
         <h2 class="trailer__title" id="trailer-title" data-content-rich="trailer.title" data-split>違法レタス農園で、<em>仲間を募集しています。</em></h2>
       </header>
-      <div class="trailer__player" id="trailer-player" data-cursor="PLAY">
-        <video id="trailer-video" playsinline preload="none" poster="site/media/trailer-kyujin.jpg" aria-label="UNDER GREEN のPV「求人案内動画編」">
-          <source src="site/media/trailer-kyujin.mp4" type="video/mp4">
-        </video>
-        <button class="trailer__play" id="trailer-play" type="button" aria-label="PVを再生">
-          <span class="trailer__play-ring" aria-hidden="true"></span>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
-        </button>
-        <div class="trailer__meta mono" aria-hidden="true">
-          <span id="trailer-name" data-content="trailer.video">UNDER GREEN PV「求人案内動画編」</span>
-          <span id="trailer-time" data-content-sub="trailer.video">0:30</span>
+      <div class="trailer__slot" id="trailer-slot">
+        <div class="trailer__player" id="trailer-player" data-cursor="PLAY">
+          <video id="trailer-video" playsinline preload="none" poster="site/media/trailer-kyujin.jpg" aria-label="UNDER GREEN のPV「求人案内動画編」">
+            <source src="site/media/trailer-kyujin.mp4" type="video/mp4">
+          </video>
+          <button class="trailer__play" id="trailer-play" type="button" aria-label="PVを再生">
+            <span class="trailer__play-ring" aria-hidden="true"></span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
+          </button>
+          <div class="trailer__meta mono" aria-hidden="true">
+            <span id="trailer-name" data-content="trailer.video">UNDER GREEN PV「求人案内動画編」</span>
+            <span id="trailer-time" data-content-sub="trailer.video">0:30</span>
+          </div>
+          <span class="frame-corners" aria-hidden="true"></span>
+          <button class="trailer__close" id="trailer-close" type="button" aria-label="PVを閉じる"><span aria-hidden="true">✕</span></button>
         </div>
-        <span class="frame-corners" aria-hidden="true"></span>
       </div>
       <p class="trailer__note" data-content="trailer.note">※ この映像はゲーム「UNDER GREEN」のPVであり、実際のゲーム映像とは異なります。</p>
     </section>
@@ -369,6 +373,6 @@
   </footer>
 
   <script src="site/vendor/lenis.min.js?v=1.3.26" defer></script>
-  <script src="site/site.js?v=20261013c" defer></script>
+  <script src="site/site.js?v=20261014a" defer></script>
 </body>
 </html>

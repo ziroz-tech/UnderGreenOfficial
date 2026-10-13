@@ -1439,11 +1439,62 @@
      Trailer
      --------------------------------------------------------------- */
   function initTrailer() {
+    const slot = $("#trailer-slot");
     const player = $("#trailer-player");
     const video = $("#trailer-video");
+    const backdrop = $("#theater-backdrop");
+    let theater = false;
+    let returnFocus = null;
+
+    const centred = () => {
+      const width = Math.min(window.innerWidth * 0.92, 1280, (window.innerHeight - 120) * 16 / 9);
+      const height = width * 9 / 16;
+      return { left: (window.innerWidth - width) / 2, top: (window.innerHeight - height) / 2 + 12, width, height };
+    };
+    const place = (rect) => {
+      player.style.left = `${rect.left}px`;
+      player.style.top = `${rect.top}px`;
+      player.style.width = `${rect.width}px`;
+      player.style.height = `${rect.height}px`;
+    };
+    const clearPlacement = () => {
+      player.classList.remove("is-theater");
+      ["left", "top", "width", "height", "transition"].forEach((key) => { player.style[key] = ""; });
+    };
+    // 再生中は画面の真ん中へ。いまの位置から中央へ移り、閉じると元の場所へ戻る
+    const openTheater = () => {
+      if (theater) return;
+      theater = true;
+      returnFocus = document.activeElement;
+      const from = slot.getBoundingClientRect();
+      player.style.transition = "none";
+      player.classList.add("is-theater");
+      place(from);
+      void player.offsetWidth;
+      player.style.transition = "";
+      requestAnimationFrame(() => place(centred()));
+      backdrop.classList.add("is-on");
+      lenis?.stop();
+      Cursor.suspend(true);
+    };
+    const closeTheater = ({ pause = true } = {}) => {
+      if (!theater) return;
+      theater = false;
+      if (pause && !video.paused) video.pause();
+      place(slot.getBoundingClientRect());
+      backdrop.classList.remove("is-on");
+      lenis?.start();
+      Cursor.suspend(false);
+      setTimeout(() => {
+        if (!theater) clearPlacement();
+      }, 720);
+      if (returnFocus instanceof HTMLElement) returnFocus.focus({ preventScroll: true });
+    };
+
     const start = () => {
       video.controls = true;
       video.muted = false;
+      openTheater();
       const attempt = video.play();
       if (attempt?.catch) attempt.catch(() => {});
     };
@@ -1454,9 +1505,21 @@
     player.addEventListener("click", (event) => {
       if (!player.classList.contains("is-playing") && event.target === video) start();
     });
+    $("#trailer-close").addEventListener("click", (event) => {
+      event.stopPropagation();
+      closeTheater();
+    });
+    backdrop.addEventListener("click", () => closeTheater());
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && theater) closeTheater();
+    });
+    window.addEventListener("resize", () => {
+      if (theater) place(centred());
+    });
     video.addEventListener("play", () => {
       player.classList.add("is-playing");
       state.trailerPlaying = true;
+      openTheater();
       syncAudio();
     });
     const stop = () => {
@@ -1468,15 +1531,17 @@
       player.classList.remove("is-playing");
       video.controls = false;
       stop();
+      closeTheater({ pause: false });
     });
     if ("IntersectionObserver" in window) {
       new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting && !video.paused) video.pause();
+          if (!entry.isIntersecting && !video.paused && !theater) video.pause();
         });
-      }, { threshold: 0.15 }).observe(player);
+      }, { threshold: 0.15 }).observe(slot);
     }
   }
+
 
   /* ---------------------------------------------------------------
      Marquee
