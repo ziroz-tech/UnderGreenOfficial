@@ -1129,7 +1129,7 @@ a.playlink .playlink__cta { border: 1px solid var(--signal); background: var(--s
 .contact__handle b { font: 800 22px/1 var(--f-display); letter-spacing: .08em; color: var(--text); text-transform: none; }
 
 .robot { position: relative; align-self: stretch; min-height: 520px; margin: 0; }
-.robot__stage { position: absolute; inset: 0 0 96px; }
+.robot__stage { position: absolute; inset: 78px 0 0; }
 .robot__stage canvas { width: 100% !important; height: 100% !important; opacity: 0; transition: opacity 1.2s; }
 .robot__stage.is-ready canvas { opacity: 1; }
 .robot__stage::before {
@@ -1143,20 +1143,35 @@ a.playlink .playlink__cta { border: 1px solid var(--signal); background: var(--s
   transition: opacity .8s;
 }
 .robot__stage.is-ready::before { opacity: 0; }
-.robot__cap { position: absolute; left: 0; right: 0; bottom: 0; display: grid; gap: 10px; justify-items: center; text-align: center; }
-.robot__cap .mono { color: var(--text-3); }
-.robot__cap b { color: var(--signal); font-weight: 500; }
-.robot__cap q {
-  position: relative;
-  max-width: 30em;
-  padding: 12px 18px;
+.robot__bubble {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  width: fit-content;
+  max-width: min(30em, 92%);
+  margin: 0 auto;
+  padding: 12px 20px;
   border: 1px solid var(--line-2);
-  background: rgba(4, 10, 7, .8);
+  background: rgba(4, 10, 7, .88);
   font: 600 14px/1.8 var(--f-mincho);
+  text-align: center;
   quotes: none;
 }
-.robot__cap q::before { content: ""; position: absolute; left: 50%; top: -6px; width: 10px; height: 10px; border-left: 1px solid var(--line-2); border-top: 1px solid var(--line-2); background: #050b08; transform: translateX(-50%) rotate(45deg); }
-.robot__cap q.is-pop { animation: pop .5s var(--ease); }
+.robot__bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  border-right: 1px solid var(--line-2);
+  border-bottom: 1px solid var(--line-2);
+  background: #050b08;
+  transform: translateX(-50%) rotate(45deg);
+}
+.robot__bubble.is-pop { animation: pop .5s var(--ease); }
 .robot__count { display: inline-block; min-width: 1.6em; padding: 0 .12em; font: 900 1.55em/1 var(--f-display); color: var(--signal); letter-spacing: .02em; font-variant-numeric: tabular-nums; vertical-align: -0.08em; }
 @keyframes pop { 0% { transform: scale(.94); } 60% { transform: scale(1.03); } 100% { transform: none; } }
 
