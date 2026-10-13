@@ -771,14 +771,12 @@ a:hover .roll > span + span, button:hover .roll > span + span { transform: trans
 .sys { padding: clamp(120px, 15vw, 220px) 0 clamp(60px, 8vw, 120px); }
 .sys__lead {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-  gap: clamp(24px, 5vw, 96px);
+  gap: .9em;
+  max-width: 54em;
   padding: 0 var(--gutter);
-  margin-top: clamp(40px, 6vw, 88px);
+  margin-top: clamp(32px, 4vw, 64px);
 }
-.sys__lead p { color: var(--text-2); font-size: 15px; line-height: 2.05; }
-.sys__lead .sys__lead-first { color: var(--text); font: 600 clamp(19px, 1.9vw, 27px)/1.85 var(--f-mincho); }
-.sys__lead-rest { display: grid; gap: .9em; align-content: start; padding-top: .5em; }
+.sys__lead p { color: var(--text-2); font-size: 15.5px; line-height: 2.05; }
 .sys__lead .sys__lead-last { color: var(--signal); font-weight: 700; }
 
 .feats {
@@ -1214,8 +1212,6 @@ a.playlink .playlink__cta { border: 1px solid var(--signal); background: var(--s
   .play-ui__guide li { grid-template-columns: 66px 1fr; }
 
   .trailer { grid-template-columns: 1fr; grid-template-areas: "head" "player" "note"; row-gap: 24px; }
-  .sys__lead { grid-template-columns: 1fr; }
-  .sys__lead .sys__lead-first { grid-row: auto; }
   .feats { grid-template-columns: 1fr; }
   .feats__side { display: contents; }
   .feats__tabs { order: -1; display: flex; overflow-x: auto; border: 0; gap: 8px; margin: 0 calc(var(--gutter) * -1); padding: 0 var(--gutter) 4px; scrollbar-width: none; }

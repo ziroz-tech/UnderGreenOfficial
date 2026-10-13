@@ -200,17 +200,12 @@
     if (!lead?.text) return;
     const rawLines = lead.text.split(/\r?\n/).filter((line) => line.trim());
     const container = $("#system-lead");
-    const rest = el("div", "sys__lead-rest");
-    container.replaceChildren();
-    rawLines.forEach((line, index) => {
-      const paragraph = el("p", "", line.trim());
-      if (index === 0) paragraph.className = "sys__lead-first";
-      else if (/^\s/.test(line)) paragraph.className = "sys__lead-last";
+    container.replaceChildren(...rawLines.map((line, index) => {
+      const paragraph = el("p", /^\s/.test(line) ? "sys__lead-last" : "", line.trim());
       paragraph.dataset.rv = "";
       paragraph.style.setProperty("--d", `${Math.min(index, 8) * 0.06}s`);
-      (index === 0 ? container : rest).appendChild(paragraph);
-    });
-    if (rest.childElementCount) container.appendChild(rest);
+      return paragraph;
+    }));
   }
 
   /* media items: images, videos, or a "|"-separated album of both */
