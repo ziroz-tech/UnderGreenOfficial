@@ -1400,11 +1400,85 @@
   /* ---------------------------------------------------------------
      Live robot (Godot model, loaded when the finale approaches)
      --------------------------------------------------------------- */
+  /* Visitor counter: the robot greets "あなたは N 人目の訪問者です".
+     A browser is counted once (its number is remembered); the count lives on an external counter
+     service set in site-content.csv (contact.visitorCounter: href = service, meta = namespace/key). */
+  const Visitors = { number: 0, returning: false, shown: false, counted: false };
+
+  async function countVisitor() {
+    const config = row("contact.visitorCounter");
+    if (!config?.href || !/^[\w.-]{3,64}\/[\w.-]{3,64}$/.test(config.meta || "")) return 0;
+    const storageKey = `ug-visitor:${config.meta}`;
+    const remembered = Number(local.get(storageKey)) || 0;
+    if (remembered > 0) {
+      Visitors.returning = true;
+      return remembered;
+    }
+    try {
+      const response = await fetch(`${config.href.replace(/\/+$/, "")}/hit/${config.meta}`, { cache: "no-store" });
+      if (!response.ok) return 0;
+      const value = Math.floor(Number((await response.json()).value) || 0);
+      if (value > 0) local.set(storageKey, String(value));
+      return value;
+    } catch (error) {
+      return 0;
+    }
+  }
+
+  function visitorLine(number) {
+    const template = Visitors.returning
+      ? text("contact.visitorReturn", "おかえりなさい。あなたは {n} 人目の訪問者です。")
+      : text("contact.visitorLine", "あなたは {n} 人目の訪問者です。");
+    const [before, after = ""] = template.split("{n}");
+    const count = el("b", "robot__count", "0");
+    count.dataset.value = String(number);
+    const fragment = document.createDocumentFragment();
+    fragment.append(document.createTextNode(before), count, document.createTextNode(after));
+    return fragment;
+  }
+
+  function animateCount(node) {
+    const target = Number(node.dataset.value) || 0;
+    const format = (value) => value.toLocaleString("ja-JP");
+    if (reduced() || target < 2) {
+      node.textContent = format(target);
+      return;
+    }
+    const started = performance.now();
+    const duration = Math.min(1800, 600 + String(target).length * 220);
+    const step = (now) => {
+      const progress = clamp((now - started) / duration, 0, 1);
+      const eased = 1 - Math.pow(1 - progress, 4);
+      node.textContent = format(Math.round(target * eased));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  function showVisitorLine() {
+    const line = $("#robot-line");
+    if (!line || !Visitors.number) return;
+    line.replaceChildren(visitorLine(Visitors.number));
+    line.dataset.mode = "visitor";
+    const count = $(".robot__count", line);
+    if (Visitors.shown) count.textContent = Visitors.number.toLocaleString("ja-JP");
+    else animateCount(count);
+    Visitors.shown = true;
+  }
+
   function initRobot() {
     const stage = $("#robot-stage");
     if (!stage || !("IntersectionObserver" in window)) return;
-    const quote = row("characters.support_robot")?.note;
-    if (quote) $("#robot-line").textContent = quote.replace(/^「|」$/g, "");
+    const quote = (row("characters.support_robot")?.note || "").replace(/^「|」$/g, "");
+    if (quote) $("#robot-line").textContent = quote;
+    // count once the page has settled, so the request never slows the first view
+    setTimeout(() => {
+      countVisitor().then((number) => {
+        Visitors.number = number;
+        Visitors.counted = true;
+        if (number && Visitors.visibleOnce) showVisitorLine();
+      });
+    }, 1500);
     let robot = null;
     let visible = false;
     const preload = new IntersectionObserver((entries) => {
@@ -1424,11 +1498,24 @@
       entries.forEach((entry) => {
         visible = entry.isIntersecting;
         robot?.setVisible(visible);
+        if (visible && !Visitors.visibleOnce) {
+          Visitors.visibleOnce = true;
+          if (Visitors.number) showVisitorLine();
+        }
       });
     }, { threshold: 0.08 }).observe(stage);
     stage.addEventListener("click", () => {
       Sound.play("select", 0.7);
       const line = $("#robot-line");
+      // クリックで「訪問者の番号」と「いつものひとこと」を切り替える
+      if (Visitors.number) {
+        if (line.dataset.mode === "visitor" && quote) {
+          line.textContent = quote;
+          line.dataset.mode = "quote";
+        } else {
+          showVisitorLine();
+        }
+      }
       line.classList.remove("is-pop");
       void line.offsetWidth;
       line.classList.add("is-pop");

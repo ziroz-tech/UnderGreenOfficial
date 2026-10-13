@@ -1157,6 +1157,7 @@ a.playlink .playlink__cta { border: 1px solid var(--signal); background: var(--s
 }
 .robot__cap q::before { content: ""; position: absolute; left: 50%; top: -6px; width: 10px; height: 10px; border-left: 1px solid var(--line-2); border-top: 1px solid var(--line-2); background: #050b08; transform: translateX(-50%) rotate(45deg); }
 .robot__cap q.is-pop { animation: pop .5s var(--ease); }
+.robot__count { display: inline-block; min-width: 1.6em; padding: 0 .12em; font: 900 1.55em/1 var(--f-display); color: var(--signal); letter-spacing: .02em; font-variant-numeric: tabular-nums; vertical-align: -0.08em; }
 @keyframes pop { 0% { transform: scale(.94); } 60% { transform: scale(1.03); } 100% { transform: none; } }
 
 .ftr { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 28px var(--gutter) 34px; border-top: 1px solid var(--line); color: var(--text-3); }
