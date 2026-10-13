@@ -622,11 +622,23 @@ a:hover .roll > span + span, button:hover .roll > span + span { transform: trans
 /* =========================================================
    Trailer
    ========================================================= */
-.trailer { position: relative; padding: clamp(110px, 14vw, 200px) var(--gutter) clamp(80px, 10vw, 140px); }
-.trailer__head { display: grid; gap: 18px; margin-bottom: clamp(32px, 5vw, 64px); }
-.trailer__title { font: 900 clamp(34px, 5.6vw, 92px)/1.15 var(--f-mincho); letter-spacing: -.01em; font-feature-settings: "palt" 1; }
+.trailer {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 720px);
+  grid-template-areas: "head player" "note player";
+  align-items: center;
+  column-gap: clamp(32px, 5vw, 88px);
+  row-gap: 16px;
+  padding: clamp(90px, 11vw, 160px) var(--gutter);
+  border-top: 1px solid var(--line);
+}
+.trailer__head { grid-area: head; display: grid; gap: 18px; align-self: end; }
+.trailer__title { font: 900 clamp(26px, 2.9vw, 44px)/1.35 var(--f-mincho); letter-spacing: -.01em; font-feature-settings: "palt" 1; }
 .trailer__title em { display: block; }
 .trailer__player {
+  grid-area: player;
+  width: 100%;
   position: relative;
   aspect-ratio: 16 / 9;
   background: #000;
@@ -639,7 +651,7 @@ a:hover .roll > span + span, button:hover .roll > span + span { transform: trans
 .trailer__play {
   position: absolute;
   left: 50%; top: 50%;
-  width: clamp(96px, 11vw, 150px);
+  width: clamp(68px, 6.5vw, 104px);
   aspect-ratio: 1;
   display: grid;
   place-items: center;
@@ -656,7 +668,7 @@ a:hover .roll > span + span, button:hover .roll > span + span { transform: trans
 .trailer__player:hover .trailer__play { transform: translate(-50%, -50%) scale(1.08); }
 .trailer__player.is-playing .trailer__play, .trailer__player.is-playing .trailer__meta { opacity: 0; pointer-events: none; }
 .trailer__meta { position: absolute; left: 18px; right: 18px; bottom: 16px; display: flex; justify-content: space-between; color: #fff; text-shadow: 0 1px 8px rgba(0, 0, 0, .8); transition: opacity .4s; z-index: 2; }
-.trailer__note { margin-top: 14px; color: var(--text-3); font-size: 12px; }
+.trailer__note { grid-area: note; align-self: start; color: var(--text-3); font-size: 12px; }
 
 /* =========================================================
    Prologue
@@ -1142,6 +1154,7 @@ a.playlink .playlink__cta { border: 1px solid var(--signal); background: var(--s
   .play-ui__guide { max-width: calc(100vw - 40px); right: 20px; bottom: auto; top: 78px; font-size: 12px; }
   .play-ui__guide li { grid-template-columns: 66px 1fr; }
 
+  .trailer { grid-template-columns: 1fr; grid-template-areas: "head" "player" "note"; row-gap: 24px; }
   .sys__lead { grid-template-columns: 1fr; }
   .sys__lead .sys__lead-first { grid-row: auto; }
   .feats { grid-template-columns: 1fr; }
