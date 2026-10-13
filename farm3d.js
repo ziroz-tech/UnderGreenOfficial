@@ -1,4 +1,5 @@
 import * as THREE from "./three.module.min.js";
+import * as GodotModels from "./godot-models.js?v=20261013a";
 import { buildChargeDockModel, buildRobotModel, buildCleaningBrushModel, buildCleaningBucketModel, buildPlantSprayerModel, buildMaintenanceWrenchModel, buildMarketCourierScooterModel, MODEL_BUILDERS } from "./models3d.js?v=20260821fluorescent1";
 
 const FLOOR_HEIGHT = 0.18;
@@ -299,6 +300,10 @@ const ROBOT_MOTION_HANDLERS = Object.freeze({
 });
 
 function applyRobotMotion(model, motion, time) {
+  if (model.userData.godot) {
+    model.userData.godot.setMotion(motion);
+    return;
+  }
   const parts = model.userData.parts;
   const rest = model.userData.rest;
   if (!parts || !rest) return;
@@ -524,6 +529,7 @@ function clearWorld() {
     const geometries = new Set();
     const materials = new Set();
     world.traverse((object) => {
+      if (object.userData?.sharedAsset) return;
       if (object.geometry) geometries.add(object.geometry);
       (Array.isArray(object.material) ? object.material : [object.material]).filter(Boolean).forEach((material) => materials.add(material));
     });
@@ -2365,14 +2371,24 @@ function buildPlantSlots(base, item, itemGroup, deckHeight, parentYaw = 0) {
       label: plant ? plant.name + (plant.ready ? " / 収穫可能" : plant.dead ? " / 枯死" : " / 生育中") : ""
     };
     if (plant) {
-      const height = plant.dead ? 0.48 : 0.42 + plant.stage * 0.13;
-      const sprite = createPlantBillboard(plant.sprite, height, height * 1.25);
-      sprite.position.y = height * 0.5 + 0.03;
-      sprite.userData.interaction = interaction;
-      sprite.userData.alphaHitTest = true;
+      const godotPlant = plant.crop === "lettuce" && GodotModels.ready();
+      const growth = plant.ready ? 1 : Number(plant.growth) || 0;
+      const height = godotPlant ? GodotModels.lettuceHeight(growth) : plant.dead ? 0.48 : 0.42 + plant.stage * 0.13;
+      let sprite;
+      if (godotPlant) {
+        sprite = GodotModels.lettuce({ key: plantSlotKey(base.id, item.id, slotIndex), podKey: item.type === "pod" ? item.id : null, growth, dead: plant.dead });
+        sprite.position.y = 0.0;
+        sprite.userData.model3d = true;
+        registerVisualInteraction(sprite, interaction);
+      } else {
+        sprite = createPlantBillboard(plant.sprite, height, height * 1.25);
+        sprite.position.y = height * 0.5 + 0.03;
+        sprite.userData.interaction = interaction;
+        sprite.userData.alphaHitTest = true;
+      }
       sprite.userData.plantBaseScale = sprite.scale.clone();
       interactables.push(sprite);
-      if (plant.dead) sprite.material.color.setHex(0x76656a);
+      if (plant.dead && !godotPlant) sprite.material.color.setHex(0x76656a);
       slotGroup.add(sprite);
       plantAnchors.set(plantSlotKey(base.id, item.id, slotIndex), {
         object: slotGroup,
@@ -2455,13 +2471,19 @@ function buildEquipment(base, item, baseGroup) {
   };
   const shadow = addBlobShadow(group, baseHeight, baseWidth);
   let robotAnimationEntry = null;
-  const deckHeight = item.type === "box" ? 0.68 : item.type === "pod" ? 0.72 : 0.55;
+  const godotPod = item.type === "pod" && GodotModels.ready();
+  const godotRobot = item.type === "support_robot" && GodotModels.ready();
+  const deckHeight = item.type === "box" ? 0.68 : godotPod ? GodotModels.POD_DECK : item.type === "pod" ? 0.72 : 0.55;
   const builder = MODEL_BUILDERS[item.type];
   if (builder) {
     const holes = item.kind === "unit" ? item.slots.map((_, index) => localSlotPosition(item.type, index, item.slots.length)) : [];
-    const model = item.type === "support_robot"
-      ? buildRobotModel({ extentX: baseHeight, extentZ: baseWidth, deckHeight, holes })
-      : builder({ extentX: baseHeight, extentZ: baseWidth, deckHeight, holes });
+    const model = godotPod
+      ? GodotModels.pod({ key: item.id, running: item.slots.some((plant) => plant && !plant.dead) })
+      : godotRobot
+        ? GodotModels.robot()
+        : item.type === "support_robot"
+          ? buildRobotModel({ extentX: baseHeight, extentZ: baseWidth, deckHeight, holes })
+          : builder({ extentX: baseHeight, extentZ: baseWidth, deckHeight, holes });
     model.position.y = 0.03;
     group.add(model);
     registerVisualInteraction(model, interaction);
@@ -2858,6 +2880,7 @@ function syncSnapshot(now = performance.now()) {
   const previousActiveBase = activeBaseId;
   capturePlantVisualTransitions(next);
   snapshot = next;
+  GodotModels.syncPlants(next, plantSlotKey);
   syncOfficialPlantTutorial(next);
   refreshDynamicRobotSnapshots(next);
   activeBaseId = next.activeBaseId;
@@ -4720,6 +4743,11 @@ function updateAnimations(elapsed) {
           baseScale.z
         );
       }
+      if (entry.object.userData.model3d) {
+        entry.object.position.y = entry.baseY + (entry.type === "ready-plant" ? (Math.sin(wave * 3.6) * 0.5 + 0.5) * 0.03 : 0);
+        entry.object.scale.z = entry.object.scale.x;
+        return;
+      }
       if (entry.type === "ready-plant") {
         entry.object.position.y = entry.baseY + Math.sin(wave * 3.6) * 0.045;
       } else {
@@ -4862,6 +4890,7 @@ function animate(now) {
   updateCamera(delta);
   updateSpriteSizing();
   updateAnimations(now / 1000);
+  GodotModels.update(delta);
   updateCleanToolPreviews(delta, now / 1000);
   updateEquipmentDragVisual(delta);
   updateTransientEffects(delta);
@@ -5742,6 +5771,11 @@ function initScene() {
   const rim = new THREE.DirectionalLight(0x48dbea, 0.85);
   rim.position.set(12, 7, -10);
   scene.add(hemisphere, key, rim);
+  GodotModels.load().then((loaded) => {
+    if (!loaded) return;
+    snapshotSignature = "";
+    forceSync = true;
+  });
   clearWorld();
   createHud();
   bindCanvasEvents();

@@ -5,15 +5,21 @@ GitHub Pages でそのまま公開できる構成です。PHP・データベー�
 ## ページの構成（上から順）
 
 1. 読み込み画面 … 光るレタスが育ちながら 000%→100%（2回目以降の訪問は短縮）
-2. トップ … ブラウザ栽培デモ（`official-demo.html`）が背景で動いている。「栽培をはじめる」かデモ部分をクリックすると全画面で遊べる。「サイトを見る」か Esc で戻る
-3. TRAILER … PV「求人案内動画編」
-4. プロローグ … スクロールに合わせて文章が復元されていく
-5. GAME … 機能紹介（Godot 版のゲーム映像・画面）
-6. STORY … 世界観（背景は Godot 版の街の映像）
-7. CHARACTERS … 人物（Godot 版の立ち絵）
-8. PLAY / MEDIA … 開発情報・出展履歴・リンク、掲載情報
+2. トップ … ブラウザ栽培デモ（`official-demo.html`）が背景で動いている。「栽培をはじめる」かデモ部分のクリックで全画面で遊べる。「サイトを見る」か Esc で戻る
+3. プロローグ … スクロールに合わせて文章が復元されていく
+4. STORY … 世界観（背景は Godot 版の街の映像。プロローグと同じ文は重ねて出さない）
+5. GAME … 機能紹介。右の一覧（人物レコードと同じ切り替え式）で選ぶ。画像が複数ある項目は、画面下のサムネイル・矢印・画面のクリックで切り替えられる
+6. CHARACTERS … 人物（Godot 版の立ち絵）
+7. PLAY / MEDIA … 開発情報・出展履歴・リンク、掲載情報
+8. TRAILER … PV「求人案内動画編」
 9. CREDITS … クレジット（`credits.csv`）
 10. CONTACT … 公式X と、3D のサポートロボット（Godot 版のモデル。クリックで反応）
+
+メニューの並びは `site-content.csv` の `header,nav` の `order` 列の順で、見出しの番号（01〜07）もその順に自動で振られます。
+
+### 栽培デモのモデル
+
+栽培デモのサポートロボット・栽培ポッド・レタスは Godot 版（本編）のモデルです（`godot-models.js`、`site/models/`）。本編の anime_tv の見た目（光と影の2段・紺色の輪郭線）に寄せ、ロボットは本編のクリップ（待機・歩き・作業・喜び）、ポッドは起動・浮遊・停止、レタスは本編と同じ成長の形キーで育ちます。読み込めなかったときは、以前の仮モデルのまま動きます。
 
 便利な URL:
 
@@ -59,8 +65,9 @@ Steam のストアページができたら、`play,link,…,80,Steam ストア�
 
 - `index.html` … 公式サイト（入口）
 - `site/site.css`・`site/site.js` … サイトの見た目と動き
-- `site/robot.js`・`site/models/support-robot.glb` … 3D サポートロボット（`three.module.min.js` を共用）
-- `site/vendor/` … 外部ライブラリ（Lenis：なめらかなスクロール／three.js の GLTF 読み込み）
+- `site/robot.js` … CONTACT の 3D サポートロボット
+- `godot-models.js`・`site/models/` … Godot 版のモデル（ロボット・ポッド・レタス。Web 用に軽くしたもの）。サイトとデモで共用
+- `site/vendor/` … 外部ライブラリ（Lenis：なめらかなスクロール／three.js r160 の GLTF 読み込み・スキンの複製）
 - `site/img/` … ロゴ・立ち絵・画面写真・共有用画像（`og.jpg`）
 - `site/media/` … Godot 版のゲーム映像（720p・無音）と PV
 - `site/audio/` … SOUND ボタンで流す環境音

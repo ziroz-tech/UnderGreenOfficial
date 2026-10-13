@@ -87,8 +87,8 @@
       <img id="portal-logo" src="site/img/logo.webp" alt="UNDER GREEN" width="1609" height="354">
     </a>
     <nav class="hdr__nav" id="hdr-nav" aria-label="メインメニュー">
-      <a href="#system" data-nav="system"><sup>01</sup><span class="roll"><span>GAME</span><span>システム</span></span></a>
-      <a href="#world" data-nav="world"><sup>02</sup><span class="roll"><span>STORY</span><span>物語</span></span></a>
+      <a href="#world" data-nav="world"><sup>01</sup><span class="roll"><span>STORY</span><span>物語</span></span></a>
+      <a href="#system" data-nav="system"><sup>02</sup><span class="roll"><span>GAME</span><span>システム</span></span></a>
       <a href="#characters" data-nav="characters"><sup>03</sup><span class="roll"><span>CHARACTERS</span><span>人物</span></span></a>
       <a href="#play" data-nav="play"><sup>04</sup><span class="roll"><span>PLAY</span><span>開発情報</span></span></a>
       <a href="#media" data-nav="media"><sup>05</sup><span class="roll"><span>MEDIA</span><span>掲載情報</span></span></a>
@@ -153,15 +153,15 @@
             <span class="btn__text"><b data-content="hero.ctaPlay">栽培をはじめる</b><small class="mono" data-content-sub="hero.ctaPlay">PLAY IN BROWSER</small></span>
             <span class="btn__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg></span>
           </button>
-          <a class="btn btn--ghost" href="#trailer" data-cursor="WATCH">
+          <a class="btn btn--ghost" href="#prologue" data-cursor="READ">
             <span class="btn__fill" aria-hidden="true"></span>
-            <span class="btn__text"><b data-content="hero.ctaTrailer">トレーラーを見る</b><small class="mono" data-content-sub="hero.ctaTrailer">WATCH TRAILER</small></span>
+            <span class="btn__text"><b data-content="hero.ctaStory">物語を読む</b><small class="mono" data-content-sub="hero.ctaStory">READ THE STORY</small></span>
           </a>
         </div>
         <p class="hero__live mono"><i aria-hidden="true"></i><span data-content-sub="hero.liveNote">LIVE — RUNNING IN YOUR BROWSER</span></p>
       </div>
 
-      <a class="hero__scroll mono" href="#trailer" aria-label="下へスクロール"><span>SCROLL TO DESCEND</span><i aria-hidden="true"></i></a>
+      <a class="hero__scroll mono" href="#prologue" aria-label="下へスクロール"><span>SCROLL TO DESCEND</span><i aria-hidden="true"></i></a>
 
       <!-- play mode chrome -->
       <div class="play-ui" id="play-ui" aria-hidden="true">
@@ -181,31 +181,8 @@
       </div>
     </section>
 
-    <!-- ===== Trailer ===== -->
-    <section class="trailer" id="trailer" data-depth="B1 / TRAILER" aria-labelledby="trailer-title">
-      <header class="trailer__head">
-        <p class="eyebrow mono" data-scramble><span data-content="trailer.kicker">TRAILER // 求人案内動画編</span></p>
-        <h2 class="trailer__title" id="trailer-title" data-content-rich="trailer.title" data-split>違法レタス農園で、<em>仲間を募集しています。</em></h2>
-      </header>
-      <div class="trailer__player" id="trailer-player" data-cursor="PLAY">
-        <video id="trailer-video" playsinline preload="none" poster="site/media/trailer-kyujin.jpg" aria-label="UNDER GREEN のPV「求人案内動画編」">
-          <source src="site/media/trailer-kyujin.mp4" type="video/mp4">
-        </video>
-        <button class="trailer__play" id="trailer-play" type="button" aria-label="PVを再生">
-          <span class="trailer__play-ring" aria-hidden="true"></span>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
-        </button>
-        <div class="trailer__meta mono" aria-hidden="true">
-          <span id="trailer-name" data-content="trailer.video">UNDER GREEN PV「求人案内動画編」</span>
-          <span id="trailer-time" data-content-sub="trailer.video">0:30</span>
-        </div>
-        <span class="frame-corners" aria-hidden="true"></span>
-      </div>
-      <p class="trailer__note" data-content="trailer.note">※ この映像はゲーム「UNDER GREEN」のPVであり、実際のゲーム映像とは異なります。</p>
-    </section>
-
     <!-- ===== Prologue ===== -->
-    <section class="prologue" id="prologue" data-depth="B2 / PROLOGUE" aria-labelledby="prologue-title">
+    <section class="prologue" id="prologue" data-depth="B1 / PROLOGUE" aria-labelledby="prologue-title">
       <div class="prologue__sticky">
         <h2 class="visually-hidden" id="prologue-title">プロローグ</h2>
         <p class="prologue__code mono"><span data-content="intro.code">ARCHIVE 08-14 // RESTORED TEXT</span><span id="prologue-pct">RESTORED 000%</span></p>
@@ -228,43 +205,15 @@
       </div>
     </div>
 
-    <!-- ===== Game system ===== -->
-    <section class="sys" id="system" data-depth="B3 / GAME" aria-labelledby="system-title">
-      <header class="sec-head">
-        <p class="sec-head__meta mono" data-scramble><b>01</b><span data-content="system.kicker">GAME SYSTEM // LIVE BUILD</span></p>
-        <h2 class="sec-head__title" id="system-title" data-content-rich="system.title" data-split>ディストピア違法農場経営<em>シミュレーション</em></h2>
-      </header>
-      <div class="sys__lead" id="system-lead">
-        <p>『UNDERGREEN』は、核汚染によって崩壊した地上から逃れた人々が過ごす巨大企業に管理された地下都市で、禁じられた食糧生産＝水耕栽培を営む、SF農業経営シミュレーションです。</p>
-      </div>
-      <div class="feats">
-        <div class="feats__stage" aria-hidden="true">
-          <div class="screen" id="feat-screen">
-            <div class="screen__layers" id="feat-layers"></div>
-            <div class="screen__hud mono">
-              <span class="screen__rec"><i></i><span id="feat-cam">CAM // CULTIVATION</span></span>
-              <span id="feat-count">01 / 06</span>
-            </div>
-            <div class="screen__foot">
-              <p class="screen__caption" id="feat-caption"></p>
-              <div class="screen__bars" id="feat-bars"></div>
-            </div>
-            <span class="frame-corners"></span>
-          </div>
-        </div>
-        <ol class="feats__list" id="system-feature-list"></ol>
-      </div>
-    </section>
-
     <!-- ===== Story ===== -->
-    <section class="story" id="world" data-depth="B4 / STORY" aria-labelledby="world-title">
+    <section class="story" id="world" data-depth="B2 / STORY" aria-labelledby="world-title">
       <div class="story__bg" aria-hidden="true">
         <video id="world-bg" muted loop playsinline preload="none" data-poster="site/media/city.jpg" data-src="site/media/city.mp4"></video>
       </div>
       <div class="story__inner">
         <h2 class="story__title" id="world-title" data-content-rich="world.title" data-split>星は死に<em>緑は消えた</em></h2>
         <div class="story__body">
-          <p class="sec-head__meta mono" data-scramble><b>02</b><span data-content="world.kicker">WORLD // ARCHIVE 01</span></p>
+          <p class="sec-head__meta mono" data-scramble><b>01</b><span data-content="world.kicker">WORLD // ARCHIVE 01</span></p>
           <div class="story__text" id="world-paragraphs">
             <p>人類はいま、核戦争によって壊滅した地球において、緩やかな滅亡へと向かっている。</p>
           </div>
@@ -273,8 +222,37 @@
       </div>
     </section>
 
+    <!-- ===== Game system ===== -->
+    <section class="sys" id="system" data-depth="B3 / GAME" aria-labelledby="system-title">
+      <header class="sec-head">
+        <p class="sec-head__meta mono" data-scramble><b>02</b><span data-content="system.kicker">GAME SYSTEM // LIVE BUILD</span></p>
+        <h2 class="sec-head__title" id="system-title" data-content-rich="system.title" data-split>ディストピア違法農場経営<em>シミュレーション</em></h2>
+      </header>
+      <div class="sys__lead" id="system-lead">
+        <p>『UNDERGREEN』は、核汚染によって崩壊した地上から逃れた人々が過ごす巨大企業に管理された地下都市で、禁じられた食糧生産＝水耕栽培を営む、SF農業経営シミュレーションです。</p>
+      </div>
+      <div class="feats" id="feats">
+        <div class="feats__stage">
+          <div class="screen" id="feat-screen">
+            <div class="screen__layers" id="feat-layers" aria-hidden="true"></div>
+            <div class="screen__hud mono" aria-hidden="true">
+              <span class="screen__rec"><i></i><span id="feat-cam">CAM // CULTIVATION</span></span>
+              <span id="feat-count">FEATURE 01 / 06</span>
+            </div>
+            <p class="screen__caption" id="feat-caption" aria-live="polite"></p>
+            <span class="frame-corners" aria-hidden="true"></span>
+          </div>
+          <div class="album" id="feat-album"></div>
+        </div>
+        <div class="feats__side">
+          <div class="feats__tabs" id="feat-tabs" role="tablist" aria-label="ゲームの特徴"></div>
+          <div class="feats__detail" id="feat-detail" role="tabpanel" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
     <!-- ===== Characters ===== -->
-    <section class="chars" id="characters" data-depth="B5 / CHARACTERS" aria-labelledby="characters-title">
+    <section class="chars" id="characters" data-depth="B4 / CHARACTERS" aria-labelledby="characters-title">
       <header class="sec-head sec-head--row">
         <div>
           <p class="sec-head__meta mono" data-scramble><b>03</b><span data-content="characters.kicker">CHARACTERS // PERSONNEL FILES</span></p>
@@ -295,7 +273,7 @@
     </section>
 
     <!-- ===== Play / Media ===== -->
-    <section class="dispatch" data-depth="B6 / DISPATCH" aria-label="開発情報と掲載情報">
+    <section class="dispatch" data-depth="B5 / DISPATCH" aria-label="開発情報と掲載情報">
       <article class="dispatch__play" id="play" aria-labelledby="play-title">
         <p class="sec-head__meta mono" data-scramble><b>04</b><span data-content="play.kicker">PLAY // DEVELOPMENT</span></p>
         <h2 class="dispatch__statement" id="play-title" data-content="play.statement" data-split>Steamでの発売を目指して開発を進めながら、インディーゲームイベントに出展しています。</h2>
@@ -325,6 +303,29 @@
           <span class="clipping__stamp mono" aria-hidden="true">PRESS</span>
         </div>
       </article>
+    </section>
+
+    <!-- ===== Trailer ===== -->
+    <section class="trailer" id="trailer" data-depth="B6 / TRAILER" aria-labelledby="trailer-title">
+      <header class="trailer__head">
+        <p class="eyebrow mono" data-scramble><span data-content="trailer.kicker">TRAILER // 求人案内動画編</span></p>
+        <h2 class="trailer__title" id="trailer-title" data-content-rich="trailer.title" data-split>違法レタス農園で、<em>仲間を募集しています。</em></h2>
+      </header>
+      <div class="trailer__player" id="trailer-player" data-cursor="PLAY">
+        <video id="trailer-video" playsinline preload="none" poster="site/media/trailer-kyujin.jpg" aria-label="UNDER GREEN のPV「求人案内動画編」">
+          <source src="site/media/trailer-kyujin.mp4" type="video/mp4">
+        </video>
+        <button class="trailer__play" id="trailer-play" type="button" aria-label="PVを再生">
+          <span class="trailer__play-ring" aria-hidden="true"></span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
+        </button>
+        <div class="trailer__meta mono" aria-hidden="true">
+          <span id="trailer-name" data-content="trailer.video">UNDER GREEN PV「求人案内動画編」</span>
+          <span id="trailer-time" data-content-sub="trailer.video">0:30</span>
+        </div>
+        <span class="frame-corners" aria-hidden="true"></span>
+      </div>
+      <p class="trailer__note" data-content="trailer.note">※ この映像はゲーム「UNDER GREEN」のPVであり、実際のゲーム映像とは異なります。</p>
     </section>
 
     <!-- ===== Credits ===== -->

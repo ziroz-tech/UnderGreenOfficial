@@ -19,8 +19,8 @@ intro,skipReady,text,130,ENTER NOW,,,,,,,,
 intro,status,text,140,UNLICENSED SIGNAL / CH. 004,,,,,,,,
 header,siteLabel,text,10,OFFICIAL WEBSITE,,,,,,,,
 header,logo,image,20,,,,,site/img/logo.webp,UNDER GREEN,,,
-header,nav,nav,30,GAME,システム,,,,,,,system
-header,nav,nav,40,STORY,物語,,,,,,,world
+header,nav,nav,30,STORY,物語,,,,,,,world
+header,nav,nav,40,GAME,システム,,,,,,,system
 header,nav,nav,50,CHARACTERS,人物,,,,,,,characters
 header,nav,nav,70,PLAY,開発情報,,,,,,,play
 header,nav,nav,75,MEDIA,掲載情報,,,,,,,media
@@ -44,7 +44,7 @@ hero,taglineEn,text,30,WHO OWNS THE SEED?,,,,,,,,
 hero,genre,text,40,ディストピア違法農場経営シミュレーション,,,,,,,,
 hero,platform,text,50,PC / STEAM — IN DEVELOPMENT,,,,,,,,
 hero,ctaPlay,text,60,栽培をはじめる,PLAY IN BROWSER,,,,,,,
-hero,ctaTrailer,text,70,トレーラーを見る,WATCH TRAILER,,,,,,,
+hero,ctaStory,text,70,物語を読む,READ THE STORY,,,,,,,
 hero,liveNote,text,80,この区画は、いまあなたのブラウザの中で稼働しています。,LIVE — RUNNING IN YOUR BROWSER,,,,,,,
 hero,exitPlay,text,90,サイトを見る,EXPLORE SITE,,,,,,,
 trailer,kicker,text,10,TRAILER // 求人案内動画編,,,,,,,,
@@ -53,7 +53,7 @@ trailer,video,video,30,UNDER GREEN PV「求人案内動画編」,0:30,,,site/med
 trailer,note,text,40,※ この映像はゲーム「UNDER GREEN」のPVであり、実際のゲーム映像とは異なります。,,,,,,,,
 game,loading,text,10,LOADING CURRENT GAME BUILD...,,,,,,,,
 game,demoTitle,text,20,レタスを育てて収穫♪,,,,,,,,
-game,frame,embed,30,UNDER GREEN ゲーム体験版,,,,page:official-demo.html?officialdemo=1&build=20260822toolboxlock2,,,,
+game,frame,embed,30,UNDER GREEN ゲーム体験版,,,,page:official-demo.html?officialdemo=1&build=20261013godot1,,,,
 game,guideTitle,text,40,HOW TO CULTIVATE,,,,,,,,
 game,guideStep,guide,50,切り替え,,右下ツールボックス上でホイール,,,,,,
 game,guideStep,guide,60,植える,,「植える」→種保管庫のレタスを空PODへドラッグ,,,,,,
@@ -86,10 +86,10 @@ system,lead,text,30,"『UNDERGREEN』は、核汚染によって崩壊した地�
  なにを作り誰に売るかはあなた次第。
  あなただけの地下農場を作り上げてください。",,,,,,,,
 system,feature01,feature,40,違法な地下農場で植物栽培,FEATURE 01,種を買い、栽培ポッドを設置して栽培します。植えた植物は時間とともに成長し、やがて収穫できます。,成長 — 時間とともに育つ作物|手入れ — 汚れたポッドを掃除する|収穫 — 実ったトマト,site/media/grow.mp4|site/media/care.mp4|site/media/ripe.mp4,育っていくレタスとポッド|ポッドを掃除する様子|実ったトマト,,album,CULTIVATION
-system,feature02,feature,50,闇市場で売りさばく,FEATURE 02,地下都市には様々な階層・勢力がひしめいています。あなたが生産した食料は、彼らの糧となり、あなたとの関係、あるいは勢力間の関係を変化させます。,マーラの闇商店 — 種と設備の仕入れ|配達 — 地下都市をゆくサポートロボット|取引 — 闇市場での受け渡し,site/img/screens/seed-market.webp|site/media/deliver.mp4|site/media/handoff.mp4,マーラの闇商店の画面|街を配達するサポートロボット|闇市場で作物を受け渡すロボット,,album,BLACK MARKET
+system,feature02,feature,50,闇市場で売りさばく,FEATURE 02,地下都市には様々な階層・勢力がひしめいています。あなたが生産した食料は、彼らの糧となり、あなたとの関係、あるいは勢力間の関係を変化させます。,下層からの来客 — 下層市場が開く|下層の売り先 — 地下都市のMAP|マーラの闇商店 — 種と設備の仕入れ,site/img/screens/event-lower-contact.webp|site/img/screens/map-lower.webp|site/img/screens/mara-shop.webp,下層市場のユンが訪ねてくるイベント会話|売り先が並ぶ下層のMAP|マーラの闇商店の画面,,album,BLACK MARKET
 system,feature03,feature,60,拠点を拡張し、労働環境を整備する,FEATURE 03,貯めたお金で新たな拠点を買い、地下世界に巨大な違法農場ネットワークを構築していきます。サポートロボットたちの要望に応えて快適な労働環境を提供すれば、あなたの農場はさらなる飛躍を遂げるでしょう。,設備の配置 — ポッドを並べて農場を組む|拠点 — 区画ごとに組み上げた農場|不動産ブローカー — 新しい拠点を探す,site/media/build.mp4|site/img/screens/farm-layout.webp|site/img/screens/property.webp,ポッドを配置して農場を組む様子|ポッドとロボットを配置した農場|不動産ブローカーの物件一覧,,album,EXPANSION
 system,feature04,feature,70,管理局の摘発をやり過ごす,FEATURE 04,管理局の偵察ドローンが拠点に接近した時は、拠点の電源をシャットダウンして回避しないといけません。監視カメラで常に気を配り、警戒を怠らないようにしましょう。,監視カメラ — 接近するドローンと電源の遮断,site/media/security.mp4,監視カメラの映像と電源を落とす操作,,video,BLACKOUT
-system,feature05,feature,80,サポートロボットの労働をプログラムする,FEATURE 05,植え付け・収穫・清掃・物流をノードで接続し、業務フローを設計できます。適度に休憩をはさませるもよし、限界まで働かせるもよし。サポートロボットたちの適性を生かすも殺すも、すべてはあなたの采配次第です。,サポートロボット — 割り当てた業務をこなす,site/media/robots.mp4,ポッドの間で働くサポートロボットたち,,video,LABOR
+system,feature05,feature,80,サポートロボットの労働をプログラムする,FEATURE 05,植え付け・収穫・清掃・物流をノードで接続し、業務フローを設計できます。適度に休憩をはさませるもよし、限界まで働かせるもよし。サポートロボットたちの適性を生かすも殺すも、すべてはあなたの采配次第です。,労務管理 — ノードで業務フローを組む|BEHAVIOR BLUEPRINT — 条件と分岐で動きを決める|サポートロボット — 組んだ業務をこなす,site/img/screens/labor-blueprint.webp|site/img/screens/labor-blueprint-zoom.webp|site/media/robots.mp4,ロボットの労務管理画面|業務フローのノードを拡大した画面|ポッドの間で働くサポートロボットたち,,album,LABOR
 system,feature06,feature,90,その種は誰のもの？,FEATURE 06,管理局の食糧制限によって支配された世界において、あなたの農場は重要な影響力を発揮します。誰のために農場を動かすのか、何を作り誰に売るのかで、地下世界の様相は大きく変化していきます。,地下都市 — 上層・中層・下層の勢力,site/img/screens/city-map.webp,地下都市の街マップ,,image,FACTIONS
 characters,kicker,text,10,CHARACTERS // PERSONNEL FILES,,,,,,,,
 characters,title,rich,20,地下通信網の,人物レコード,,,,,,,

@@ -184,6 +184,8 @@
       big.append(el("small", "", number), document.createTextNode(entry.text), el("span", "", entry.subtext || ""));
       big.style.transitionDelay = `${0.12 + index * 0.05}s`;
       mobile.appendChild(big);
+      const sectionNumber = $(".sec-head__meta b", document.getElementById(entry.meta));
+      if (sectionNumber) sectionNumber.textContent = number;
     });
   }
 
@@ -254,43 +256,53 @@
   }
 
   const featureLayers = [];
-  const featureMobileLayers = [];
+  const Features = { active: -1, list: [], visible: false };
 
   function renderFeatures() {
     const features = typed("system", "feature");
-    const list = $("#system-feature-list");
-    const layersRoot = $("#feat-layers");
     if (!features.length) return;
-    list.replaceChildren();
+    const layersRoot = $("#feat-layers");
+    const tabs = $("#feat-tabs");
     layersRoot.replaceChildren();
+    tabs.replaceChildren();
     featureLayers.length = 0;
-    featureMobileLayers.length = 0;
-
+    Features.list = features;
     features.forEach((entry, index) => {
       const captions = splitList(entry.note).filter((caption) => !/PLACEHOLDER/i.test(caption));
       const camera = (entry.meta || entry.subtext || `FEATURE ${pad(index + 1)}`).toUpperCase();
+      const node = el("div", "screen__layer");
+      layersRoot.appendChild(node);
+      featureLayers.push({ node, items: buildMediaItems(node, entry), captions, camera, index: 0 });
 
-      const layerNode = el("div", "screen__layer");
-      layersRoot.appendChild(layerNode);
-      featureLayers.push({ node: layerNode, items: buildMediaItems(layerNode, entry), captions, camera, index: 0 });
-
-      const item = el("li", "feat");
-      item.dataset.index = String(index);
-      const number = el("span", "feat__num", pad(index + 1));
-      number.setAttribute("aria-hidden", "true");
-      const label = el("span", "feat__label mono", entry.subtext || `FEATURE ${pad(index + 1)}`);
-      const title = el("h3", "feat__title", entry.text);
-      const mobileMedia = el("div", "feat__media");
-      mobileMedia.setAttribute("aria-hidden", "true");
-      const body = el("p", "feat__body", entry.body);
-      item.append(number, label, title, mobileMedia, body);
-      list.appendChild(item);
-      featureMobileLayers.push({ node: mobileMedia, items: buildMediaItems(mobileMedia, entry), captions, camera, index: 0 });
+      const tab = el("button", "feats__tab");
+      tab.type = "button";
+      tab.setAttribute("role", "tab");
+      tab.setAttribute("aria-selected", "false");
+      tab.setAttribute("aria-controls", "feat-detail");
+      tab.tabIndex = -1;
+      tab.dataset.cursor = "VIEW";
+      tab.append(el("span", "mono", pad(index + 1)), el("b", "", entry.text));
+      tab.addEventListener("click", () => activateFeature(index));
+      tabs.appendChild(tab);
     });
+    tabs.onkeydown = (event) => {
+      const keys = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
+      if (!(event.key in keys)) return;
+      event.preventDefault();
+      const next = (Features.active + keys[event.key] + featureLayers.length) % featureLayers.length;
+      activateFeature(next);
+      tabs.children[next]?.focus();
+    };
+    Features.active = -1;
+    activateFeature(0, { silent: true });
   }
 
   function renderWorld() {
-    const paragraphs = typed("world", "paragraph").flatMap((entry) => entry.text.split(/\r?\n/)).map((line) => line.trim()).filter(Boolean);
+    const prologueLines = new Set(rowsOf("intro.line").map((entry) => entry.text.trim()));
+    const paragraphs = typed("world", "paragraph")
+      .flatMap((entry) => entry.text.split(/\r?\n/))
+      .map((line) => line.trim())
+      .filter((line) => line && !prologueLines.has(line));
     if (paragraphs.length) {
       $("#world-paragraphs").replaceChildren(...paragraphs.map((line, index) => {
         const paragraph = el("p", "", line);
@@ -780,7 +792,7 @@
   /* ---------------------------------------------------------------
      Live demo (hero) + play mode
      --------------------------------------------------------------- */
-  const DEFAULT_DEMO = "official-demo.html?officialdemo=1&build=20260822toolboxlock2";
+  const DEFAULT_DEMO = "official-demo.html?officialdemo=1&build=20261013godot1";
   const EMBED_STYLE = `
     html.ug-attract .facility-clean-tools,
     html.ug-attract .facility-grid-toolbar,
@@ -794,6 +806,47 @@
     html.ug-attract body { cursor: default; }
   `;
   const Demo = { frame: null, loaded: false, statusTimer: 0, loadPromise: null };
+
+  /* Pause the demo's drawing while the hero is off screen (its clock keeps running). */
+  function installFramePause(win) {
+    if (!win || win.__ugPause) return;
+    const original = win.requestAnimationFrame.bind(win);
+    const queue = [];
+    const control = {
+      paused: false,
+      resume() {
+        control.paused = false;
+        queue.splice(0).forEach((callback) => original(callback));
+      }
+    };
+    win.requestAnimationFrame = (callback) => {
+      if (control.paused) {
+        queue.push(callback);
+        return 0;
+      }
+      return original(callback);
+    };
+    win.__ugPause = control;
+  }
+
+  function setDemoDrawing(on) {
+    try {
+      const control = Demo.frame?.contentWindow?.__ugPause;
+      if (!control) return;
+      if (on) control.resume();
+      else control.paused = true;
+    } catch (error) { /* not ready */ }
+  }
+
+  function observeHero() {
+    if (!("IntersectionObserver" in window)) return;
+    new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        Demo.heroVisible = entry.isIntersecting;
+        setDemoDrawing(entry.isIntersecting || state.playing);
+      });
+    }, { threshold: 0 }).observe($("#top"));
+  }
 
   function demoSource() {
     const entry = row("game.frame");
@@ -829,6 +882,8 @@
           style.textContent = EMBED_STYLE;
           frameDocument.head.appendChild(style);
           frameDocument.documentElement.classList.toggle("ug-attract", !state.playing);
+          installFramePause(frame.contentWindow);
+          setDemoDrawing(Demo.heroVisible !== false || state.playing);
           const resync = () => setTimeout(syncDemoAudio, 0);
           frameDocument.addEventListener("pointerdown", resync, true);
           frameDocument.addEventListener("keydown", (event) => {
@@ -875,6 +930,7 @@
         Demo.frame.removeAttribute("tabindex");
       }
       setAttract(false);
+      setDemoDrawing(true);
       Cursor.suspend(true);
       if (local.get("ug-sound") !== "off") setSound(true, { save: false });
       Sound.play("boot", 0.6);
@@ -908,7 +964,7 @@
     Cursor.suspend(false);
     syncAudio();
     if (location.hash === "#play") history.replaceState(null, "", location.pathname + location.search);
-    if (scroll) setTimeout(() => scrollToTarget($("#trailer").hidden ? $("#prologue") : $("#trailer")), 350);
+    if (scroll) setTimeout(() => scrollToTarget($("#prologue")), 350);
   }
 
   /* ---------------------------------------------------------------
@@ -1115,7 +1171,6 @@
      Feature stage (desktop sticky screen / mobile inline media)
      --------------------------------------------------------------- */
   const FEATURE_IMAGE_TIME = 4800;
-  const Stage = { desktop: { active: -1 }, mobile: { active: -1 } };
 
   function loadVideo(video) {
     if (video.dataset.src) {
@@ -1136,19 +1191,87 @@
     });
   }
 
-  function showLayerItem(layer, index, bars) {
+  /* album controls: arrows, counter, thumbnails (desktop) or dots (mobile) */
+  function thumbFor(item) {
+    if (item.video) return posterFor(item.video.dataset.src || item.video.currentSrc || "");
+    return $("img", item)?.getAttribute("src") || "";
+  }
+
+  function albumArrow(direction) {
+    const button = el("button", `album__arrow album__arrow--${direction}`);
+    button.type = "button";
+    button.setAttribute("aria-label", direction === "prev" ? "前の画像" : "次の画像");
+    button.dataset.cursor = direction === "prev" ? "PREV" : "NEXT";
+    button.innerHTML = direction === "prev"
+      ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>'
+      : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
+    return button;
+  }
+
+  function buildAlbum(layer, root, { thumbs }) {
+    root.replaceChildren();
+    layer.ui = null;
+    const count = layer.items.length;
+    root.hidden = count < 2;
+    if (count < 2) return;
+    const go = (step) => {
+      showLayerItem(layer, (layer.index + step + count) % count);
+      Sound.play("tick", 0.5);
+    };
+    const previous = albumArrow("prev");
+    const next = albumArrow("next");
+    previous.addEventListener("click", (event) => { event.stopPropagation(); go(-1); });
+    next.addEventListener("click", (event) => { event.stopPropagation(); go(1); });
+    const counter = el("span", "album__count mono");
+    const list = el("div", thumbs ? "album__thumbs" : "album__dots");
+    const marks = layer.items.map((item, index) => {
+      const mark = el("button", thumbs ? "album__thumb" : "album__dot");
+      mark.type = "button";
+      mark.setAttribute("aria-label", `${index + 1}枚目を表示${layer.captions[index] ? `：${layer.captions[index]}` : ""}`);
+      if (thumbs) {
+        const image = el("img");
+        image.src = thumbFor(item);
+        image.alt = "";
+        image.loading = "lazy";
+        mark.append(image, el("i"));
+        if (item.video) mark.appendChild(el("span", "album__badge", "▶"));
+      }
+      mark.addEventListener("click", (event) => {
+        event.stopPropagation();
+        if (index === layer.index) return;
+        showLayerItem(layer, index);
+        Sound.play("tick", 0.5);
+      });
+      list.appendChild(mark);
+      return mark;
+    });
+    if (thumbs) root.append(el("span", "album__label mono", `ALBUM · ${count}`), previous, list, next, counter);
+    else root.append(previous, next, counter, list);
+    layer.ui = {
+      select(index) {
+        counter.textContent = `${pad(index + 1)} / ${pad(count)}`;
+        marks.forEach((mark, position) => {
+          mark.classList.toggle("is-active", position === index);
+          mark.style.setProperty("--p", position < index ? "1" : "0");
+          mark.setAttribute("aria-current", String(position === index));
+        });
+      },
+      progress(value) {
+        marks[layer.index]?.style.setProperty("--p", value.toFixed(3));
+      }
+    };
+  }
+
+  function showLayerItem(layer, index) {
     stopLayer(layer);
     layer.index = index;
     layer.started = performance.now();
     layer.items.forEach((item, position) => item.classList.toggle("is-on", position === index));
-    if (bars) {
-      $$("i", bars).forEach((bar, position) => bar.style.setProperty("--p", position < index ? "1" : "0"));
-      const caption = $("#feat-caption");
-      caption.textContent = layer.captions[index] || layer.captions[0] || "";
-    }
+    layer.ui?.select(index);
+    if (layer.caption) layer.caption.textContent = layer.captions[index] || layer.captions[0] || "";
     const item = layer.items[index];
     const advance = () => {
-      if (layer.items.length > 1) showLayerItem(layer, (index + 1) % layer.items.length, bars);
+      if (layer.items.length > 1) showLayerItem(layer, (index + 1) % layer.items.length);
     };
     if (item?.video) {
       const video = item.video;
@@ -1163,86 +1286,96 @@
     }
   }
 
-  function activateDesktopFeature(index) {
-    const controller = Stage.desktop;
-    if (index === controller.active || !featureLayers[index]) return;
-    const previous = featureLayers[controller.active];
+  function fillFeatureDetail(index) {
+    const entry = Features.list[index];
+    if (!entry) return;
+    const number = el("span", "feats__num", pad(index + 1));
+    number.setAttribute("aria-hidden", "true");
+    $("#feat-detail").replaceChildren(
+      number,
+      el("p", "feats__label mono", entry.subtext || `FEATURE ${pad(index + 1)}`),
+      el("h3", "feats__title", entry.text),
+      el("p", "feats__body", entry.body || "")
+    );
+  }
+
+  function activateFeature(index, { silent = false } = {}) {
+    if (index === Features.active || !featureLayers[index]) return;
+    const previous = featureLayers[Features.active];
     if (previous) {
       previous.node.classList.remove("is-active");
       previous.node.classList.add("is-leaving");
-      const leaving = previous;
-      setTimeout(() => { leaving.node.classList.remove("is-leaving"); stopLayer(leaving); }, 1000);
+      previous.ui = null;
+      stopLayer(previous);
+      setTimeout(() => previous.node.classList.remove("is-leaving"), 1000);
     }
-    controller.active = index;
+    Features.active = index;
     const layer = featureLayers[index];
     layer.node.classList.add("is-active");
+    layer.caption = $("#feat-caption");
     $("#feat-cam").textContent = `CAM // ${layer.camera}`;
-    $("#feat-count").textContent = `${pad(index + 1)} / ${pad(featureLayers.length)}`;
-    const bars = $("#feat-bars");
-    bars.replaceChildren(...layer.items.map(() => el("i")));
-    bars.hidden = layer.items.length < 2;
-    $$("#system-feature-list .feat").forEach((item, position) => item.classList.toggle("is-active", position === index));
-    showLayerItem(layer, 0, bars);
-  }
-
-  function activateMobileFeature(index) {
-    const controller = Stage.mobile;
-    if (index === controller.active) return;
-    stopLayer(featureMobileLayers[controller.active]);
-    controller.active = index;
-    if (featureMobileLayers[index]) showLayerItem(featureMobileLayers[index], 0, null);
+    $("#feat-count").textContent = `FEATURE ${pad(index + 1)} / ${pad(featureLayers.length)}`;
+    buildAlbum(layer, $("#feat-album"), { thumbs: true });
+    const screen = $("#feat-screen");
+    screen.classList.toggle("is-album", layer.items.length > 1);
+    if (layer.items.length > 1) screen.dataset.cursor = "NEXT";
+    else delete screen.dataset.cursor;
+    $$("#feat-tabs .feats__tab").forEach((tab, position) => {
+      tab.setAttribute("aria-selected", String(position === index));
+      tab.tabIndex = position === index ? 0 : -1;
+    });
+    if (Features.visible) {
+      showLayerItem(layer, 0);
+    } else {
+      layer.index = 0;
+      layer.items.forEach((item, position) => item.classList.toggle("is-on", position === 0));
+      layer.ui?.select(0);
+      layer.caption.textContent = layer.captions[0] || "";
+    }
+    const detail = $("#feat-detail");
+    if (silent || reduced()) {
+      fillFeatureDetail(index);
+      return;
+    }
+    Sound.play("tick", 0.5);
+    detail.classList.add("is-out");
+    clearTimeout(detail.swapTimer);
+    detail.swapTimer = setTimeout(() => {
+      fillFeatureDetail(index);
+      requestAnimationFrame(() => detail.classList.remove("is-out"));
+    }, 220);
   }
 
   function updateFeatureBars() {
-    const layer = featureLayers[Stage.desktop.active];
-    if (!layer || layer.items.length < 2) return;
+    const layer = featureLayers[Features.active];
+    if (!layer?.ui) return;
     const item = layer.items[layer.index];
     let progress = 0;
     if (item?.video) progress = item.video.duration ? item.video.currentTime / item.video.duration : 0;
     else progress = (performance.now() - layer.started) / FEATURE_IMAGE_TIME;
-    const bar = $$("#feat-bars i")[layer.index];
-    if (bar) bar.style.setProperty("--p", clamp(progress, 0, 1).toFixed(3));
+    layer.ui.progress(clamp(progress, 0, 1));
   }
 
   function observeFeatures() {
-    if (!("IntersectionObserver" in window)) return;
-    const items = $$("#system-feature-list .feat");
-    const desktopObserver = new IntersectionObserver((entries) => {
-      if (!mqDesktop.matches) return;
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) activateDesktopFeature(Number(entry.target.dataset.index));
-      });
-    }, { rootMargin: "-48% 0px -48% 0px", threshold: 0 });
-    items.forEach((item) => desktopObserver.observe(item));
-
-    const ratios = new Map();
-    const mobileObserver = new IntersectionObserver((entries) => {
-      if (mqDesktop.matches) return;
-      entries.forEach((entry) => ratios.set(Number(entry.target.dataset.index), entry.intersectionRatio));
-      const best = [...ratios.entries()].filter(([, ratio]) => ratio > 0.55).sort((left, right) => right[1] - left[1])[0];
-      if (best) activateMobileFeature(best[0]);
-      else {
-        stopLayer(featureMobileLayers[Stage.mobile.active]);
-        Stage.mobile.active = -1;
-      }
-    }, { threshold: [0, 0.3, 0.55, 0.8, 1] });
-    $$(".feat__media").forEach((media, index) => {
-      media.dataset.index = String(index);
-      mobileObserver.observe(media);
+    $("#feat-screen").addEventListener("click", () => {
+      const layer = featureLayers[Features.active];
+      if (!layer || layer.items.length < 2) return;
+      showLayerItem(layer, (layer.index + 1) % layer.items.length);
+      Sound.play("tick", 0.5);
     });
-
-    const section = $("#system");
+    if (!("IntersectionObserver" in window)) {
+      Features.visible = true;
+      return;
+    }
     new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (!entry.isIntersecting) {
-          stopLayer(featureLayers[Stage.desktop.active]);
-          stopLayer(featureMobileLayers[Stage.mobile.active]);
-        } else if (mqDesktop.matches && Stage.desktop.active >= 0) {
-          const layer = featureLayers[Stage.desktop.active];
-          showLayerItem(layer, layer.index || 0, $("#feat-bars"));
-        }
+        Features.visible = entry.isIntersecting;
+        const layer = featureLayers[Features.active];
+        if (!layer) return;
+        if (entry.isIntersecting) showLayerItem(layer, layer.index || 0);
+        else stopLayer(layer);
       });
-    }).observe(section);
+    }, { threshold: 0.15 }).observe($("#feats"));
   }
 
   function observeAmbientVideos() {
@@ -1505,13 +1638,7 @@
         lastScrollY = -1;
       }, 120);
     });
-    mqDesktop.addEventListener?.("change", () => {
-      stopLayer(featureLayers[Stage.desktop.active]);
-      stopLayer(featureMobileLayers[Stage.mobile.active]);
-      Stage.desktop.active = -1;
-      Stage.mobile.active = -1;
-      measure();
-    });
+    mqDesktop.addEventListener?.("change", measure);
     window.addEventListener("load", () => { measure(); lastScrollY = -1; });
   }
 
@@ -1551,6 +1678,7 @@
     observeReveals();
     observeFeatures();
     observeAmbientVideos();
+    observeHero();
     initTrailer();
     initRobot();
     loadCredits();
