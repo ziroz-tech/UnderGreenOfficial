@@ -600,6 +600,7 @@ a:hover .roll > span + span, button:hover .roll > span + span { transform: trans
   font-feature-settings: "palt" 1;
 }
 .sec-head__title em, .trailer__title em { display: block; color: var(--signal); }
+.sec-head__title--long { font-size: clamp(30px, 4.4vw, 70px); }
 .sec-head--row { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; }
 .sec-head--row > div { flex: 1 1 560px; }
 .sec-head__lead { max-width: 320px; color: var(--text-2); font: 600 17px/1.8 var(--f-mincho); }
