@@ -792,7 +792,7 @@
   /* ---------------------------------------------------------------
      Live demo (hero) + play mode
      --------------------------------------------------------------- */
-  const DEFAULT_DEMO = "official-demo.html?officialdemo=1&build=20261013godot1";
+  const DEFAULT_DEMO = "official-demo.html?officialdemo=1&build=20261013godot2";
   const EMBED_STYLE = `
     html.ug-attract .facility-clean-tools,
     html.ug-attract .facility-grid-toolbar,

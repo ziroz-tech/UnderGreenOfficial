@@ -53,7 +53,7 @@ trailer,video,video,30,UNDER GREEN PV「求人案内動画編」,0:30,,,site/med
 trailer,note,text,40,※ この映像はゲーム「UNDER GREEN」のPVであり、実際のゲーム映像とは異なります。,,,,,,,,
 game,loading,text,10,LOADING CURRENT GAME BUILD...,,,,,,,,
 game,demoTitle,text,20,レタスを育てて収穫♪,,,,,,,,
-game,frame,embed,30,UNDER GREEN ゲーム体験版,,,,page:official-demo.html?officialdemo=1&build=20261013godot1,,,,
+game,frame,embed,30,UNDER GREEN ゲーム体験版,,,,page:official-demo.html?officialdemo=1&build=20261013godot2,,,,
 game,guideTitle,text,40,HOW TO CULTIVATE,,,,,,,,
 game,guideStep,guide,50,切り替え,,右下ツールボックス上でホイール,,,,,,
 game,guideStep,guide,60,植える,,「植える」→種保管庫のレタスを空PODへドラッグ,,,,,,

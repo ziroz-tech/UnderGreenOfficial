@@ -1,5 +1,5 @@
 import * as THREE from "./three.module.min.js";
-import * as GodotModels from "./godot-models.js?v=20261013a";
+import * as GodotModels from "./godot-models.js?v=20261013b";
 import { buildChargeDockModel, buildRobotModel, buildCleaningBrushModel, buildCleaningBucketModel, buildPlantSprayerModel, buildMaintenanceWrenchModel, buildMarketCourierScooterModel, MODEL_BUILDERS } from "./models3d.js?v=20260821fluorescent1";
 
 const FLOOR_HEIGHT = 0.18;
@@ -2376,7 +2376,7 @@ function buildPlantSlots(base, item, itemGroup, deckHeight, parentYaw = 0) {
       const height = godotPlant ? GodotModels.lettuceHeight(growth) : plant.dead ? 0.48 : 0.42 + plant.stage * 0.13;
       let sprite;
       if (godotPlant) {
-        sprite = GodotModels.lettuce({ key: plantSlotKey(base.id, item.id, slotIndex), podKey: item.type === "pod" ? item.id : null, growth, dead: plant.dead });
+        sprite = GodotModels.lettuce({ key: plantSlotKey(base.id, item.id, slotIndex), plantId: String(plant.id || ""), podKey: item.type === "pod" ? String(base.id) + ":" + String(item.id) : null, growth, dead: plant.dead });
         sprite.position.y = 0.0;
         sprite.userData.model3d = true;
         registerVisualInteraction(sprite, interaction);
@@ -2478,9 +2478,9 @@ function buildEquipment(base, item, baseGroup) {
   if (builder) {
     const holes = item.kind === "unit" ? item.slots.map((_, index) => localSlotPosition(item.type, index, item.slots.length)) : [];
     const model = godotPod
-      ? GodotModels.pod({ key: item.id, running: item.slots.some((plant) => plant && !plant.dead) })
+      ? GodotModels.pod({ key: String(base.id) + ":" + String(item.id), running: item.slots.some((plant) => plant && !plant.dead) })
       : godotRobot
-        ? GodotModels.robot()
+        ? GodotModels.robot({ key: String(base.id) + ":" + String(item.id) })
         : item.type === "support_robot"
           ? buildRobotModel({ extentX: baseHeight, extentZ: baseWidth, deckHeight, holes })
           : builder({ extentX: baseHeight, extentZ: baseWidth, deckHeight, holes });

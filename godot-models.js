@@ -23,6 +23,9 @@ const live = new Set();
 const podStates = new Map();
 const plants = new Map();
 const pods = new Map();
+// デモは状態が変わるたびに世界を作り直す。モデルは作り直さず使い回し、動きを途切れさせない
+const robots = new Map();
+const KEEP_DETACHED_SECONDS = 1.5;
 const lightWorld = new THREE.Vector3();
 const parentScale = new THREE.Vector3();
 const rootWorld = new THREE.Vector3();
@@ -30,6 +33,7 @@ let loading = null;
 let isReady = false;
 
 export const ready = () => isReady;
+export const stats = { created: 0 };
 
 function toonGradient() {
   // 本編 anime_tv：2段（影は青みのある暗さ、光の側はそのまま）
@@ -223,18 +227,35 @@ function attached(object) {
 export function update(delta) {
   live.forEach((instance) => {
     if (!attached(instance.root)) {
+      instance.detachedFor = (instance.detachedFor || 0) + delta;
+      if (instance.detachedFor < KEEP_DETACHED_SECONDS) return;
       live.delete(instance);
       if (instance.plantKey && plants.get(instance.plantKey) === instance) plants.delete(instance.plantKey);
       pods.forEach((value, key) => { if (value === instance) pods.delete(key); });
+      robots.forEach((value, key) => { if (value === instance) robots.delete(key); });
       return;
     }
+    instance.detachedFor = 0;
     instance.mixer?.update(delta);
     instance.tick?.(delta);
   });
 }
 
+function resetTransform(object, scale) {
+  object.position.set(0, 0, 0);
+  object.rotation.set(0, 0, 0);
+  object.scale.setScalar(scale);
+}
+
 /* ---------------- 栽培ポッド ---------------- */
 export function pod({ key, running }) {
+  const existing = pods.get(key);
+  if (existing) {
+    resetTransform(existing.root, POD_SCALE);
+    existing.setRunning(running);
+    return existing.root;
+  }
+  stats.created += 1;
   const root = templates.pod.clone(true);
   const mixer = new THREE.AnimationMixer(root);
   const clip = (name) => {
@@ -251,30 +272,44 @@ export function pod({ key, running }) {
     else action.time = action.getClip().duration;
     action.play();
   };
+  let pending = null;
+  mixer.addEventListener("finished", (event) => {
+    if (!pending || event.action !== pending.action) return;
+    const { next } = pending;
+    pending = null;
+    mixer.stopAllAction();
+    steady(next ? "Pod_Hover" : "Pod_Off", next);
+  });
+  const transitionTo = (next) => {
+    const transition = clip(next ? "Pod_Startup" : "Pod_Shutdown");
+    if (!transition) {
+      mixer.stopAllAction();
+      steady(next ? "Pod_Hover" : "Pod_Off", next);
+      return;
+    }
+    mixer.stopAllAction();
+    transition.reset();
+    transition.setLoop(THREE.LoopOnce, 1);
+    transition.clampWhenFinished = true;
+    transition.play();
+    pending = { action: transition, next };
+  };
   const previous = podStates.get(key);
   podStates.set(key, running);
-  if (previous === undefined || previous === running) {
-    steady(running ? "Pod_Hover" : "Pod_Off", running);
-  } else {
-    const transition = clip(running ? "Pod_Startup" : "Pod_Shutdown");
-    if (transition) {
-      transition.setLoop(THREE.LoopOnce, 1);
-      transition.clampWhenFinished = true;
-      transition.play();
-      mixer.addEventListener("finished", () => {
-        transition.stop();
-        steady(running ? "Pod_Hover" : "Pod_Off", running);
-      });
-    } else {
-      steady(running ? "Pod_Hover" : "Pod_Off", running);
-    }
-  }
+  if (previous === undefined || previous === running) steady(running ? "Pod_Hover" : "Pod_Off", running);
+  else transitionTo(running);
   const light = root.getObjectByName("hoverLight");
   const instance = {
     root,
     mixer,
     running,
     cropHeight: 0,
+    setRunning(next) {
+      podStates.set(key, next);
+      if (next === instance.running) return;
+      instance.running = next;
+      transitionTo(next);
+    },
     tick() {
       // 本編 pod_model.gd：浮いている間、ライトは作物のてっぺん＋8 cm まで持ち上がる
       if (!light || !instance.running || instance.cropHeight <= 0) return;
@@ -317,7 +352,14 @@ function applyGrowth(meshes, growth) {
   });
 }
 
-export function lettuce({ key, podKey = null, growth = 0, dead = false }) {
+export function lettuce({ key, plantId = "", podKey = null, growth = 0, dead = false }) {
+  const existing = key ? plants.get(key) : null;
+  if (existing && existing.plantId === plantId && existing.dead === dead) {
+    resetTransform(existing.root, LETTUCE_SCALE);
+    existing.setGrowth(growth);
+    return existing.root;
+  }
+  stats.created += 1;
   const root = templates.lettuce.clone(true);
   const meshes = [];
   root.traverse((node) => {
@@ -335,6 +377,8 @@ export function lettuce({ key, podKey = null, growth = 0, dead = false }) {
   const instance = {
     root,
     plantKey: key,
+    plantId,
+    dead,
     growth: -1,
     target: growth,
     setGrowth(value) { instance.target = value; },
@@ -369,7 +413,13 @@ export function syncPlants(next, keyFor) {
 }
 
 /* ---------------- サポートロボット ---------------- */
-export function robot() {
+export function robot({ key = "" } = {}) {
+  const existing = key ? robots.get(key) : null;
+  if (existing) {
+    resetTransform(existing.root, 1);
+    return existing.root;
+  }
+  stats.created += 1;
   const root = cloneSkinned(templates.robot);
   const mixer = new THREE.AnimationMixer(root);
   let current = null;
@@ -392,6 +442,7 @@ export function robot() {
   setMotion("idle");
   const instance = { root, mixer };
   live.add(instance);
+  if (key) robots.set(key, instance);
   root.userData.godot = { setMotion };
   root.userData.godotModel = "robot";
   return root;
