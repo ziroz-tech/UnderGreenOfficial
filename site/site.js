@@ -1401,21 +1401,25 @@
      Live robot (Godot model, loaded when the finale approaches)
      --------------------------------------------------------------- */
   /* Visitor counter: the robot greets "あなたは N 人目の訪問者です".
-     A browser is counted once (its number is remembered); the count lives on an external counter
-     service set in site-content.csv (contact.visitorCounter: href = service, meta = namespace/key). */
+     A browser is counted once (its number is remembered). The count lives in the Cloudflare Worker
+     set in site-content.csv (contact.visitorCounter: href = its /hit URL, meta = counter name). */
   const Visitors = { number: 0, returning: false, shown: false, counted: false };
 
   async function countVisitor() {
     const config = row("contact.visitorCounter");
-    if (!config?.href || !/^[\w.-]{3,64}\/[\w.-]{3,64}$/.test(config.meta || "")) return 0;
-    const storageKey = `ug-visitor:${config.meta}`;
+    if (!config?.href) return 0;
+    // ?counter=test で確認用のカウンターを使う（本番の数を増やさない）
+    const name = params.get("counter") === "test" ? "test" : (config.meta || "visitors");
+    const storageKey = `ug-visitor:${config.href}#${name}`;
     const remembered = Number(local.get(storageKey)) || 0;
     if (remembered > 0) {
       Visitors.returning = true;
       return remembered;
     }
     try {
-      const response = await fetch(`${config.href.replace(/\/+$/, "")}/hit/${config.meta}`, { cache: "no-store" });
+      const endpoint = new URL(config.href);
+      endpoint.searchParams.set("name", name);
+      const response = await fetch(endpoint, { method: "POST", cache: "no-store" });
       if (!response.ok) return 0;
       const value = Math.floor(Number((await response.json()).value) || 0);
       if (value > 0) local.set(storageKey, String(value));

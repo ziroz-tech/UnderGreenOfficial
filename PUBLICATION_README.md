@@ -50,6 +50,8 @@ GitHub Pages でそのまま公開できる構成です。PHP・データベー�
 | `media.*` | 掲載情報の切り抜き |
 | `credits.image` | クレジット上の水彩画 |
 | `contact.channel` | 公式X の URL（ページ内の X リンクはすべてここから） |
+| `contact.visitorLine` / `contact.visitorReturn` | 一番下のロボットのセリフ（訪問者の番号）。`{n}` に番号が入る。2 回目以降の訪問は `visitorReturn` |
+| `contact.visitorCounter` | 訪問者カウンターの数え係（Cloudflare Workers）の URL。消すとカウンターは止まり、いつものひとことに戻る。数の確認・書き換えは `visitor-counter/README.md` |
 
 ### 旧HTML版を公開したら
 

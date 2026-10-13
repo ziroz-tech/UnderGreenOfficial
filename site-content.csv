@@ -122,6 +122,6 @@ contact,lead,text,20,作品へのご感想、取材、制作に関するお問�
 contact,channel,link,30,X,OFFICIAL CHANNEL,,,,,https://x.com/UnderGreenJP,,
 contact,visitorLine,text,40,あなたは {n} 人目の訪問者です。,,,,,,,,
 contact,visitorReturn,text,45,おかえりなさい。あなたは {n} 人目の訪問者です。,,,,,,,,
-contact,visitorCounter,counter,50,訪問者カウンター,,,,,,https://abacus.jasoncameron.dev,,ziroz-undergreen/visitors
+contact,visitorCounter,counter,50,訪問者カウンター,,,,,,https://ug-visitors.ziroz-tech.workers.dev/hit,,visitors
 credits,kicker,text,10,CREDITS // STAFF,,,,,,,,
 credits,image,image,20,,,,,site/img/ending-robot.webp,畑の中に座るサポートロボットの水彩画,,,
