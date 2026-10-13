@@ -806,7 +806,7 @@ a:hover .roll > span + span, button:hover .roll > span + span { transform: trans
 .feats__tab:hover b { color: var(--text); }
 .feats__tab[aria-selected="true"] { color: var(--signal); padding-left: 12px; box-shadow: inset 3px 0 0 var(--signal); background: rgb(var(--signal-rgb) / .05); }
 .feats__tab[aria-selected="true"] b { color: var(--text); }
-.feats__detail { display: grid; gap: 12px; }
+.feats__detail { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; min-width: 0; }
 .feats__detail > * { transition: opacity .4s, transform .6s var(--ease); }
 .feats__detail.is-out > * { opacity: 0; transform: translateY(12px); }
 .feats__num { font: 900 clamp(64px, 6vw, 104px)/.8 var(--f-display); color: var(--signal); }
@@ -982,18 +982,19 @@ a:hover .roll > span + span, button:hover .roll > span + span { transform: trans
   transition: clip-path .9s var(--ease-io), opacity 0s .9s;
 }
 .dossier__portrait.is-active { opacity: 1; clip-path: inset(0 0 0 0); transition: clip-path 1s var(--ease-io), opacity 0s; z-index: 1; }
-.dossier__portrait.is-robot { height: 64%; bottom: 8%; }
+.dossier__portrait.is-robot { height: 58%; bottom: 12%; }
 .dossier__file { position: absolute; left: 16px; bottom: 14px; z-index: 2; color: var(--signal); }
 .dossier__draft { position: absolute; right: 16px; top: 14px; z-index: 2; color: var(--text-3); }
 .dossier__stage .scanbar { position: absolute; left: 0; right: 0; height: 2px; z-index: 2; background: var(--signal); box-shadow: 0 0 18px var(--signal); top: 0; opacity: 0; }
 .dossier__stage.is-switching .scanbar { animation: scan .9s var(--ease-io); }
 @keyframes scan { 0% { top: 100%; opacity: 1; } 100% { top: 0; opacity: 0; } }
 
-.dossier__info { display: grid; align-content: center; gap: 18px; padding: 24px 0; }
+.dossier__info { display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; gap: 18px; padding: 24px 0; min-width: 0; }
 .dossier__info > * { transition: opacity .45s, transform .6s var(--ease); }
 .dossier__info.is-out > * { opacity: 0; transform: translateY(14px); }
 .dossier__signal { color: var(--signal); }
 .dossier__name { font: 900 clamp(44px, 5vw, 86px)/1.08 var(--f-mincho); letter-spacing: .02em; font-feature-settings: "palt" 1; }
+.dossier__name.is-long { font-size: clamp(32px, 3.3vw, 56px); }
 .dossier__role { display: inline-flex; align-items: center; gap: 10px; color: var(--text); font-weight: 700; letter-spacing: .14em; }
 .dossier__role::before { content: ""; width: 18px; height: 1px; background: var(--signal); }
 .dossier__summary { color: var(--text-2); font-size: 15px; line-height: 2.05; }

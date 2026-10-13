@@ -414,7 +414,7 @@
     const quote = el("blockquote", "dossier__quote", profile.note || "");
     info.replaceChildren(
       el("p", "dossier__signal mono", `${pad(position + 1)} // ${profile.meta || "PERSONNEL FILE"}`),
-      el("h3", "dossier__name", profile.text),
+      el("h3", `dossier__name${Array.from(profile.text || "").length > 5 ? " is-long" : ""}`, profile.text),
       el("p", "dossier__role", profile.subtext || ""),
       el("p", "dossier__summary", profile.body || ""),
       quote
