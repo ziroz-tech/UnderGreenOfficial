@@ -1648,30 +1648,51 @@
   /* ---------------------------------------------------------------
      Cursor
      --------------------------------------------------------------- */
+  // ポインターについてくるドット絵のサポートロボット。表情：0 ふだん / 1 目が光る / 2 にっこり / 3 びっくり / 4 居眠り
+  const BOT_FACES = { normal: 0, glint: 1, happy: 2, surprised: 3, sleepy: 4 };
   const Cursor = {
     node: $(".cursor"),
-    x: -100, y: -100, rx: -100, ry: -100,
+    x: -100, y: -100, bx: -100, by: -100,
     enabled: false,
+    hover: false,
+    label: "",
+    face: -1,
+    flip: 1,
+    lastMove: 0,
+    downUntil: 0,
     init() {
       if (!mqFine.matches || reduced()) return;
       this.enabled = true;
       doc.classList.add("has-cursor");
       this.dot = $(".cursor__dot", this.node);
-      this.ring = $(".cursor__ring", this.node);
-      this.label = $(".cursor__label", this.node);
+      this.bot = $(".cursor__bot", this.node);
+      this.sprite = $(".cursor__sprite", this.node);
+      this.tag = $(".cursor__label", this.node);
       window.addEventListener("pointermove", (event) => {
         if (event.pointerType !== "mouse") return;
+        if (this.x < -50) {
+          this.bx = event.clientX + 18;
+          this.by = event.clientY + 16;
+        }
         this.x = event.clientX;
         this.y = event.clientY;
+        this.lastMove = performance.now();
         this.node.classList.remove("is-hidden");
+      }, { passive: true });
+      window.addEventListener("pointerdown", (event) => {
+        if (event.pointerType === "mouse") this.pressed = true;
+      }, { passive: true });
+      window.addEventListener("pointerup", (event) => {
+        if (event.pointerType !== "mouse") return;
+        this.pressed = false;
+        this.downUntil = performance.now() + 350;
       }, { passive: true });
       document.addEventListener("pointerover", (event) => {
         const target = event.target.closest?.("[data-cursor], a, button, [role='tab']");
-        const label = target?.dataset?.cursor || "";
-        this.node.classList.toggle("is-hover", Boolean(target) && !label);
-        this.node.classList.toggle("is-label", Boolean(label));
-        this.label.textContent = label;
-        if (target && !label && target.closest(".hdr, .dossier__index, .menu")) Sound.play("tick", 0.18);
+        this.label = target?.dataset?.cursor || "";
+        this.hover = Boolean(target);
+        this.node.classList.toggle("is-hover", this.hover && !this.label);
+        if (target && !this.label && target.closest(".hdr, .dossier__index, .menu")) Sound.play("tick", 0.18);
       });
       document.addEventListener("pointerleave", () => this.node.classList.add("is-hidden"));
     },
@@ -1680,12 +1701,45 @@
       doc.classList.toggle("has-cursor", !on);
       this.node.classList.toggle("is-hidden", on);
     },
+    setFace(face) {
+      if (face === this.face) return;
+      this.face = face;
+      this.sprite.style.backgroundPosition = `${-63 * face}px 0`;
+    },
     update() {
       if (!this.enabled) return;
-      this.rx += (this.x - this.rx) * 0.2;
-      this.ry += (this.y - this.ry) * 0.2;
+      const now = performance.now();
       this.dot.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
-      this.ring.style.transform = `translate3d(${this.rx}px, ${this.ry}px, 0)`;
+      // ポインターの右下を少し遅れて追いかけ、進む向きへ体を傾ける
+      const targetX = this.x + 18;
+      const targetY = this.y + 16;
+      this.bx += (targetX - this.bx) * 0.13;
+      this.by += (targetY - this.by) * 0.13;
+      const lagX = targetX - this.bx;
+      const idle = now - this.lastMove;
+      const tilt = clamp(lagX * 0.35, -16, 16);
+      const bob = idle > 600 ? Math.sin(now / 420) * 2 : 0;
+      this.bot.style.transform = `translate3d(${this.bx}px, ${this.by + bob}px, 0) rotate(${tilt}deg)`;
+      // ポインターのいる側を向く（もとの絵は左向き）
+      const flip = this.bx + 20 < this.x ? -1 : 1;
+      if (flip !== this.flip) {
+        this.flip = flip;
+        this.sprite.style.setProperty("--flip", String(flip));
+      }
+      let face = BOT_FACES.normal;
+      let tag = this.label;
+      if (this.pressed || now < this.downUntil) face = BOT_FACES.surprised;
+      else if (idle > 6000) {
+        face = BOT_FACES.sleepy;
+        if (!tag) tag = "Zz";
+      } else if (this.hover) face = BOT_FACES.happy;
+      else if (now % 3200 < 180) face = BOT_FACES.glint;
+      this.setFace(face);
+      if (tag !== this.shownTag) {
+        this.shownTag = tag;
+        if (tag) this.tag.textContent = tag;
+        this.node.classList.toggle("is-label", Boolean(tag));
+      }
     }
   };
 
