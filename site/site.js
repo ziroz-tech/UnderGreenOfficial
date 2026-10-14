@@ -1648,7 +1648,7 @@
   /* ---------------------------------------------------------------
      Cursor
      --------------------------------------------------------------- */
-  // ポインターについてくるドット絵のサポートロボット。表情：0 ふだん / 1 目が光る / 2 にっこり / 3 びっくり / 4 居眠り
+  // ポインターについてくるドット絵のサポートロボット。表情：0 目を光らせる / 1 きらっ / 2 にっこり（ふだん）/ 3 びっくり / 4 居眠り
   const BOT_FACES = { normal: 0, glint: 1, happy: 2, surprised: 3, sleepy: 4 };
   const Cursor = {
     node: $(".cursor"),
@@ -1726,14 +1726,14 @@
         this.flip = flip;
         this.sprite.style.setProperty("--flip", String(flip));
       }
-      let face = BOT_FACES.normal;
+      // ふだんはにっこり。リンクやボタンの上では目を光らせる（ときどききらっ）
+      let face = BOT_FACES.happy;
       let tag = this.label;
       if (this.pressed || now < this.downUntil) face = BOT_FACES.surprised;
       else if (idle > 6000) {
         face = BOT_FACES.sleepy;
         if (!tag) tag = "Zz";
-      } else if (this.hover) face = BOT_FACES.happy;
-      else if (now % 3200 < 180) face = BOT_FACES.glint;
+      } else if (this.hover) face = now % 1600 < 160 ? BOT_FACES.glint : BOT_FACES.normal;
       this.setFace(face);
       if (tag !== this.shownTag) {
         this.shownTag = tag;
