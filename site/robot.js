@@ -1,21 +1,22 @@
-// Live support robot (Godot model) for the contact section. Loaded on demand by site.js.
+// Live support robot (Godot model) for the contact section. site.js builds it ahead of time;
+// `calm` resolves at a quiet moment, and each one-off heavy step waits for it.
 import * as THREE from "three";
 import { GLTFLoader } from "./vendor/GLTFLoader.js";
 import { RoomEnvironment } from "./vendor/RoomEnvironment.js";
 
 const REACTIONS = ["SR_Celebrate", "SR_Clap", "SR_Surprise", "SR_Nod", "SR_Wave"];
 
-export async function mountRobot(container, { url, reduced = false } = {}) {
+export async function mountRobot(container, { url, reduced = false, calm = () => Promise.resolve() } = {}) {
+  await calm();
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.15;
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   container.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();
+  await calm();
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
   const camera = new THREE.PerspectiveCamera(24, 1, 0.1, 60);
@@ -24,11 +25,6 @@ export async function mountRobot(container, { url, reduced = false } = {}) {
   scene.add(new THREE.HemisphereLight(0xd8fff0, 0x06120c, 0.6));
   const key = new THREE.DirectionalLight(0xfff3e0, 2.2);
   key.position.set(-2.4, 4.2, 3.2);
-  key.castShadow = true;
-  key.shadow.mapSize.set(1024, 1024);
-  key.shadow.camera.near = 0.5;
-  key.shadow.camera.far = 14;
-  key.shadow.radius = 4;
   scene.add(key);
   const rim = new THREE.DirectionalLight(0x6dffc4, 3.4);
   rim.position.set(2.8, 2.4, -3.2);
@@ -43,8 +39,24 @@ export async function mountRobot(container, { url, reduced = false } = {}) {
     new THREE.MeshStandardMaterial({ color: 0x0b1712, roughness: 0.85, metalness: 0.1 })
   );
   floor.rotation.x = -Math.PI / 2;
-  floor.receiveShadow = true;
   scene.add(floor);
+  // soft contact shadow painted on the floor (a real-time shadow map cost ~1 s of shader compiling)
+  const soft = document.createElement("canvas");
+  soft.width = soft.height = 64;
+  const softContext = soft.getContext("2d");
+  const blobGradient = softContext.createRadialGradient(32, 32, 0, 32, 32, 32);
+  blobGradient.addColorStop(0, "#fff");
+  blobGradient.addColorStop(0.45, "#999");
+  blobGradient.addColorStop(1, "#000");
+  softContext.fillStyle = blobGradient;
+  softContext.fillRect(0, 0, 64, 64);
+  const blob = new THREE.Mesh(
+    new THREE.PlaneGeometry(1, 1),
+    new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.62, alphaMap: new THREE.CanvasTexture(soft), depthWrite: false })
+  );
+  blob.rotation.x = -Math.PI / 2;
+  blob.position.y = 0.004;
+  scene.add(blob);
   const ring = new THREE.Mesh(
     new THREE.RingGeometry(1.18, 1.24, 96),
     new THREE.MeshBasicMaterial({ color: 0x8affb6, transparent: true, opacity: 0.85, side: THREE.DoubleSide })
@@ -70,12 +82,12 @@ export async function mountRobot(container, { url, reduced = false } = {}) {
   scene.add(beam);
 
   const gltf = await new GLTFLoader().loadAsync(url);
+  await calm();
   const model = gltf.scene;
   model.traverse((node) => {
-    if (node.isMesh) {
-      node.castShadow = true;
-      node.receiveShadow = true;
-    }
+    if (!node.isMesh) return;
+    // the back tank is see-through already; true refraction needs a second full pass (and ~1 s of compiling)
+    [].concat(node.material).forEach((material) => { if (material.transmission) material.transmission = 0; });
   });
   // measure in the idle pose (skinned bounds follow the bones)
   const idleClip = gltf.animations.find((clip) => clip.name === "SR_Idle");
@@ -98,6 +110,8 @@ export async function mountRobot(container, { url, reduced = false } = {}) {
   model.position.x -= center.x;
   model.position.z -= center.z;
   model.position.y -= box.min.y;
+  const footprint = box.getSize(new THREE.Vector3());
+  blob.scale.set(Math.min(2.1, footprint.x * 0.78), Math.min(1.6, footprint.z * 1.45), 1);
   const pivot = new THREE.Group();
   pivot.add(model);
   scene.add(pivot);
@@ -186,6 +200,24 @@ export async function mountRobot(container, { url, reduced = false } = {}) {
     if (on && !wasVisible && !reduced) play("SR_Wave", { once: true, fade: 0.2 });
   };
   document.addEventListener("visibilitychange", () => setVisible(visible));
+  // compile every shader off the main thread, then make the first draw of each material in its
+  // own quiet moment (the GPU driver still finishes a shader when it is first used)
+  if (renderer.compileAsync) await renderer.compileAsync(scene, camera);
+  const meshes = [];
+  scene.traverse((node) => { if (node.isMesh && node.visible) meshes.push(node); });
+  const byMaterial = new Map();
+  meshes.forEach((mesh) => {
+    const id = [].concat(mesh.material).map((material) => material.uuid).join();
+    if (!byMaterial.has(id)) byMaterial.set(id, []);
+    byMaterial.get(id).push(mesh);
+  });
+  for (const group of byMaterial.values()) {
+    await calm();
+    meshes.forEach((mesh) => { mesh.visible = group.includes(mesh); });
+    renderer.render(scene, camera);
+  }
+  meshes.forEach((mesh) => { mesh.visible = true; });
+  await calm();
   renderer.render(scene, camera);
   return { setVisible, react };
 }

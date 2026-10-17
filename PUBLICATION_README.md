@@ -67,7 +67,7 @@ Steam のストアページができたら、`play,link,…,80,Steam ストア�
 
 - `index.html` … 公式サイト（入口）
 - `site/site.css`・`site/site.js` … サイトの見た目と動き
-- `site/robot.js` … CONTACT の 3D サポートロボット
+- `site/robot.js` … CONTACT の 3D サポートロボット。見る人が最初の画面（栽培デモ）から下へ進んだら、スクロールが止まっている間に少しずつ準備する（ここに来たときに止まらないように）。初回の描画が重くなる「本物の影」と「透ける液体の屈折」は使わず、床に描いた柔らかい影で代用
 - `godot-models.js`・`site/models/` … Godot 版のモデル（ロボット・ポッド・レタス。Web 用に軽くしたもの）。サイトとデモで共用
 - `site/vendor/` … 外部ライブラリ（Lenis：なめらかなスクロール／three.js r160 の GLTF 読み込み・スキンの複製）
 - `site/img/` … ロゴ・立ち絵・画面写真・共有用画像（`og.jpg`）

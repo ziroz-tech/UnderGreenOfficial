@@ -1471,19 +1471,35 @@
     }, 1500);
     let robot = null;
     let visible = false;
-    const preload = new IntersectionObserver((entries) => {
-      if (!entries.some((entry) => entry.isIntersecting)) return;
-      preload.disconnect();
-      import(new URL("robot.js", SCRIPT_URL).href)
-        .then((module) => module.mountRobot(stage, { url: new URL("models/support-robot.glb", SCRIPT_URL).href, reduced: reduced() }))
+    let preparing = null;
+    // build the 3D robot well before it is needed, one step at a time in quiet moments,
+    // so reaching this section never stalls the page
+    const prepare = () => {
+      if (preparing) return preparing;
+      preparing = calm()
+        .then(() => import(new URL("robot.js?v=20261017d", SCRIPT_URL).href))
+        .then((module) => module.mountRobot(stage, { url: new URL("models/support-robot.glb", SCRIPT_URL).href, reduced: reduced(), calm }))
         .then((instance) => {
           robot = instance;
           stage.classList.add("is-ready");
           robot.setVisible(visible);
         })
         .catch(() => { /* the static illustration stays */ });
-    }, { rootMargin: "0px 0px 90% 0px" });
-    preload.observe(stage);
+      return preparing;
+    };
+    // start as soon as the visitor leaves the live farm; coming near this section starts it at the latest
+    const early = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) return;
+      early.disconnect();
+      prepare();
+    });
+    early.observe($("#top"));
+    const near = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      near.disconnect();
+      prepare();
+    }, { rootMargin: "0px 0px 150% 0px" });
+    near.observe(stage);
     new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         visible = entry.isIntersecting;
@@ -1760,7 +1776,24 @@
      --------------------------------------------------------------- */
   let lastFrame = performance.now();
   let lastScrollY = -1;
+  let lastScrollAt = 0;
   let scrollVelocity = 0;
+
+  // resolves at a quiet moment (the page has stopped scrolling and the browser is idle),
+  // for one-off heavy work that would otherwise show as a hitch
+  function calm() {
+    return new Promise((resolve) => {
+      const check = () => {
+        if (performance.now() - lastScrollAt < 300) {
+          setTimeout(check, 150);
+          return;
+        }
+        if (window.requestIdleCallback) window.requestIdleCallback(() => resolve(), { timeout: 800 });
+        else setTimeout(resolve, 30);
+      };
+      check();
+    });
+  }
 
   function frame(now) {
     const delta = Math.min(0.05, (now - lastFrame) / 1000);
@@ -1771,6 +1804,7 @@
     if (y !== lastScrollY) {
       scrollVelocity = lenis ? lenis.velocity : (y - lastScrollY);
       lastScrollY = y;
+      lastScrollAt = now;
       updateChrome(y);
       updatePrologue();
       updateParallax();
