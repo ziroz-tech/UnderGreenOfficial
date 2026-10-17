@@ -27,6 +27,14 @@ GitHub Pages でそのまま公開できる構成です。PHP・データベー�
 - `…/UnderGreenOfficial/?skipIntro` … 読み込み画面を省く
 - `…/UnderGreenOfficial/#characters` など … 各セクションへ直接移動
 
+### プレスキット（press/）
+
+報道・メディア・配信者向けの素材ページ（`…/UnderGreenOfficial/press/`）。MEDIA 欄の「PRESS KIT」とフッターからリンクしている。
+作品概要・紹介文（コピーボタン付き）・トレーラーとゲーム画面の短い映像・スクリーンショット・ロゴ・キービジュアル・人物の透過PNG・開発者とクレジットを載せ、画像一式は ZIP で保存できる。「ファクトシートを印刷・PDF保存」で A4 2枚の概要が印刷できる。
+
+- 文章は `site-content.csv` の `press` 行（作品概要は `press,fact`）。主な特徴・人物名・出展履歴・クレジットはサイトと同じ行を使う
+- 画像・ZIP・`press/assets.json` は、サイトの外の `press-kit/build_press.py` で作る（使い方は `press-kit/README.md`）
+
 ## 中身の差し替え（site-content.csv）
 
 文章・画像・動画はほぼすべて `site-content.csv` で変えられます。列は `section,key,type,order,text,subtext,body,note,src,alt,href,mediaType,meta` です。
@@ -67,6 +75,7 @@ Steam のストアページができたら、`play,link,…,80,Steam ストア�
 
 - `index.html` … 公式サイト（入口）
 - `site/site.css`・`site/site.js` … サイトの見た目と動き
+- `press/` … プレスキット（`index.html`・`press.css`・`press.js`、素材は `files/`、一覧用の小さい画像は `thumbs/`）
 - `site/robot.js` … CONTACT の 3D サポートロボット。見る人が最初の画面（栽培デモ）から下へ進んだら、スクロールが止まっている間に少しずつ準備する（ここに来たときに止まらないように）。初回の描画が重くなる「本物の影」と「透ける液体の屈折」は使わず、床に描いた柔らかい影で代用
 - `godot-models.js`・`site/models/` … Godot 版のモデル（ロボット・ポッド・レタス。Web 用に軽くしたもの）。サイトとデモで共用
 - `site/vendor/` … 外部ライブラリ（Lenis：なめらかなスクロール／three.js r160 の GLTF 読み込み・スキンの複製）

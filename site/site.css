@@ -1060,6 +1060,8 @@ a:hover .roll > span + span, button:hover .roll > span + span { transform: trans
 .playlink__cta { grid-row: 2 / span 2; grid-column: 2; padding: 8px 12px; border: 1px dashed var(--line-2); color: var(--text-3); white-space: nowrap; }
 a.playlink:hover { padding-left: 10px; }
 a.playlink .playlink__cta { border: 1px solid var(--signal); background: var(--signal); color: #021; }
+.presslink { margin-top: 18px; border-top: 1px solid var(--line); }
+.presslink .playlink__cta i { font-style: normal; }
 
 .clipping {
   position: relative;
@@ -1185,6 +1187,9 @@ a.playlink .playlink__cta { border: 1px solid var(--signal); background: var(--s
 
 .ftr { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 28px var(--gutter) 34px; border-top: 1px solid var(--line); color: var(--text-3); }
 .ftr img { height: 20px; width: auto; opacity: .8; }
+.ftr__links { display: flex; align-items: center; gap: 28px; }
+.ftr__press { color: var(--text-2); text-decoration: none; }
+.ftr__press:hover { color: var(--signal); }
 .ftr__top { display: inline-flex; gap: 10px; color: var(--text-2); }
 .ftr__top i { font-style: normal; color: var(--signal); transition: transform .5s var(--ease); }
 .ftr__top:hover i { transform: translateY(-4px); }

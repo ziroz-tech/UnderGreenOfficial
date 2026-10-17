@@ -1,0 +1,325 @@
+{
+ "generated": "2026-10-18",
+ "screenshots": [
+  {
+   "href": "files/screenshots/UNDERGREEN_screenshot_01_farm.jpg",
+   "w": 1600,
+   "h": 900,
+   "bytes": 455070,
+   "id": "farm",
+   "title": "拠点の全景",
+   "caption": "ポッドと設備を並べて組み上げた地下農場",
+   "thumb": "thumbs/screenshot_01_farm.webp"
+  },
+  {
+   "href": "files/screenshots/UNDERGREEN_screenshot_02_robots.jpg",
+   "w": 1600,
+   "h": 900,
+   "bytes": 439774,
+   "id": "robots",
+   "title": "サポートロボットの農作業",
+   "caption": "収穫や運搬をこなすサポートロボットたち",
+   "thumb": "thumbs/screenshot_02_robots.webp"
+  },
+  {
+   "href": "files/screenshots/UNDERGREEN_screenshot_03_lettuce.jpg",
+   "w": 1600,
+   "h": 900,
+   "bytes": 538386,
+   "id": "lettuce",
+   "title": "育ったレタス",
+   "caption": "栽培ポッドで育つレタス",
+   "thumb": "thumbs/screenshot_03_lettuce.webp"
+  },
+  {
+   "href": "files/screenshots/UNDERGREEN_screenshot_04_tomato.jpg",
+   "w": 1600,
+   "h": 900,
+   "bytes": 589137,
+   "id": "tomato",
+   "title": "実ったトマト",
+   "caption": "収穫を待つトマト",
+   "thumb": "thumbs/screenshot_04_tomato.webp"
+  },
+  {
+   "href": "files/screenshots/UNDERGREEN_screenshot_05_event.jpg",
+   "w": 2560,
+   "h": 1600,
+   "bytes": 714651,
+   "id": "event",
+   "title": "下層市場との出会い",
+   "caption": "下層市場の仲買人ユンとの会話",
+   "thumb": "thumbs/screenshot_05_event.webp"
+  },
+  {
+   "href": "files/screenshots/UNDERGREEN_screenshot_06_map.jpg",
+   "w": 2560,
+   "h": 1600,
+   "bytes": 855021,
+   "id": "map",
+   "title": "地下都市のMAP",
+   "caption": "下層の売り先が並ぶMAP",
+   "thumb": "thumbs/screenshot_06_map.webp"
+  },
+  {
+   "href": "files/screenshots/UNDERGREEN_screenshot_07_shop.jpg",
+   "w": 2560,
+   "h": 1600,
+   "bytes": 276431,
+   "id": "shop",
+   "title": "マーラの闇商店",
+   "caption": "種と設備の仕入れ",
+   "thumb": "thumbs/screenshot_07_shop.webp"
+  },
+  {
+   "href": "files/screenshots/UNDERGREEN_screenshot_08_labor.jpg",
+   "w": 2560,
+   "h": 1600,
+   "bytes": 481166,
+   "id": "labor",
+   "title": "労務管理",
+   "caption": "ノードでサポートロボットの業務フローを組む",
+   "thumb": "thumbs/screenshot_08_labor.webp"
+  },
+  {
+   "href": "files/screenshots/UNDERGREEN_screenshot_09_security.jpg",
+   "w": 1600,
+   "h": 900,
+   "bytes": 124637,
+   "id": "security",
+   "title": "管理局の偵察ドローン",
+   "caption": "監視カメラに映る、拠点へ近づくドローン",
+   "thumb": "thumbs/screenshot_09_security.webp"
+  },
+  {
+   "href": "files/screenshots/UNDERGREEN_screenshot_10_city.jpg",
+   "w": 1600,
+   "h": 900,
+   "bytes": 452094,
+   "id": "city",
+   "title": "地下都市",
+   "caption": "下層の街並み",
+   "thumb": "thumbs/screenshot_10_city.webp"
+  }
+ ],
+ "brand": [
+  {
+   "href": "files/brand/UNDERGREEN_logo.png",
+   "w": 1641,
+   "h": 386,
+   "bytes": 306991,
+   "id": "logo",
+   "title": "ロゴ",
+   "caption": "透過PNG",
+   "thumb": "thumbs/brand_logo.webp"
+  },
+  {
+   "href": "files/brand/UNDERGREEN_tagline.png",
+   "w": 718,
+   "h": 92,
+   "bytes": 5085,
+   "id": "tagline",
+   "title": "英語キャッチコピー",
+   "caption": "透過PNG",
+   "thumb": "thumbs/brand_tagline.webp"
+  },
+  {
+   "href": "files/brand/UNDERGREEN_keyvisual.jpg",
+   "w": 1920,
+   "h": 1080,
+   "bytes": 235987,
+   "id": "keyvisual",
+   "title": "キービジュアル（タイトル画面）",
+   "caption": "JPG",
+   "thumb": "thumbs/brand_keyvisual.webp"
+  },
+  {
+   "href": "files/brand/UNDERGREEN_banner.jpg",
+   "w": 1200,
+   "h": 630,
+   "bytes": 145161,
+   "id": "banner",
+   "title": "バナー（1200×630）",
+   "caption": "JPG・SNS 用",
+   "thumb": "thumbs/brand_banner.webp"
+  }
+ ],
+ "characters": [
+  {
+   "href": "files/characters/UNDERGREEN_character_01_operator.png",
+   "w": 1072,
+   "h": 1689,
+   "bytes": 1292673,
+   "id": "operator",
+   "variant": "",
+   "thumb": "thumbs/character_01_operator.webp"
+  },
+  {
+   "href": "files/characters/UNDERGREEN_character_02_mara.png",
+   "w": 1159,
+   "h": 1643,
+   "bytes": 1823636,
+   "id": "mara",
+   "variant": "",
+   "thumb": "thumbs/character_02_mara.webp"
+  },
+  {
+   "href": "files/characters/UNDERGREEN_character_03_support_robot_3d.png",
+   "w": 1224,
+   "h": 1237,
+   "bytes": 392107,
+   "id": "support_robot",
+   "variant": "3D",
+   "thumb": "thumbs/character_03_support_robot_3d.webp"
+  },
+  {
+   "href": "files/characters/UNDERGREEN_character_04_support_robot_3d_salute.png",
+   "w": 1202,
+   "h": 1239,
+   "bytes": 378172,
+   "id": "support_robot",
+   "variant": "3D・敬礼",
+   "thumb": "thumbs/character_04_support_robot_3d_salute.webp"
+  },
+  {
+   "href": "files/characters/UNDERGREEN_character_05_support_robot_illust.png",
+   "w": 587,
+   "h": 520,
+   "bytes": 394319,
+   "id": "support_robot",
+   "variant": "イラスト",
+   "thumb": "thumbs/character_05_support_robot_illust.webp"
+  },
+  {
+   "href": "files/characters/UNDERGREEN_character_06_yun.png",
+   "w": 1238,
+   "h": 1668,
+   "bytes": 1635744,
+   "id": "yun",
+   "variant": "",
+   "thumb": "thumbs/character_06_yun.webp"
+  },
+  {
+   "href": "files/characters/UNDERGREEN_character_07_io.png",
+   "w": 1023,
+   "h": 1724,
+   "bytes": 1626636,
+   "id": "io",
+   "variant": "",
+   "thumb": "thumbs/character_07_io.webp"
+  },
+  {
+   "href": "files/characters/UNDERGREEN_character_08_sera.png",
+   "w": 1564,
+   "h": 1723,
+   "bytes": 1954781,
+   "id": "sera",
+   "variant": "",
+   "thumb": "thumbs/character_08_sera.webp"
+  },
+  {
+   "href": "files/characters/UNDERGREEN_character_09_nagi.png",
+   "w": 1070,
+   "h": 1672,
+   "bytes": 1471106,
+   "id": "nagi",
+   "variant": "",
+   "thumb": "thumbs/character_09_nagi.webp"
+  },
+  {
+   "href": "files/characters/UNDERGREEN_character_10_kido.png",
+   "w": 1243,
+   "h": 1730,
+   "bytes": 1654518,
+   "id": "kido",
+   "variant": "",
+   "thumb": "thumbs/character_10_kido.webp"
+  }
+ ],
+ "trailer": {
+  "id": "trailer",
+  "title": "PV「求人案内動画編」",
+  "href": "../site/media/trailer-kyujin.mp4",
+  "poster": "../site/media/trailer-kyujin.jpg",
+  "w": 1920,
+  "h": 1080,
+  "bytes": 10377305,
+  "duration": "0:30"
+ },
+ "clips": [
+  {
+   "id": "grow",
+   "title": "作物の成長",
+   "href": "../site/media/grow.mp4",
+   "poster": "../site/media/grow.jpg",
+   "w": 1280,
+   "h": 720,
+   "bytes": 2203582,
+   "duration": "0:07"
+  },
+  {
+   "id": "care",
+   "title": "ポッドの掃除",
+   "href": "../site/media/care.mp4",
+   "poster": "../site/media/care.jpg",
+   "w": 1280,
+   "h": 720,
+   "bytes": 861771,
+   "duration": "0:05"
+  },
+  {
+   "id": "ripe",
+   "title": "実ったトマト",
+   "href": "../site/media/ripe.mp4",
+   "poster": "../site/media/ripe.jpg",
+   "w": 1280,
+   "h": 720,
+   "bytes": 2499780,
+   "duration": "0:12"
+  },
+  {
+   "id": "build",
+   "title": "設備の配置",
+   "href": "../site/media/build.mp4",
+   "poster": "../site/media/build.jpg",
+   "w": 1280,
+   "h": 720,
+   "bytes": 1187190,
+   "duration": "0:08"
+  },
+  {
+   "id": "robots",
+   "title": "サポートロボットの労働",
+   "href": "../site/media/robots.mp4",
+   "poster": "../site/media/robots.jpg",
+   "w": 1280,
+   "h": 720,
+   "bytes": 1903138,
+   "duration": "0:11"
+  },
+  {
+   "id": "security",
+   "title": "監視カメラと電源の遮断",
+   "href": "../site/media/security.mp4",
+   "poster": "../site/media/security.jpg",
+   "w": 1280,
+   "h": 720,
+   "bytes": 650698,
+   "duration": "0:11"
+  },
+  {
+   "id": "city",
+   "title": "地下都市",
+   "href": "../site/media/city.mp4",
+   "poster": "../site/media/city.jpg",
+   "w": 1280,
+   "h": 720,
+   "bytes": 934093,
+   "duration": "0:05"
+  }
+ ],
+ "zip": {
+  "href": "files/UNDER_GREEN_PressKit.zip",
+  "bytes": 18250688
+ }
+}
