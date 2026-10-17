@@ -1396,38 +1396,29 @@
      Live robot (Godot model, loaded when the finale approaches)
      --------------------------------------------------------------- */
   /* Visitor counter: the robot greets "あなたは N 人目の訪問者です".
-     A browser is counted once (its number is remembered). The count lives in the Cloudflare Worker
+     Every page view is counted and shows its own number. The count lives in the Cloudflare Worker
      set in site-content.csv (contact.visitorCounter: href = its /hit URL, meta = counter name). */
-  const Visitors = { number: 0, returning: false, shown: false, counted: false };
+  const Visitors = { number: 0, shown: false, counted: false };
 
   async function countVisitor() {
     const config = row("contact.visitorCounter");
     if (!config?.href) return 0;
     // ?counter=test で確認用のカウンターを使う（本番の数を増やさない）
     const name = params.get("counter") === "test" ? "test" : (config.meta || "visitors");
-    const storageKey = `ug-visitor:${config.href}#${name}`;
-    const remembered = Number(local.get(storageKey)) || 0;
-    if (remembered > 0) {
-      Visitors.returning = true;
-      return remembered;
-    }
+    // 開くたびに 1 つ増やし、そのときの番号を出す（番号はブラウザに残さない）
     try {
       const endpoint = new URL(config.href);
       endpoint.searchParams.set("name", name);
       const response = await fetch(endpoint, { method: "POST", cache: "no-store" });
       if (!response.ok) return 0;
-      const value = Math.floor(Number((await response.json()).value) || 0);
-      if (value > 0) local.set(storageKey, String(value));
-      return value;
+      return Math.floor(Number((await response.json()).value) || 0);
     } catch (error) {
       return 0;
     }
   }
 
   function visitorLine(number) {
-    const template = Visitors.returning
-      ? text("contact.visitorReturn", "おかえりなさい。あなたは {n} 人目の訪問者です。")
-      : text("contact.visitorLine", "あなたは {n} 人目の訪問者です。");
+    const template = text("contact.visitorLine", "あなたは {n} 人目の訪問者です。");
     const [before, after = ""] = template.split("{n}");
     const count = el("b", "robot__count", "0");
     count.dataset.value = String(number);
