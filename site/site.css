@@ -241,7 +241,7 @@ h1, h2, h3, blockquote, q, .clipping__title, .playlink b, .log b, .contact__lead
 }
 .hdr.is-solid::before { opacity: 1; }
 .hdr.is-hidden { transform: translateY(-110%); }
-.hdr__brand img { height: 26px; width: auto; }
+.hdr__brand img { height: 26px; width: auto; max-width: none; }
 .hdr__nav { display: flex; justify-content: center; gap: clamp(14px, 2.2vw, 36px); }
 .hdr__nav a {
   position: relative;
@@ -276,7 +276,7 @@ h1, h2, h3, blockquote, q, .clipping__title, .playlink b, .log b, .contact__lead
 a:hover .roll > span:first-child, button:hover .roll > span:first-child { transform: translateY(-105%); }
 a:hover .roll > span + span, button:hover .roll > span + span { transform: translateY(0); }
 
-.hdr__tools { display: flex; align-items: center; gap: 10px; }
+.hdr__tools { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
 .sound { display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 12px; border: 1px solid var(--line-2); color: var(--text-2); transition: border-color .3s, color .3s; }
 .sound:hover { border-color: var(--signal); color: var(--text); }
 .sound__bars { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
@@ -1197,10 +1197,14 @@ a.playlink .playlink__cta { border: 1px solid var(--signal); background: var(--s
 /* =========================================================
    Responsive
    ========================================================= */
-@media (max-width: 1180px) {
+@media (max-width: 1320px) {
   .hdr__nav sup { display: none; }
   .hdr__nav { gap: 16px; }
+}
+@media (max-width: 1180px) {
   .depth { display: none; }
+  .sound__label { display: none; }
+  .sound { width: 38px; justify-content: center; padding: 0; }
 }
 
 @media (max-width: 1023px) {

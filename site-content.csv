@@ -26,6 +26,7 @@ header,nav,nav,70,PLAY,開発情報,,,,,,,play
 header,nav,nav,75,MEDIA,掲載情報,,,,,,,media
 header,nav,nav,78,CREDITS,制作,,,,,,,credits
 header,nav,nav,80,CONTACT,通信,,,,,,,contact
+header,nav,nav,90,PRESS,プレス,,,,,,,press/
 header,liveLabel,text,90,LIVE CULTIVATION,,,,,,,,
 header,audioLabel,text,100,SOUND,,,,,,,,
 header,audioStart,text,110,OFF,,,,,,,,
@@ -119,7 +120,8 @@ media,pressTag,text,70,PRESS KIT,,,,,,,,
 media,pressTitle,text,80,報道関係の方へ,,,,,,,,
 media,pressBody,text,90,作品情報・紹介文・画像・映像をまとめています。,,,,,,,,
 press,pageTitle,text,10,UNDER GREEN | Press Kit,,,,,,,,
-press,kicker,text,20,OFFICIAL PRESS KIT,,,,,,,,
+press,kicker,text,20,PRESS // OFFICIAL PRESS KIT,,,,,,,,
+press,title,text,25,プレスキット,,,,,,,,
 press,lead,text,30,報道・メディア・配信者の皆さま向けの素材ページです。作品情報・紹介文・画像・映像をまとめています。,,,,,,,,
 press,usage,text,40,このページの画像・映像は、『UNDER GREEN』を紹介する記事・動画・配信などでご自由にお使いいただけます。縮小やトリミングは問題ありませんが、内容を変える加工はご遠慮ください。,,,,,,,,
 press,fact,fact,100,タイトル,UNDER GREEN,,,,,,,

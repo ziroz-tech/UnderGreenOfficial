@@ -13,7 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#040706">
   <meta name="color-scheme" content="dark">
-  <title>UNDER GREEN | Press Kit</title>
+  <title>PRESS | UNDER GREEN</title>
   <meta name="description" content="ディストピア違法農場経営シミュレーション「UNDER GREEN」のプレスキット。作品概要・紹介文・スクリーンショット・ロゴ・キャラクター画像・映像をまとめています。">
   <link rel="canonical" href="https://ziroz-tech.github.io/UnderGreenOfficial/press/">
   <meta property="og:type" content="website">
@@ -33,49 +33,71 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=JetBrains+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;700&family=Zen+Old+Mincho:wght@600;900&display=swap">
-  <link rel="stylesheet" href="press.css?v=20261018b">
+  <link rel="stylesheet" href="press.css?v=20261018c">
   <script>document.documentElement.classList.replace("no-js", "js");</script>
 </head>
 <body>
   <a class="skip" href="#facts">本文へ移動</a>
 
-  <header class="hdr">
-    <a class="hdr__brand" href="#top" aria-label="UNDER GREEN プレスキットの先頭へ">
+  <div class="cursor" aria-hidden="true"><i class="cursor__dot"></i><div class="cursor__bot"><i class="cursor__sprite"></i><b class="cursor__label"></b></div></div>
+
+  <!-- 公式サイトと同じヘッダー（メニューは site-content.csv の header,nav 行から作る） -->
+  <header class="hdr" id="hdr">
+    <a class="hdr__brand" href="../" aria-label="UNDER GREEN 公式サイトのトップへ">
       <img src="../site/img/logo.webp" alt="UNDER GREEN" width="1609" height="354">
-      <span class="mono">/ PRESS KIT</span>
     </a>
-    <nav class="hdr__nav" aria-label="ページ内">
-      <a href="#facts">概要</a>
-      <a href="#about">紹介文</a>
-      <a href="#video">映像</a>
-      <a href="#screenshots">画像</a>
-      <a href="#brand">ロゴ</a>
-      <a href="#characters">人物</a>
-      <a href="#developer">制作</a>
+    <nav class="hdr__nav" id="hdr-nav" aria-label="メインメニュー">
+      <a href="../#world"><sup>01</sup><span class="roll"><span>STORY</span><span>物語</span></span></a>
+      <a href="../#system"><sup>02</sup><span class="roll"><span>GAME</span><span>システム</span></span></a>
+      <a href="../#characters"><sup>03</sup><span class="roll"><span>CHARACTERS</span><span>人物</span></span></a>
+      <a href="../#play"><sup>04</sup><span class="roll"><span>PLAY</span><span>開発情報</span></span></a>
+      <a href="../#media"><sup>05</sup><span class="roll"><span>MEDIA</span><span>掲載情報</span></span></a>
+      <a href="../#credits"><sup>06</sup><span class="roll"><span>CREDITS</span><span>制作</span></span></a>
+      <a href="../#contact"><sup>07</sup><span class="roll"><span>CONTACT</span><span>通信</span></span></a>
+      <a href="./" class="is-current" aria-current="page"><sup>08</sup><span class="roll"><span>PRESS</span><span>プレス</span></span></a>
     </nav>
-    <a class="hdr__site mono" href="../">OFFICIAL SITE <i aria-hidden="true">↗</i></a>
+    <div class="hdr__tools">
+      <a class="hdr__play" href="../#play" data-cursor="PLAY"><i aria-hidden="true"></i><span data-text="header.demoButton">PLAY IN BROWSER</span></a>
+      <button class="hdr__menu" id="menu-toggle" type="button" aria-expanded="false" aria-controls="menu"><span class="visually-hidden">メニュー</span><i></i><i></i></button>
+    </div>
   </header>
+
+  <div class="menu" id="menu" aria-hidden="true">
+    <nav class="menu__nav" id="menu-nav" aria-label="メニュー"></nav>
+    <div class="menu__foot mono">
+      <span>WHO OWNS THE SEED?</span>
+      <a href="https://x.com/UnderGreenJP" target="_blank" rel="noopener noreferrer">X / @UnderGreenJP ↗</a>
+    </div>
+  </div>
 
   <main id="top">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero__bg" aria-hidden="true"><img src="thumbs/screenshot_01_farm.webp" alt="" width="960" height="540"></div>
       <div class="hero__body">
-        <p class="kicker mono" data-text="press.kicker">OFFICIAL PRESS KIT</p>
-        <h1 class="hero__title" id="hero-title"><img src="../site/img/logo.webp" alt="UNDER GREEN" width="1609" height="354"></h1>
-        <p class="hero__tagline">その種は、誰のもの？<span class="mono">WHO OWNS THE SEED?</span></p>
-        <p class="hero__genre" data-text="hero.genre">ディストピア違法農場経営シミュレーション</p>
+        <p class="sec-head__meta mono"><b id="press-number">08</b><span data-text="press.kicker">PRESS // OFFICIAL PRESS KIT</span></p>
+        <h1 class="hero__title" id="hero-title" data-text="press.title">プレスキット</h1>
+        <p class="hero__game"><span class="mono">UNDER GREEN</span><span data-text="hero.genre">ディストピア違法農場経営シミュレーション</span></p>
         <p class="hero__lead" data-text="press.lead">報道・メディア・配信者の皆さま向けの素材ページです。作品情報・紹介文・画像・映像をまとめています。</p>
         <div class="hero__actions">
-          <a class="btn btn--primary" id="zip-hero" href="files/UNDER_GREEN_PressKit.zip" download>画像素材を一括保存 <small class="mono" data-zip-size></small></a>
+          <a class="btn btn--primary" id="zip-hero" href="files/UNDER_GREEN_PressKit.zip" download data-cursor="SAVE">画像素材を一括保存 <small class="mono" data-zip-size></small></a>
           <a class="btn" href="#screenshots">素材を見る</a>
-          <a class="btn" href="../#play">体験版を遊ぶ <i aria-hidden="true">↗</i></a>
         </div>
       </div>
     </section>
 
+    <nav class="localnav" id="localnav" aria-label="プレスキットの目次">
+      <a href="#facts">作品概要</a>
+      <a href="#about">紹介文</a>
+      <a href="#video">映像</a>
+      <a href="#screenshots">画像</a>
+      <a href="#brand">ロゴ</a>
+      <a href="#characters">キャラクター</a>
+      <a href="#developer">開発者</a>
+    </nav>
+
     <section class="sec" id="facts" aria-labelledby="facts-title">
       <header class="sec__head">
-        <p class="kicker mono">FACT SHEET</p>
+        <p class="sec-head__meta mono"><span>FACT SHEET</span></p>
         <h2 id="facts-title">作品概要</h2>
         <p class="sec__note">掲載用の基本情報</p>
       </header>
@@ -97,7 +119,7 @@
 
     <section class="sec" id="about" aria-labelledby="about-title">
       <header class="sec__head">
-        <p class="kicker mono">ABOUT</p>
+        <p class="sec-head__meta mono"><span>ABOUT</span></p>
         <h2 id="about-title">紹介文</h2>
         <p class="sec__note">記事にそのままお使いいただけます</p>
       </header>
@@ -119,7 +141,7 @@
 
     <section class="sec" id="video" aria-labelledby="video-title">
       <header class="sec__head">
-        <p class="kicker mono">VIDEO</p>
+        <p class="sec-head__meta mono"><span>VIDEO</span></p>
         <h2 id="video-title">トレーラー・映像</h2>
         <p class="sec__note">押した映像だけ読み込みます</p>
       </header>
@@ -130,7 +152,7 @@
 
     <section class="sec" id="screenshots" aria-labelledby="shots-title">
       <header class="sec__head">
-        <p class="kicker mono">SCREENSHOTS</p>
+        <p class="sec-head__meta mono"><span>SCREENSHOTS</span></p>
         <h2 id="shots-title">スクリーンショット</h2>
         <p class="sec__note">クリックで拡大表示</p>
       </header>
@@ -139,7 +161,7 @@
 
     <section class="sec" id="brand" aria-labelledby="brand-title">
       <header class="sec__head">
-        <p class="kicker mono">BRAND ASSETS</p>
+        <p class="sec-head__meta mono"><span>BRAND ASSETS</span></p>
         <h2 id="brand-title">ロゴ・キービジュアル</h2>
         <p class="sec__note">ロゴは透過PNG</p>
       </header>
@@ -148,7 +170,7 @@
 
     <section class="sec" id="characters" aria-labelledby="chara-title">
       <header class="sec__head">
-        <p class="kicker mono">CHARACTERS</p>
+        <p class="sec-head__meta mono"><span>CHARACTERS</span></p>
         <h2 id="chara-title">キャラクター</h2>
         <p class="sec__note">透過PNG・立ち絵</p>
       </header>
@@ -157,7 +179,7 @@
 
     <section class="sec" id="developer" aria-labelledby="dev-title">
       <header class="sec__head">
-        <p class="kicker mono">DEVELOPER</p>
+        <p class="sec-head__meta mono"><span>DEVELOPER</span></p>
         <h2 id="dev-title">開発者・クレジット</h2>
       </header>
       <div class="dev">
@@ -183,9 +205,12 @@
   </main>
 
   <footer class="ftr">
-    <img src="../site/img/logo.webp" alt="UNDER GREEN" width="1609" height="354" loading="lazy">
+    <a href="../" aria-label="UNDER GREEN 公式サイトのトップへ"><img src="../site/img/logo.webp" alt="UNDER GREEN" width="1609" height="354" loading="lazy"></a>
     <p class="mono" data-text="site.copyright">© 2026 UNDER GREEN PROJECT</p>
-    <a class="mono" href="../">公式サイトへ戻る <i aria-hidden="true">→</i></a>
+    <div class="ftr__links">
+      <a class="mono" href="../">OFFICIAL SITE <i aria-hidden="true">→</i></a>
+      <a class="ftr__top mono" href="#top">BACK TO TOP <i aria-hidden="true">↑</i></a>
+    </div>
   </footer>
 
   <dialog class="viewer" id="viewer" aria-label="画像の拡大表示">
@@ -200,6 +225,6 @@
 
   <p class="toast mono" id="toast" role="status" aria-live="polite"></p>
 
-  <script src="press.js?v=20261018a" defer></script>
+  <script src="press.js?v=20261018c" defer></script>
 </body>
 </html>

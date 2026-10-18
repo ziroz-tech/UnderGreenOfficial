@@ -161,8 +161,11 @@
     if (creditsImage?.src) $("#credits-image").src = resolveSource(creditsImage.src);
   }
 
+  // a menu target is a section id on this page, or a separate page such as "press/"
+  const isPageTarget = (target) => /[/.]/.test(target);
+
   function renderNavigation() {
-    const items = typed("header", "nav").filter((entry) => entry.meta && document.getElementById(entry.meta));
+    const items = typed("header", "nav").filter((entry) => entry.meta && (isPageTarget(entry.meta) || document.getElementById(entry.meta)));
     if (!items.length) return;
     const desktop = $("#hdr-nav");
     const mobile = $("#menu-nav");
@@ -170,8 +173,9 @@
     mobile.replaceChildren();
     items.forEach((entry, index) => {
       const number = pad(index + 1);
+      const href = isPageTarget(entry.meta) ? entry.meta : `#${entry.meta}`;
       const link = el("a");
-      link.href = `#${entry.meta}`;
+      link.href = href;
       link.dataset.nav = entry.meta;
       const roll = el("span", "roll");
       roll.append(el("span", "", entry.text), el("span", "", entry.subtext || entry.text));
@@ -179,12 +183,13 @@
       desktop.appendChild(link);
 
       const big = el("a");
-      big.href = `#${entry.meta}`;
+      big.href = href;
       big.dataset.nav = entry.meta;
       big.append(el("small", "", number), document.createTextNode(entry.text), el("span", "", entry.subtext || ""));
       big.style.transitionDelay = `${0.12 + index * 0.05}s`;
       mobile.appendChild(big);
-      const sectionNumber = $(".sec-head__meta b", document.getElementById(entry.meta));
+      const section = isPageTarget(entry.meta) ? null : document.getElementById(entry.meta);
+      const sectionNumber = section && $(".sec-head__meta b", section);
       if (sectionNumber) sectionNumber.textContent = number;
     });
   }
